@@ -14,6 +14,13 @@ const players = [
   { name: "User 1", address: "300303", contribution: 100 },
   { name: "User 1", address: "300303", contribution: 100 },
   { name: "User 1", address: "300303", contribution: 100 }
+];
+
+const transactions = [
+  { date: new Date(), username: "User 1", contribution: 10, link: "https://etherscan.io/tx/0x88f6d02ef407d84a6a558d69a302c21c73d32b8c0ff5811aef253e3f25824563"},
+  { date: new Date(), username: "User 1", contribution: 10, link: "https://etherscan.io/tx/0x88f6d02ef407d84a6a558d69a302c21c73d32b8c0ff5811aef253e3f25824563"},
+  { date: new Date(), username: "User 1", contribution: 10, link: "https://etherscan.io/tx/0x88f6d02ef407d84a6a558d69a302c21c73d32b8c0ff5811aef253e3f25824563"},
+  { date: new Date(), username: "User 1", contribution: 10, link: "https://etherscan.io/tx/0x88f6d02ef407d84a6a558d69a302c21c73d32b8c0ff5811aef253e3f25824563"},
 ]
 
 export default function Home() {
@@ -33,9 +40,13 @@ export default function Home() {
             templateColumns='repeat(2, 1fr)'
             gap={4}
           >
-            <GridItem colSpan={1}><LeaderTable players={players} /></GridItem>
-            <GridItem colSpan={1} bg='papayawhip'><UserTxnTable /></GridItem>
-            <GridItem colSpan={2} bg='tomato' />
+            <GridItem colSpan={1}>
+              <LeaderTable players={players} />
+            </GridItem>
+            <GridItem colSpan={1} bg='papayawhip' />
+            <GridItem colSpan={2}>
+              <UserTxnTable transactions={transactions} />
+            </GridItem>
           </Grid>
         </Container>
       </main>
@@ -52,4 +63,7 @@ width={[
   '25%', // 48em-62em
   '15%', // 62em+
 ]}
+<GridItem colSpan={1} bg='papayawhip' />
+<GridItem colSpan={2} bg='tomato' />
+// const dateString = date.toISOString().slice(0, 10).replace(/-/g, "");
 */
