@@ -1,8 +1,8 @@
 import Head from 'next/head';
 import Navbar from "../src/components/Navbar";
 import LeaderTable from "../src/components/LeaderTable";
-import Profile from "../src/components/Profile";
-import PastTransactionTable from "../src/components/PastTransactionTable";
+import UserProfile from "../src/components/UserProfile";
+import UserTxnTable from "../src/components/UserTxnTable";
 import {
   Container,
   Grid,
@@ -34,7 +34,7 @@ export default function Home() {
             gap={4}
           >
             <GridItem colSpan={1}><LeaderTable players={players} /></GridItem>
-            <GridItem colSpan={1} bg='papayawhip' />
+            <GridItem colSpan={1} bg='papayawhip'><UserTxnTable /></GridItem>
             <GridItem colSpan={2} bg='tomato' />
           </Grid>
         </Container>
