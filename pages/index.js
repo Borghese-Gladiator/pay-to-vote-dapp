@@ -16,12 +16,18 @@ const players = [
   { name: "User 1", address: "300303", contribution: 100 }
 ];
 
+const playerObj = {
+  username: "Trevor",
+  highest: 50,
+  rank: 34
+};
+
 const transactions = [
   { date: new Date('1995-12-17T03:24:00'), username: "User 1", contribution: 10, link: "https://etherscan.io/tx/0x88f6d02ef407d84a6a558d69a302c21c73d32b8c0ff5811aef253e3f25824563"},
   { date: new Date('1997-12-17T03:24:00'), username: "User 1", contribution: 10, link: "https://etherscan.io/tx/0x88f6d02ef407d84a6a558d69a302c21c73d32b8c0ff5811aef253e3f25824563"},
   { date: new Date('2000-12-17T03:24:00'), username: "User 1", contribution: 10, link: "https://etherscan.io/tx/0x88f6d02ef407d84a6a558d69a302c21c73d32b8c0ff5811aef253e3f25824563"},
   { date: new Date(), username: "User 1", contribution: 10, link: "https://etherscan.io/tx/0x88f6d02ef407d84a6a558d69a302c21c73d32b8c0ff5811aef253e3f25824563"},
-]
+];
 
 export default function Home() {
   return (
@@ -43,7 +49,9 @@ export default function Home() {
             <GridItem colSpan={1}>
               <LeaderTable players={players} />
             </GridItem>
-            <GridItem colSpan={1} bg='papayawhip' />
+            <GridItem colSpan={1}>
+              <UserProfile playerObj={playerObj} />
+            </GridItem>
             <GridItem colSpan={2}>
               <UserTxnTable transactions={transactions} />
             </GridItem>
