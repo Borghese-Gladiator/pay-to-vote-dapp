@@ -1,10 +1,9 @@
 import React from "react";
-import { Link, Box, Flex, Text, Button, Stack, Icon, IconButton } from "@chakra-ui/react";
+import { Link, Box, Flex, Text, Stack, Icon, IconButton } from "@chakra-ui/react";
 import Logo from "./Logo";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
-import { FaGithubSquare } from "react-icons/fa";
-import { AiOutlineClose } from "react-icons/ai";
-import { GoMarkGithub } from "react-icons/go";
+// import { FaGithubSquare } from "react-icons/fa";
+import { AiFillGithub, AiOutlineClose } from "react-icons/ai";
 import { GiHamburgerMenu } from "react-icons/gi";
 
 const NavBar = (props) => {
@@ -46,27 +45,28 @@ const MenuLinks = ({ isOpen }) => {
         pt={[4, 2, 0, 0]}
       >
         <Link
-            href='https://chakra-ui.com'
-            target="_blank"
-            rel="noopener noreferrer"
-            isExternal
-          >
-            Etherscan
-            <ExternalLinkIcon w={8} h={8} />
-          </Link>
-          <Link
-            href='https://chakra-ui.com'
-            target="_blank"
-            rel="noopener noreferrer"
-            isExternal
-          >
-            <IconButton
-              colorScheme='gray'
-              aria-label='Go to GitHub link'
-              size='lg'
-              icon={<Icon as={GoMarkGithub} w={8} h={8} />}
-            />
-          </Link>
+          href='https://chakra-ui.com'
+          target="_blank"
+          rel="noopener noreferrer"
+          isExternal
+        >
+          <Flex>
+            <Text fontSize='xl'>View Contract</Text>
+            <ExternalLinkIcon w={8} h={8} p={1}/>
+          </Flex>
+        </Link>
+        <Link
+          href='https://chakra-ui.com'
+          target="_blank"
+          rel="noopener noreferrer"
+          isExternal
+        >
+          <IconButton
+            aria-label='Go to GitHub link'
+            size='md'
+            icon={<Icon as={AiFillGithub} w={6} h={6} />}
+          />
+        </Link>
       </Stack>
     </Box>
   );
@@ -81,7 +81,7 @@ const NavBarContainer = ({ children, ...props }) => {
       wrap="wrap"
       w="100%"
       mb={8}
-      p={8}
+      p={6}
       bg={["primary.500", "primary.500", "transparent", "transparent"]}
       color={["white", "white", "primary.700", "primary.700"]}
       {...props}
