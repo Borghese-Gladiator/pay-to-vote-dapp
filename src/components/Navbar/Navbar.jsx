@@ -92,4 +92,3 @@ const NavBarContainer = ({ children, ...props }) => {
 };
 
 export default NavBar;
-// <Icon as={FaGithubSquare} w={8} h={8} color='gray.400' />
