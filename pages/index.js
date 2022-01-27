@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import Navbar from "../src/components/Navbar";
-import Leaderboard from "../src/components/Leaderboard";
+import LeaderTable from "../src/components/LeaderTable";
 import Profile from "../src/components/Profile";
 import PastTransactionTable from "../src/components/PastTransactionTable";
 import {
@@ -8,6 +8,13 @@ import {
   Grid,
   GridItem
 } from '@chakra-ui/react'
+
+const players = [
+  { name: "User 1", address: "300303", contribution: 100 },
+  { name: "User 1", address: "300303", contribution: 100 },
+  { name: "User 1", address: "300303", contribution: 100 },
+  { name: "User 1", address: "300303", contribution: 100 }
+]
 
 export default function Home() {
   return (
@@ -26,7 +33,7 @@ export default function Home() {
             templateColumns='repeat(2, 1fr)'
             gap={4}
           >
-            <GridItem colSpan={1} bg='papayawhip' />
+            <GridItem colSpan={1}><LeaderTable players={players} /></GridItem>
             <GridItem colSpan={1} bg='papayawhip' />
             <GridItem colSpan={2} bg='tomato' />
           </Grid>
