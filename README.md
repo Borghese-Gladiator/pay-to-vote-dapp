@@ -1,3 +1,18 @@
+# Pay2Vote DApp
+DApp to track users paying to win. Displays leaderboard, current profile, and past transactions.
+
+## Implementation
+
+#### Steps
+- npx create-react-app pay-to-vote-dapp
+- Installed Chakra UI - ```npm i @chakra-ui/react @emotion/react@^11 @emotion/styled@^11 framer-motion@^5```
+- Removed existing styles
+- Added ChakraProvider to _app for Next.js to load styles
+- Added src/theme.js and _document.js to show Chakra UI dark mode
+- Added icons - ```npm install react-icons @chakra-ui/icons```
+- Wrote up index.js layout and components (Navbar, LeaderTable, UserTxnTable, UserProfile)
+
+## Next.js README
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
