@@ -67,10 +67,14 @@ Since CD (Continuous Deployment) from Vercel is set up with GitHub, every pushed
   - Rewrite sample-script to deploy.js script for both contracts
 - Simplified setup by writing commands into package.json and installed concurrently to start both at same time - ```npm i -D concurrently```
 - Connected frontend to backend
-  - Loaded deployed contract addresses from .env.local
+  - Loaded deployed contract addresses from .env.local with getStaticProps
+  - Updated index.js to use Greeter contract and display with GreeterDisplay (uses ErrorFallback)
 - Deployed 
 
 #### Bugs
+- ```Error: call revert exception (method="greet()", errorArgs=null, errorName=null, errorSignature=null, reason=null, code=CALL_EXCEPTION, version=abi/5.5.0)``` - redeploy contract && switch to Test Account in MetaMask (one of the accounts listed when hardhat is starting up locally)
+- ```{"code":-32602,"message":"Trying to send a raw transaction with an invalid chainId. The expected chainId is 31337"``` - fix by updating hardhat.config.js (missing ```hardhat: { chainId: 337 }```) [https://hardhat.org/metamask-issue.html](https://hardhat.org/metamask-issue.html)
+- ```MetaMask - RPC Error: [ethjs-query] while formatting outputs from RPC '{"value":{"code":-32603,"data":{"code":-32000,"message":"Nonce too high. Expected nonce to be 2 but got 9. Note that transactions can't be queued when automining."}}}'``` - Reset Account (occurred when using same account but switching which app was running)
 
 #### References
 - Connecting frontend to Smart Contract
