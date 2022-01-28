@@ -14,9 +14,28 @@ DApp to track users paying to win. Displays leaderboard, current profile, and pa
 - Start up both smart contract local network and frontend display - ```npm run dev```
 - Compile smart contracts - ```npx hardhat compile```
 - Deploy to local network - ```npx hardhat run scripts/deploy.js --network localhost```
-- Deploy to Ropsten live network - ```npx hardhat run scripts/deploy.js --network ropsten```
+
+####  Deploy Steps
+Since CD (Continuous Deployment) from Vercel is set up with GitHub, every pushed commit will push right to PRD.
+1. Compile smart contracts - ```npx hardhat compile```
+2. Deploy to Ropsten live network - ```npx hardhat run scripts/deploy.js --network ropsten```
 
 #### Full Setup Guide
+- Installed MetaMask Wallet Chrome extension - [https://metamask.io/download/](https://metamask.io/download/)
+  - Changed settings to show test networks like localhost
+  - Changed network to Ropsten
+- Got 1 rETH with Faucet into my MetaMask wallet address (took around 3 minutes - was one of the following sites)
+  - [https://faucet.metamask.io/](https://faucet.metamask.io/)
+  - [https://faucet.ropsten.be/](https://faucet.ropsten.be/)
+  - [https://faucet.dimensions.network/](https://faucet.dimensions.network/)
+- Created account with Infura - [https://infura.io/](https://infura.io/)
+  - Created Ropsten project using tutorial [https://blog.infura.io/getting-started-with-infura-28e41844cc89/](https://blog.infura.io/getting-started-with-infura-28e41844cc89/)
+  - Copied MetaMask Wallet Account 1 address to "CONTRACT ADDRESSES" AllowList
+  - Validated project is connected to Mainnet with curl call from WSL (NOTE - curl command did not work on Windows due to doubles quotes issue)
+    - Mainnet - ```curl https://mainnet.infura.io/v3/{INFURA_PROJECT_ID} -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"eth_blockNumber","params": [],"id":1}'```
+    - Ropsten - ```curl https://ropsten.infura.io/v3/{INFURA_PROJECT_ID} -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"eth_blockNumber","params": [],"id":1}'```
+- Saved private key from Metamask account and Infura project ID into .env file for dotenv
+- Started local network and Imported Account into MetaMask Wallet using Account#0 private key - ```npm run hardhat-dev```
 
 ## Technologies
 - Hardhat.js - Ethereum development environment
@@ -47,11 +66,17 @@ DApp to track users paying to win. Displays leaderboard, current profile, and pa
   - Update hardhat.config.js to have networks and path to artifacts
   - Rewrite sample-script to deploy.js script for both contracts
 - Simplified setup by writing commands into package.json and installed concurrently to start both at same time - ```npm i -D concurrently```
+- Connected frontend to backend
+  - Loaded deployed contract addresses from .env.local
+- Deployed 
+
+#### Bugs
 
 #### References
 - Connecting frontend to Smart Contract
   - [https://gist.github.com/mbvissers/ad96c21706d25194be6f30b076eb25c1](https://gist.github.com/mbvissers/ad96c21706d25194be6f30b076eb25c1) which was from this article [https://medium.com/codex/creating-a-basic-dapp-with-web3-and-nextjs-2ee94af06517](https://medium.com/codex/creating-a-basic-dapp-with-web3-and-nextjs-2ee94af06517)
   - [https://github.com/nomiclabs/hardhat-hackathon-boilerplate/blob/master/frontend/src/components/Dapp.js](https://github.com/nomiclabs/hardhat-hackathon-boilerplate/blob/master/frontend/src/components/Dapp.js)
+    - this code did not work locally
 
 ## Hardhat README
 This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts.
