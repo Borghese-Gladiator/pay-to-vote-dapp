@@ -1,16 +1,72 @@
 # Pay2Vote DApp
 DApp to track users paying to win. Displays leaderboard, current profile, and past transactions.
 
+## Table of Contents
+- [Features](#features)
+- [Technologies](#technologies)
+- [Local Setup Commands](#local-setup-commands)
+- [Implementation](#implementation)
+
+## Features
+
+## Local Setup Commands
+- Install dependencies - ```npm install```
+- Start up both smart contract local network and frontend display - ```npm run dev```
+- Compile smart contracts - ```npx hardhat compile```
+- Deploy to local network - ```npx hardhat run scripts/deploy.js --network localhost```
+- Deploy to Ropsten live network - ```npx hardhat run scripts/deploy.js --network ropsten```
+
+#### Full Setup Guide
+
+## Technologies
+- Hardhat.js - Ethereum development environment
+- Ether.js - Library to interact with Ethereum blockchain
+- Next.js - React framework with default routing and serverless functions
+- Chakra UI - Component library
+- Vercel - Platform to host JAMStack apps (frontend with serverless functions)
+
 ## Implementation
 
 #### Steps
 - npx create-react-app pay-to-vote-dapp
-- Installed Chakra UI - ```npm i @chakra-ui/react @emotion/react@^11 @emotion/styled@^11 framer-motion@^5```
-- Removed existing styles
-- Added ChakraProvider to _app for Next.js to load styles
-- Added src/theme.js and _document.js to show Chakra UI dark mode
-- Added icons - ```npm install react-icons @chakra-ui/icons```
-- Wrote up index.js layout and components (Navbar, LeaderTable, UserTxnTable, UserProfile)
+- Created frontend
+  - Installed Chakra UI - ```npm i @chakra-ui/react @emotion/react@^11 @emotion/styled@^11 framer-motion@^5```
+  - Removed existing styles
+  - Added ChakraProvider to _app for Next.js to load styles
+  - Added src/theme.js and _document.js to show Chakra UI dark mode
+  - Added icons - ```npm install react-icons @chakra-ui/icons```
+  - Wrote up index.js layout and components (Navbar, LeaderTable, UserTxnTable, UserProfile)
+- Created backend
+  - Installed hardhat - ```npm install ethers hardhat @nomiclabs/hardhat-waffle ethereum-waffle chai @nomiclabs/hardhat-ethers```
+  - Ran hardhat setup - ```npx hardhat```
+  - Added contracts - Greeter, SimpleAuction
+    - SimpleAuction - [https://docs.soliditylang.org/en/v0.8.11/solidity-by-example.html](https://docs.soliditylang.org/en/v0.8.11/solidity-by-example.html)
+  - Add dotenv
+  - Add .env to .gitignore
+  - Configure hardhat.config.js - ```npm i dotenv```
+  - Update hardhat.config.js to have networks and path to artifacts
+  - Rewrite sample-script to deploy.js script for both contracts
+- Simplified setup by writing commands into package.json and installed concurrently to start both at same time - ```npm i -D concurrently```
+
+#### References
+- Connecting frontend to Smart Contract
+  - [https://gist.github.com/mbvissers/ad96c21706d25194be6f30b076eb25c1](https://gist.github.com/mbvissers/ad96c21706d25194be6f30b076eb25c1) which was from this article [https://medium.com/codex/creating-a-basic-dapp-with-web3-and-nextjs-2ee94af06517](https://medium.com/codex/creating-a-basic-dapp-with-web3-and-nextjs-2ee94af06517)
+  - [https://github.com/nomiclabs/hardhat-hackathon-boilerplate/blob/master/frontend/src/components/Dapp.js](https://github.com/nomiclabs/hardhat-hackathon-boilerplate/blob/master/frontend/src/components/Dapp.js)
+
+## Hardhat README
+This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts.
+
+Try running some of the following tasks:
+
+```shell
+npx hardhat accounts
+npx hardhat compile
+npx hardhat clean
+npx hardhat test
+npx hardhat node
+node scripts/sample-script.js
+npx hardhat help
+```
 
 ## Next.js README
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
