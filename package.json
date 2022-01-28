@@ -2,8 +2,12 @@
   "name": "pay-to-vote-dapp",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "concurrently \"npm run next-dev\" \"npm run hardhat-dev\"",
+    "next-dev": "next dev",
+    "next-build": "next build",
+    "hardhat-dev": "npx hardhat node",
+    "hardhat-build": "npx hardhat compile",
+    "build": "npm run hardhat-build && npm run next-build",
     "start": "next start",
     "lint": "next lint"
   },
