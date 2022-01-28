@@ -37,7 +37,7 @@ export default function UserTxnTable({ transactions }) {
                 .toLocaleString('en-us', { year: 'numeric', month: '2-digit', day: '2-digit' })
                 .replace(/(\d+)\/(\d+)\/(\d+)/, '$3-$1-$2');
               return (
-                <Tr>
+                <Tr key={`txn-row-${order}`}>
                   <Td>{order}</Td>
                   <Td>{dateString}</Td>
                   <Td>${contribution}</Td>

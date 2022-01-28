@@ -34,31 +34,22 @@ export default function LeaderTable({ players }) {
             .slice(0, 3)
             .map(({ name, address, contribution }, idx) => {
               return (
-                <>
-                  <Tr>
-                    <Td>
-                      <IconButton
-                        ml={2}
-                        size='sm'
-                        aria-label='Open collapsible'
-                        icon={show ? <AiFillCaretUp /> : <AiFillCaretDown />}
-                        onClick={handleToggle}
-                      />
-                    </Td>
-                    <Td>{idx + 1}</Td>
-                    <Td>
-                      {name}
-                    </Td>
-                    <Td isNumeric>${contribution}</Td>
-                  </Tr>
-                  <Collapse isOpen={true}>
-                    <Tr>
-                      Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus
-                      terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer
-                      labore wes anderson cred nesciunt sapiente ea proident.
-                    </Tr>
-                  </Collapse>
-                </>
+                <Tr key={`leader-row-${idx}`}>
+                  <Td>
+                    <IconButton
+                      ml={2}
+                      size='sm'
+                      aria-label='Open collapsible'
+                      icon={show ? <AiFillCaretUp /> : <AiFillCaretDown />}
+                      onClick={handleToggle}
+                    />
+                  </Td>
+                  <Td>{idx + 1}</Td>
+                  <Td>
+                    {name}
+                  </Td>
+                  <Td isNumeric>${contribution}</Td>
+                </Tr>
               )
             })
           }
