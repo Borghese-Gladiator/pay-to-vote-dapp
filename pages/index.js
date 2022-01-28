@@ -6,6 +6,7 @@ import SimpleAuction from '../src/artifacts/contracts/SimpleAuction.sol/SimpleAu
 import { useEffect, useState } from 'react';
 import RootLayout from "../src/components/_layouts/RootLayout";
 import NoWalletDetected from "../src/components/NoWalletDetected";
+import GreeterDisplay from "../src/components/GreeterDisplay";
 import LeaderTable from "../src/components/LeaderTable";
 import UserProfile from "../src/components/UserProfile";
 import UserTxnTable from "../src/components/UserTxnTable";
@@ -36,6 +37,8 @@ const transactions = [
 ];
 
 export default function Home({ greeterAddress, simpleAuctionAddress }) {
+  const [greeting, setGreeting] = useState();
+  
   // request access to the user's MetaMask account
   async function requestAccount() {
     await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -43,12 +46,13 @@ export default function Home({ greeterAddress, simpleAuctionAddress }) {
 
   // call the smart contract, read the current greeting value
   async function fetchGreeting() {
-    if (typeof window.ethereum !== 'undefined') {
+    if (typeof window !== "undefined" && typeof window.ethereum !== 'undefined') {
       const provider = new ethers.providers.Web3Provider(window.ethereum)
       const contract = new ethers.Contract(greeterAddress, Greeter.abi, provider)
       try {
         const data = await contract.greet()
         console.log('data: ', data)
+        setGreeting(data);
       } catch (err) {
         console.log("Error: ", err)
       }
@@ -56,14 +60,16 @@ export default function Home({ greeterAddress, simpleAuctionAddress }) {
   }
 
   // call the smart contract, send an update
-  async function updateGreeting() {
+  async function updateGreeting(e) {
+    e.preventDefault();
+    const newGreeting = e.target.greeting.value;
     if (!greeting) return
-    if (typeof window.ethereum !== 'undefined') {
+    if (typeof window !== "undefined" && typeof window.ethereum !== 'undefined') {
       await requestAccount()
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner()
       const contract = new ethers.Contract(greeterAddress, Greeter.abi, signer)
-      const transaction = await contract.setGreeting(greeting)
+      const transaction = await contract.setGreeting(newGreeting)
       await transaction.wait()
       fetchGreeting()
     }
@@ -78,6 +84,7 @@ export default function Home({ greeterAddress, simpleAuctionAddress }) {
     )
   }
 
+  fetchGreeting();
   // Everything is loaded, render application
   return (
     <RootLayout>
@@ -89,9 +96,7 @@ export default function Home({ greeterAddress, simpleAuctionAddress }) {
           gap={2}
         >
           <GridItem colSpan={2}>
-            <button onClick={fetchGreeting}>Fetch Greeting</button>
-            <button onClick={updateGreeting}>Set Greeting</button>
-            <input onChange={e => setGreeting(e.target.value)} placeholder="Set greeting" />
+            <GreeterDisplay greeting={greeting} setGreeting={setGreeting} handleSubmitGreeting={updateGreeting} />
           </GridItem>
           <GridItem colSpan={1}>
             <LeaderTable players={players} />
