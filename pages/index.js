@@ -1,10 +1,6 @@
-// Load smart contracts
-import { ethers } from 'ethers'
-import Greeter from '../src/artifacts/contracts/Greeter.sol/Greeter.json'
-import SimpleAuction from '../src/artifacts/contracts/SimpleAuction.sol/SimpleAuction.json'
-// Frontend
-import { useEffect, useState } from 'react';
+import ContractContext from "../src/context/ContractContext";
 import RootLayout from "../src/components/_layouts/RootLayout";
+// Custom Components
 import NoWalletDetected from "../src/components/NoWalletDetected";
 import GreeterDisplay from "../src/components/GreeterDisplay";
 import LeaderTable from "../src/components/LeaderTable";
@@ -49,6 +45,7 @@ export default function Home({ greeterAddress, simpleAuctionAddress }) {
 
   // Everything is loaded, render application
   return (
+    <ContractContext.Provider value={{ greeterAddress, simpleAuctionAddress }}>
     <RootLayout>
       <Container h={'100%'} maxW='container.lg'>
         <Grid
@@ -72,6 +69,7 @@ export default function Home({ greeterAddress, simpleAuctionAddress }) {
         </Grid>
       </Container>
     </RootLayout>
+    </ContractContext.Provider>
   )
 }
 

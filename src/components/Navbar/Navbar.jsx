@@ -1,13 +1,16 @@
-import React from "react";
-import { Link, Box, Flex, Text, Stack, Icon, IconButton } from "@chakra-ui/react";
+import { useState, useContext } from "react";
+import ContractContext from "../../context/ContractContext";
+
 import Logo from "./Logo";
+import { Link, Box, Flex, Text, Stack, Icon, IconButton, Image } from "@chakra-ui/react";
+
+// Icons
 import { ExternalLinkIcon } from "@chakra-ui/icons";
-// import { FaGithubSquare } from "react-icons/fa";
 import { AiFillGithub, AiOutlineClose } from "react-icons/ai";
 import { GiHamburgerMenu } from "react-icons/gi";
 
 const NavBar = (props) => {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const toggle = () => setIsOpen(!isOpen);
 
@@ -32,6 +35,7 @@ const MenuToggle = ({ toggle, isOpen }) => {
 };
 
 const MenuLinks = ({ isOpen }) => {
+  const { greeterAddress, simpleAuctionAddress } = useContext(ContractContext);
   return (
     <Box
       display={{ base: isOpen ? "block" : "none", md: "block" }}
@@ -45,18 +49,35 @@ const MenuLinks = ({ isOpen }) => {
         pt={[4, 2, 0, 0]}
       >
         <Link
-          href='https://chakra-ui.com'
+          href={`https://etherscan.io/address/${greeterAddress}`}
           target="_blank"
           rel="noopener noreferrer"
           isExternal
         >
           <Flex>
-            <Text fontSize='xl'>View Contract</Text>
-            <ExternalLinkIcon w={8} h={8} p={1}/>
+            <Text fontSize='sm'>View Greeter</Text>
+            <Image
+              src="/etherscan-logo-circle.jpg"
+              borderRadius='full'
+              htmlHeight={16}
+              htmlWidth={16}
+            />
+            <ExternalLinkIcon w={8} h={8} p={1} />
           </Flex>
         </Link>
         <Link
-          href='https://chakra-ui.com'
+          href={`https://etherscan.io/address/${simpleAuctionAddress}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          isExternal
+        >
+          <Flex>
+            <Text fontSize='sm'>View SimpleAuction</Text>
+            <ExternalLinkIcon w={8} h={8} p={1} />
+          </Flex>
+        </Link>
+        <Link
+          href='https://github.com/Borghese-Gladiator/pay-to-vote-dapp'
           target="_blank"
           rel="noopener noreferrer"
           isExternal

@@ -1,3 +1,13 @@
+// Load smart contracts
+import { ethers } from 'ethers'
+import Greeter from '../artifacts/contracts/Greeter.sol/Greeter.json'
+import SimpleAuction from '../artifacts/contracts/SimpleAuction.sol/SimpleAuction.json'
+
+// Context
+import ContractContext from "../context/ContractContext";
+
+// Frontend
+import { useState, useEffect, useContext } from "react";
 import { ErrorBoundary } from 'react-error-boundary';
 import ErrorFallback from "./ErrorFallback";
 import {
@@ -14,7 +24,8 @@ import {
 const textOneLineStyle = { whiteSpace: "nowrap" }
 const defaultGreeting = "";
 
-export default function GreeterDisplay({ greeterAddress }) {
+export default function GreeterDisplay() {
+  const { greeterAddress, simpleAuctionAddress } = useContext(ContractContext);
   const [greeting, setGreeting] = useState();
   
   // request access to the user's MetaMask account
@@ -49,11 +60,13 @@ export default function GreeterDisplay({ greeterAddress }) {
       const contract = new ethers.Contract(greeterAddress, Greeter.abi, signer)
       const transaction = await contract.setGreeting(newGreeting)
       await transaction.wait()
-      setGreeting(fetchGreeting());
+      setGreeting(await fetchGreeting());
     }
   }
-
-  setGreeting(fetchGreeting());
+  useEffect(async () => {
+    setGreeting(await fetchGreeting());
+  }, [greeting])
+  
   return (
     <ErrorBoundary
       FallbackComponent={ErrorFallback}
