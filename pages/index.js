@@ -1,7 +1,10 @@
+import { useState } from "react";
 import ContractContext from "../src/context/ContractContext";
-import RootLayout from "../src/components/_layouts/RootLayout";
+import UserInfoContext from "../src/context/UserInfoContext";
+
 // Custom Components
-import NoWalletDetected from "../src/components/NoWalletDetected";
+import RootLayout from "../src/components/_layouts/RootLayout";
+import UserSetup from "../src/components/UserSetup";
 import GreeterDisplay from "../src/components/GreeterDisplay";
 import LeaderTable from "../src/components/LeaderTable";
 import UserProfile from "../src/components/UserProfile";
@@ -33,42 +36,45 @@ const transactions = [
 ];
 
 export default function Home({ greeterAddress, simpleAuctionAddress }) {
-  // Detect Ethereum Provider is present, render MetaMask not detected
-  if (typeof window !== "undefined" && typeof window.ethereum === "undefined") {
-    return (
-      <RootLayout>
-        <NoWalletDetected />
-      </RootLayout>
-    )
-  }
+  const [loadingSetup, setLoadingSetup] = useState(true);
+  const [userInfo, setUserInfo] = useState({});
 
-  // Everything is loaded, render application
   return (
-    <ContractContext.Provider value={{ greeterAddress, simpleAuctionAddress }}>
-      <RootLayout>
-        <Container h={'100%'} maxW='container.lg'>
-          <Grid
-            h={'100%'}
-            templateRows='repeat(3, 1fr)'
-            templateColumns='repeat(2, 1fr)'
-            gap={2}
-          >
-            <GridItem colSpan={2}>
-              <GreeterDisplay />
-            </GridItem>
-            <GridItem colSpan={1}>
-              <LeaderTable players={players} />
-            </GridItem>
-            <GridItem colSpan={1}>
-              <UserProfile playerObj={playerObj} />
-            </GridItem>
-            <GridItem colSpan={2}>
-              <UserTxnTable transactions={transactions} />
-            </GridItem>
-          </Grid>
-        </Container>
-      </RootLayout>
-    </ContractContext.Provider>
+    <UserInfoContext.Provider value={{ userInfo, setUserInfo }}>
+      <ContractContext.Provider value={{ greeterAddress, simpleAuctionAddress }}>
+        <RootLayout>
+          {
+            // Go through checks for user to setup MetaMask, connect account, and write username
+            // Otherwise, everything is loaded and render application
+            loadingSetup
+              ? <UserSetup setLoadingSetup={setLoadingSetup} />
+              : (
+                <Container h={'100%'} maxW='container.lg'>
+                  <Grid
+                    h={'100%'}
+                    templateRows='repeat(3, 1fr)'
+                    templateColumns='repeat(2, 1fr)'
+                    gap={2}
+                  >
+                    <GridItem colSpan={2}>
+                      <GreeterDisplay />
+                    </GridItem>
+                    <GridItem colSpan={1}>
+                      <LeaderTable players={players} />
+                    </GridItem>
+                    <GridItem colSpan={1}>
+                      <UserProfile playerObj={playerObj} />
+                    </GridItem>
+                    <GridItem colSpan={2}>
+                      <UserTxnTable transactions={transactions} />
+                    </GridItem>
+                  </Grid>
+                </Container>
+              )
+          }
+        </RootLayout>
+      </ContractContext.Provider>
+    </UserInfoContext.Provider>
   )
 }
 

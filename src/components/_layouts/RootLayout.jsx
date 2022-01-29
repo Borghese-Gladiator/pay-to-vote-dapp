@@ -1,8 +1,5 @@
 import Head from 'next/head';
 import Navbar from "../Navbar";
-import {
-  Flex,
-} from '@chakra-ui/react';
 
 export default function RootLayout({ children }) {
   return (
