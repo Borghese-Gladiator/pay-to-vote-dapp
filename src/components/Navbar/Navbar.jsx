@@ -54,15 +54,16 @@ const MenuLinks = ({ isOpen }) => {
           rel="noopener noreferrer"
           isExternal
         >
-          <Flex>
-            <Text fontSize='sm'>View Greeter</Text>
+          <Flex alignItems="center">
             <Image
               src="/etherscan-logo-circle.jpg"
               borderRadius='full'
               htmlHeight={16}
               htmlWidth={16}
+              mr={1}
             />
-            <ExternalLinkIcon w={8} h={8} p={1} />
+            <Text fontSize='sm'>View Greeter</Text>
+            <ExternalLinkIcon w={6} h={6} p={1} />
           </Flex>
         </Link>
         <Link
@@ -71,9 +72,16 @@ const MenuLinks = ({ isOpen }) => {
           rel="noopener noreferrer"
           isExternal
         >
-          <Flex>
+          <Flex alignItems="center">
+            <Image
+              src="/etherscan-logo-circle.jpg"
+              borderRadius='full'
+              htmlHeight={16}
+              htmlWidth={16}
+              mr={1}
+            />
             <Text fontSize='sm'>View SimpleAuction</Text>
-            <ExternalLinkIcon w={8} h={8} p={1} />
+            <ExternalLinkIcon w={6} h={6} p={1} />
           </Flex>
         </Link>
         <Link
