@@ -13,12 +13,13 @@ import ErrorFallback from "./ErrorFallback";
 import {
   Heading,
   Box,
-  Flex,
   Stack,
+  Flex,
   Button,
   Text,
   FormControl,
-  Input
+  Input,
+  Spinner
 } from '@chakra-ui/react';
 
 const textOneLineStyle = { whiteSpace: "nowrap" }
@@ -27,7 +28,8 @@ const defaultGreeting = "";
 export default function GreeterDisplay() {
   const { greeterAddress, simpleAuctionAddress } = useContext(ContractContext);
   const [greeting, setGreeting] = useState();
-  
+  const [loading, setLoading] = useState(false);
+
   // request access to the user's MetaMask account
   async function requestAccount() {
     await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -59,14 +61,16 @@ export default function GreeterDisplay() {
       const signer = provider.getSigner()
       const contract = new ethers.Contract(greeterAddress, Greeter.abi, signer)
       const transaction = await contract.setGreeting(newGreeting)
+      setLoading(true);
       await transaction.wait()
       setGreeting(await fetchGreeting());
+      setLoading(false);
     }
   }
   useEffect(async () => {
     setGreeting(await fetchGreeting());
   }, [greeting])
-  
+
   return (
     <ErrorBoundary
       FallbackComponent={ErrorFallback}
@@ -79,7 +83,16 @@ export default function GreeterDisplay() {
       >
         <Stack>
           <Heading>Greeter</Heading>
-          <Text p>Current greeting: {greeting}</Text>
+          <Flex>
+            <Text p>Current greeting: {greeting}</Text>
+            {loading && <Spinner
+              thickness='4px'
+              speed='0.65s'
+              emptyColor='gray.200'
+              color='blue.500'
+              size='xl'
+            />}
+          </Flex>
           <form onSubmit={updateGreeting}>
             <FormControl isRequired>
               <Flex alignItems="center" m={1}>

@@ -26,14 +26,13 @@ const playerObj = {
 };
 
 const transactions = [
-  { date: new Date('1995-12-17T03:24:00'), username: "User 1", contribution: 10, link: "https://etherscan.io/tx/0x88f6d02ef407d84a6a558d69a302c21c73d32b8c0ff5811aef253e3f25824563" },
-  { date: new Date('1997-12-17T03:24:00'), username: "User 1", contribution: 10, link: "https://etherscan.io/tx/0x88f6d02ef407d84a6a558d69a302c21c73d32b8c0ff5811aef253e3f25824563" },
-  { date: new Date('2000-12-17T03:24:00'), username: "User 1", contribution: 10, link: "https://etherscan.io/tx/0x88f6d02ef407d84a6a558d69a302c21c73d32b8c0ff5811aef253e3f25824563" },
-  { date: new Date(), username: "User 1", contribution: 10, link: "https://etherscan.io/tx/0x88f6d02ef407d84a6a558d69a302c21c73d32b8c0ff5811aef253e3f25824563" },
+  { date: new Date('1995-12-17T03:24:00'), username: "User 1", contribution: 10, txnHash: "0x88f6d02ef407d84a6a558d69a302c21c73d32b8c0ff5811aef253e3f25824563" },
+  { date: new Date('1997-12-17T03:24:00'), username: "User 1", contribution: 10, txnHash: "0x88f6d02ef407d84a6a558d69a302c21c73d32b8c0ff5811aef253e3f25824563" },
+  { date: new Date('1997-12-17T03:24:00'), username: "User 1", contribution: 10, txnHash: "0x88f6d02ef407d84a6a558d69a302c21c73d32b8c0ff5811aef253e3f25824563" },
+  { date: new Date('1997-12-17T03:24:00'), username: "User 1", contribution: 10, txnHash: "0x88f6d02ef407d84a6a558d69a302c21c73d32b8c0ff5811aef253e3f25824563" },
 ];
 
 export default function Home({ greeterAddress, simpleAuctionAddress }) {
-
   // Detect Ethereum Provider is present, render MetaMask not detected
   if (typeof window !== "undefined" && typeof window.ethereum === "undefined") {
     return (
@@ -46,29 +45,29 @@ export default function Home({ greeterAddress, simpleAuctionAddress }) {
   // Everything is loaded, render application
   return (
     <ContractContext.Provider value={{ greeterAddress, simpleAuctionAddress }}>
-    <RootLayout>
-      <Container h={'100%'} maxW='container.lg'>
-        <Grid
-          h={'100%'}
-          templateRows='repeat(3, 1fr)'
-          templateColumns='repeat(2, 1fr)'
-          gap={2}
-        >
-          <GridItem colSpan={2}>
-            <GreeterDisplay />
-          </GridItem>
-          <GridItem colSpan={1}>
-            <LeaderTable players={players} />
-          </GridItem>
-          <GridItem colSpan={1}>
-            <UserProfile playerObj={playerObj} />
-          </GridItem>
-          <GridItem colSpan={2}>
-            <UserTxnTable transactions={transactions} />
-          </GridItem>
-        </Grid>
-      </Container>
-    </RootLayout>
+      <RootLayout>
+        <Container h={'100%'} maxW='container.lg'>
+          <Grid
+            h={'100%'}
+            templateRows='repeat(3, 1fr)'
+            templateColumns='repeat(2, 1fr)'
+            gap={2}
+          >
+            <GridItem colSpan={2}>
+              <GreeterDisplay />
+            </GridItem>
+            <GridItem colSpan={1}>
+              <LeaderTable players={players} />
+            </GridItem>
+            <GridItem colSpan={1}>
+              <UserProfile playerObj={playerObj} />
+            </GridItem>
+            <GridItem colSpan={2}>
+              <UserTxnTable transactions={transactions} />
+            </GridItem>
+          </Grid>
+        </Container>
+      </RootLayout>
     </ContractContext.Provider>
   )
 }

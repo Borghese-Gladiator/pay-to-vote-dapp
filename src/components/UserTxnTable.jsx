@@ -11,7 +11,9 @@ import {
   Tr,
   Th,
   Td,
-  Link
+  Link,
+  Flex,
+  Text
 } from '@chakra-ui/react';
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 
@@ -31,7 +33,7 @@ export default function UserTxnTable({ transactions }) {
         <Tbody>
           {transactions
             .sort((txnA, txnB) => txnB.date - txnA.date)
-            .map(({ date, contribution, link }, idx) => {
+            .map(({ date, contribution, txnHash }, idx) => {
               const order = transactions.length - idx;
               const dateString = date
                 .toLocaleString('en-us', { year: 'numeric', month: '2-digit', day: '2-digit' })
@@ -43,12 +45,15 @@ export default function UserTxnTable({ transactions }) {
                   <Td>${contribution}</Td>
                   <Td>
                     <Link
-                      href={link}
+                      href={`https://etherscan.io/tx/${txnHash}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       isExternal
                     >
-                      <ExternalLinkIcon w={8} h={8} p={1} />
+                      <Flex alignItems="center">
+                        <Text as={"p"}>{txnHash}</Text>
+                        <ExternalLinkIcon w={8} h={8} p={1} />
+                      </Flex>
                     </Link>
                   </Td>
                 </Tr>
