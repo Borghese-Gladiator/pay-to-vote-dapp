@@ -26,7 +26,7 @@ const CreateUsername = dynamic(
   { ssr: false }
 )
 
-export default function UserSetup({ setLoading }) {
+export default function UserSetup({ setLoadingSetup }) {
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
 
   // Detect Ethereum Provider is present, render MetaMask not detected
