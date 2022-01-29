@@ -5,6 +5,7 @@ import {
   Link,
   Container
 } from '@chakra-ui/react';
+import { ExternalLinkIcon } from '@chakra-ui/icons';
 
 export default function NoWalletDetected() {
   return (
