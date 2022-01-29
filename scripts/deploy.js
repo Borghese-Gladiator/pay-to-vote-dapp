@@ -24,7 +24,7 @@ async function main() {
   const greeter = await Greeter.deploy("Hello, Hardhat!");
   const simpleAuction = await SimpleAuction.deploy(
       dateUINT,
-      process.env.METAMASK_ACCOUNT_ONE_ADDRESS
+      process.env.ACCOUNT_PUBLIC_ADDRESS
     );
   
   await greeter.deployed();

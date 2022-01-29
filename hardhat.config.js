@@ -18,7 +18,7 @@ module.exports = {
     },
     ropsten: {
       url: `https://ropsten.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,
-      accounts: [`0x${process.env.METAMASK_ACCOUNT_ONE_PRIVATE_KEY}`]
+      accounts: [`0x${process.env.ACCOUNT_PRIVATE_KEY}`]
     }
   },
   solidity: "0.8.4",
