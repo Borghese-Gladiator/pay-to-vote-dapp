@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   Flex,
+  Text,
   Spinner
 } from '@chakra-ui/react';
 
@@ -11,7 +12,6 @@ export default function ConnectWallet({ userInfo, setUserInfo }) {
   const { execute, status, value, error } = useAsync(metamaskConnect, false);
   async function metamaskConnect() {
     try {
-      setLoading(true);
       await window.ethereum.enable()
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
@@ -19,7 +19,6 @@ export default function ConnectWallet({ userInfo, setUserInfo }) {
         ...userInfo,
         selectedAddress: await signer.getAddress()
       });
-      setLoading(false);
     } catch (e) {
       throw new Error(e.message);
     }
