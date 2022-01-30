@@ -37,17 +37,10 @@ contract CustomCashGrab {
     /// Vote with value sent together in this transaction.
     /// The value will only be refunded if the auction is not won.
     function vote(string memory _name) external payable {
-        // No arguments are necessary, all
-        // information is already part of
-        // the transaction. The keyword payable
-        // is required for the function to
-        // be able to receive Ether.
-
         // Revert the call if the period is over.
         if (block.timestamp > votingEndTime)
             revert VotingAlreadyEnded();
-
-        uint idx = voterList.length;
+        
         Voter memory voter;
         voter.name = _name;
         voter.voterAddress = msg.sender; // msg.sender is always the address where the current (external) function call came from
@@ -56,23 +49,6 @@ contract CustomCashGrab {
         
         Voter memory highestVoter = findHighestVoter();
         emit HighestBidIncreased(highestVoter);
-    }
-    /// Withdraw a bid that was overbid.
-    function withdraw() external returns (bool) {
-        uint amount = pendingReturns[msg.sender];
-        if (amount > 0) {
-            // It is important to set this to zero because the recipient
-            // can call this function again as part of the receiving call
-            // before `send` returns.
-            pendingReturns[msg.sender] = 0;
-
-            if (!payable(msg.sender).send(amount)) {
-                // No need to call throw here, just reset the amount owing
-                pendingReturns[msg.sender] = amount;
-                return false;
-            }
-        }
-        return true;
     }
     /// End the voting and send pool to winner.
     function votingEnd() external {
@@ -89,6 +65,13 @@ contract CustomCashGrab {
         // contracts, they also have to be considered interaction with
         // external contracts.
 
+        
+        // No arguments are necessary, all
+        // information is already part of
+        // the transaction. The keyword payable
+        // is required for the function to
+        // be able to receive Ether.
+
         // 1. Conditions
         if (block.timestamp < votingEndTime)
             revert VotingNotYetEnded();
@@ -104,7 +87,7 @@ contract CustomCashGrab {
         address payable wallet = payable(highestVoter.voterAddress);
         wallet.transfer(contributionTotal);
     }
-    function findHighestVoter() private view returns (Voter) {
+    function findHighestVoter() private view returns (Voter memory) {
         uint highestContribution = 0;
         Voter memory highestVoter;
         for (uint i = 0; i < voterList.length; i++) {
@@ -115,8 +98,11 @@ contract CustomCashGrab {
         }
         return highestVoter;
     }
-    function getVoterList() public view returns (uint[] memory) {
-        return voterList;
+    function getVoterCount() public view returns (uint) {
+        return voterList.length;
+    }
+    function getVoter(uint index) public view returns (Voter memory) {
+        return voterList[index];
     }
     function getContributionTotal() public view returns (uint) {
         return contributionTotal;
