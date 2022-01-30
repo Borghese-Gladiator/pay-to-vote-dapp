@@ -1,5 +1,5 @@
 # Pay2Vote DApp
-DApp to track users paying to win. Displays leaderboard, current profile, and past transactions.
+DApp to pay to win the prize pool. Each voter contributes an amount and the highestVoter takes the pool home.
 - Live Demo: [https://pay-to-vote-dapp.vercel.app/](https://pay-to-vote-dapp.vercel.app/)
 
 ## Table of Contents
@@ -96,6 +96,7 @@ Since CD (Continuous Deployment) from Vercel is set up with GitHub, every pushed
   - check .env has the correct ACCOUNT_PUBLIC_ADDRESS and ACCOUNT_PRIVATE_KEY for the local network
 - ```{"code":-32602,"message":"Trying to send a raw transaction with an invalid chainId. The expected chainId is 31337"``` - fix by updating hardhat.config.js (missing ```hardhat: { chainId: 337 }```) [https://hardhat.org/metamask-issue.html](https://hardhat.org/metamask-issue.html)
 - ```MetaMask - RPC Error: [ethjs-query] while formatting outputs from RPC '{"value":{"code":-32603,"data":{"code":-32000,"message":"Nonce too high. Expected nonce to be 2 but got 9. Note that transactions can't be queued when automining."}}}'``` - Reset Account (occurred when using same account but switching which app was running)
+- ```Warning: Can't perform a React state update on an unmounted component.``` - Occurred after I used dynamic imports. Fix with useAsync hook
 
 #### References
 - Basis for initializing project [https://dev.to/dabit3/the-complete-guide-to-full-stack-ethereum-development-3j13](https://dev.to/dabit3/the-complete-guide-to-full-stack-ethereum-development-3j13)
