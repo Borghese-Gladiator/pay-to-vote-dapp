@@ -1,10 +1,9 @@
 // Load smart contracts
 import { ethers } from 'ethers'
 import Greeter from '../artifacts/contracts/Greeter.sol/Greeter.json'
-import SimpleAuction from '../artifacts/contracts/SimpleAuction.sol/SimpleAuction.json'
 
 // Context
-import ContractContext from "../context/ContractContext";
+import ContractAddressesContext from "../context/ContractAddressesContext";
 
 // Frontend
 import { useState, useEffect, useContext } from "react";
@@ -26,7 +25,7 @@ const textOneLineStyle = { whiteSpace: "nowrap" }
 const defaultGreeting = "";
 
 export default function GreeterDisplay() {
-  const { greeterAddress, simpleAuctionAddress } = useContext(ContractContext);
+  const { greeterAddress } = useContext(ContractAddressesContext);
   const [greeting, setGreeting] = useState();
   const [loading, setLoading] = useState(false);
 
