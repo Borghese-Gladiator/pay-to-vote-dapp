@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ContractContext from "../src/context/ContractContext";
+import ContractAddressesContext from "../src/context/ContractAddressesContext";
 import UserInfoContext from "../src/context/UserInfoContext";
 
 // Custom Components
@@ -35,13 +35,13 @@ const transactions = [
   { date: new Date('1997-12-17T03:24:00'), username: "User 1", contribution: 10, txnHash: "0x88f6d02ef407d84a6a558d69a302c21c73d32b8c0ff5811aef253e3f25824563" },
 ];
 
-export default function Home({ greeterAddress, simpleAuctionAddress }) {
+export default function Home({ greeterAddress, simpleAuctionAddress, customCashGrabAddress }) {
   const [loadingSetup, setLoadingSetup] = useState(true);
   const [userInfo, setUserInfo] = useState({});
 
   return (
     <UserInfoContext.Provider value={{ userInfo, setUserInfo }}>
-      <ContractContext.Provider value={{ greeterAddress, simpleAuctionAddress }}>
+      <ContractAddressesContext.Provider value={{ greeterAddress, simpleAuctionAddress, customCashGrabAddress }}>
         <RootLayout>
           {
             // Go through checks for user to setup MetaMask, connect account, and write username
@@ -73,7 +73,7 @@ export default function Home({ greeterAddress, simpleAuctionAddress }) {
               )
           }
         </RootLayout>
-      </ContractContext.Provider>
+      </ContractAddressesContext.Provider>
     </UserInfoContext.Provider>
   )
 }
@@ -82,7 +82,8 @@ export async function getStaticProps() {
   return {
     props: {
       greeterAddress: process.env.GREETER_DEPLOYED_ADDRESS,
-      simpleAuctionAddress: process.env.SIMPLE_AUCTION_DEPLOYED_ADDRESS
+      simpleAuctionAddress: process.env.SIMPLE_AUCTION_DEPLOYED_ADDRESS,
+      customCashGrabAddress: process.env.CUSTOM_CASH_GRAB_DEPLOYED_ADDRESS
     }
   }
 }
