@@ -45,7 +45,7 @@ export default function CreateUsername({ userInfo, setUserInfo }) {
         <Text style={textOneLineStyle}>Set Username</Text>
         <Box pl={1} />
         <Input
-          value={value}
+          value={username}
           onChange={handleChange}
           placeholder={"Winged Victory of Samothrace"} size="lg" />
         <Button onClick={execute} disabled={status === "pending"}>Submit</Button>
