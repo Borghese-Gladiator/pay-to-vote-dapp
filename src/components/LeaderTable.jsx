@@ -22,9 +22,9 @@ export default function LeaderTable({ players }) {
       <Table variant='simple'>
         <Thead>
           <Tr>
-            <Th></Th>
             <Th>Rank</Th>
             <Th>Name</Th>
+            <Th>Address</Th>
             <Th isNumeric>Contribution</Th>
           </Tr>
         </Thead>
@@ -35,19 +35,9 @@ export default function LeaderTable({ players }) {
             .map(({ name, address, contribution }, idx) => {
               return (
                 <Tr key={`leader-row-${idx}`}>
-                  <Td>
-                    <IconButton
-                      ml={2}
-                      size='sm'
-                      aria-label='Open collapsible'
-                      icon={show ? <AiFillCaretUp /> : <AiFillCaretDown />}
-                      onClick={handleToggle}
-                    />
-                  </Td>
                   <Td>{idx + 1}</Td>
-                  <Td>
-                    {name}
-                  </Td>
+                  <Td>{name}</Td>
+                  <Td>{address}</Td>
                   <Td isNumeric>${contribution}</Td>
                 </Tr>
               )
