@@ -98,13 +98,13 @@ contract CustomCashGrab {
         }
         return highestVoter;
     }
-    function getVoterCount() public view returns (uint) {
+    function getVoterCount() external view returns (uint) {
         return voterList.length;
     }
-    function getVoter(uint index) public view returns (Voter memory) {
+    function getVoter(uint index) external view returns (Voter memory) {
         return voterList[index];
     }
-    function getContributionTotal() public view returns (uint) {
+    function getContributionTotal() external view returns (uint) {
         return contributionTotal;
     }
 }
