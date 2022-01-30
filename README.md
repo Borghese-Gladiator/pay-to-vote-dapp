@@ -8,6 +8,14 @@ DApp to track users paying to win. Displays leaderboard, current profile, and pa
 - [Implementation](#implementation)
 
 ## Features
+- Users vote by pawning up their ETH and at the end, the user who pawned up the most ETH wins the entire pool.
+
+## Technologies
+- Hardhat.js - Ethereum development environment
+- Ether.js - Library to interact with Ethereum blockchain
+- Next.js - React framework with default routing and serverless functions
+- Chakra UI - Component library
+- Vercel - Platform to host JAMStack apps (frontend with serverless functions)
 
 ## Local Setup Commands
 - Install dependencies - ```npm install```
@@ -37,13 +45,6 @@ Since CD (Continuous Deployment) from Vercel is set up with GitHub, every pushed
 - Saved private key from Metamask account and Infura project ID into .env file for dotenv
 - Started local network and Imported Account into MetaMask Wallet using Account#0 private key - ```npm run hardhat-dev```
 
-## Technologies
-- Hardhat.js - Ethereum development environment
-- Ether.js - Library to interact with Ethereum blockchain
-- Next.js - React framework with default routing and serverless functions
-- Chakra UI - Component library
-- Vercel - Platform to host JAMStack apps (frontend with serverless functions)
-
 ## Implementation
 
 #### Steps
@@ -69,18 +70,47 @@ Since CD (Continuous Deployment) from Vercel is set up with GitHub, every pushed
 - Connected frontend to backend
   - Loaded deployed contract addresses from .env.local with getStaticProps
   - Updated index.js to use Greeter contract and display with GreeterDisplay (uses ErrorFallback)
-- Deployed 
-
+- Deployed GreeterContract
+  - Deployed smart contracts to Ropsten
+  - Deployed Next.js project to Vercel and configured ENV (add both .env and .env.local variables)
+    - ACCOUNT_PRIVATE_KEY, ACCOUNT_PUBLIC_ADDRESS - saved MetaMask Account 1 where I added Ropsten Ether
+    - INFURA_PROJECT_ID - created Infura project
+    - SIMPLE_AUCTION_DEPLOYED_ADDRESS, GREETER_DEPLOYED_ADDRESS - saved values after running deploy to Ropsten Network command
+  - Fixed frontend to load env variables by passing in getStaticProps, storing into Context Provider and loading from Context Consumer in GreeterDisplay
+- Wrote smart contract CustomCashGrab.sol using SimpleAuction as reference [https://docs.soliditylang.org/en/v0.8.11/solidity-by-example.html](https://docs.soliditylang.org/en/v0.8.11/solidity-by-example.html)
+- Wrote src/components/UserSetup components and UserInfoContext to get User Address info globally
+  
 #### Bugs
-- ```Error: call revert exception (method="greet()", errorArgs=null, errorName=null, errorSignature=null, reason=null, code=CALL_EXCEPTION, version=abi/5.5.0)``` - redeploy contract && switch to Test Account in MetaMask (one of the accounts listed when hardhat is starting up locally)
+- When you have 0 ETH, check which account you are using and what network you are on. In MetaMask, name your accounts names like Local_Test_Account and Ropsten_Test_Account to clearly see which network you should be on when using them.
+- ```Error: call revert exception (method="greet()", errorArgs=null, errorName=null, errorSignature=null, reason=null, code=CALL_EXCEPTION, version=abi/5.5.0)```
+  - redeploy contract && switch to Test Account in MetaMask (one of the accounts listed when hardhat is starting up locally)
+  - check .env has the correct ACCOUNT_PUBLIC_ADDRESS and ACCOUNT_PRIVATE_KEY for the local network
 - ```{"code":-32602,"message":"Trying to send a raw transaction with an invalid chainId. The expected chainId is 31337"``` - fix by updating hardhat.config.js (missing ```hardhat: { chainId: 337 }```) [https://hardhat.org/metamask-issue.html](https://hardhat.org/metamask-issue.html)
 - ```MetaMask - RPC Error: [ethjs-query] while formatting outputs from RPC '{"value":{"code":-32603,"data":{"code":-32000,"message":"Nonce too high. Expected nonce to be 2 but got 9. Note that transactions can't be queued when automining."}}}'``` - Reset Account (occurred when using same account but switching which app was running)
 
 #### References
+- Basis for initializing project [https://dev.to/dabit3/the-complete-guide-to-full-stack-ethereum-development-3j13](https://dev.to/dabit3/the-complete-guide-to-full-stack-ethereum-development-3j13)
 - Connecting frontend to Smart Contract
   - [https://gist.github.com/mbvissers/ad96c21706d25194be6f30b076eb25c1](https://gist.github.com/mbvissers/ad96c21706d25194be6f30b076eb25c1) which was from this article [https://medium.com/codex/creating-a-basic-dapp-with-web3-and-nextjs-2ee94af06517](https://medium.com/codex/creating-a-basic-dapp-with-web3-and-nextjs-2ee94af06517)
   - [https://github.com/nomiclabs/hardhat-hackathon-boilerplate/blob/master/frontend/src/components/Dapp.js](https://github.com/nomiclabs/hardhat-hackathon-boilerplate/blob/master/frontend/src/components/Dapp.js)
     - this code did not work locally
+- Writing smart contracts [https://solidity-by-example.org/structs/](https://solidity-by-example.org/structs/)
+- useLocalStorage and useAsync [https://usehooks.com/useAsync/](https://usehooks.com/useAsync/)
+
+#### Notes
+Flow of Application
+1. deploy Smart Contract to local
+2. validate UI on local in local network using MetaMask
+3. deploy Smart Contract to Ropsten Testnet
+4. validate UI on Vercel in Ropsten using MetaMask
+
+User simply uses frontend and changes accounts with MetaMask as needed between Mainnet and Testnet
+
+#### Retrospective
+- MetaMask + Next.js do not work well together since calls to Ether.js require window.ethereum to be present which is not present on the Server Side, therefore Next.js cannot SSR nor perform static site generation.
+- Frontend takes way more time than I expected even with a component library. Also, I should use component libraries I'm more familiar with.
+
+#### Next Steps
 
 ## Hardhat README
 This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts.
