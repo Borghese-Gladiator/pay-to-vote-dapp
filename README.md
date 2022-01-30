@@ -1,5 +1,6 @@
 # Pay2Vote DApp
 DApp to track users paying to win. Displays leaderboard, current profile, and past transactions.
+- Live Demo: [https://pay-to-vote-dapp.vercel.app/](https://pay-to-vote-dapp.vercel.app/)
 
 ## Table of Contents
 - [Features](#features)
@@ -9,6 +10,10 @@ DApp to track users paying to win. Displays leaderboard, current profile, and pa
 
 ## Features
 - Users vote by pawning up their ETH and at the end, the user who pawned up the most ETH wins the entire pool.
+  - CountdownTimer to end of voting
+  - Leaderboard of current top contenders
+  - User profile
+  - User past transactions
 
 ## Technologies
 - Hardhat.js - Ethereum development environment
@@ -78,7 +83,11 @@ Since CD (Continuous Deployment) from Vercel is set up with GitHub, every pushed
     - SIMPLE_AUCTION_DEPLOYED_ADDRESS, GREETER_DEPLOYED_ADDRESS - saved values after running deploy to Ropsten Network command
   - Fixed frontend to load env variables by passing in getStaticProps, storing into Context Provider and loading from Context Consumer in GreeterDisplay
 - Wrote smart contract CustomCashGrab.sol using SimpleAuction as reference [https://docs.soliditylang.org/en/v0.8.11/solidity-by-example.html](https://docs.soliditylang.org/en/v0.8.11/solidity-by-example.html)
+  - Added to deploy.js
 - Wrote src/components/UserSetup components and UserInfoContext to get User Address info globally
+- Wrote Hardhat tests
+  - Renamed sample-test to test-greeter
+  - Wrote test-custom-cash-grab.js
   
 #### Bugs
 - When you have 0 ETH, check which account you are using and what network you are on. In MetaMask, name your accounts names like Local_Test_Account and Ropsten_Test_Account to clearly see which network you should be on when using them.
@@ -90,12 +99,10 @@ Since CD (Continuous Deployment) from Vercel is set up with GitHub, every pushed
 
 #### References
 - Basis for initializing project [https://dev.to/dabit3/the-complete-guide-to-full-stack-ethereum-development-3j13](https://dev.to/dabit3/the-complete-guide-to-full-stack-ethereum-development-3j13)
-- Connecting frontend to Smart Contract
-  - [https://gist.github.com/mbvissers/ad96c21706d25194be6f30b076eb25c1](https://gist.github.com/mbvissers/ad96c21706d25194be6f30b076eb25c1) which was from this article [https://medium.com/codex/creating-a-basic-dapp-with-web3-and-nextjs-2ee94af06517](https://medium.com/codex/creating-a-basic-dapp-with-web3-and-nextjs-2ee94af06517)
-  - [https://github.com/nomiclabs/hardhat-hackathon-boilerplate/blob/master/frontend/src/components/Dapp.js](https://github.com/nomiclabs/hardhat-hackathon-boilerplate/blob/master/frontend/src/components/Dapp.js)
-    - this code did not work locally
+- Connecting frontend to Smart Contract - [https://gist.github.com/mbvissers/ad96c21706d25194be6f30b076eb25c1](https://gist.github.com/mbvissers/ad96c21706d25194be6f30b076eb25c1) which was from this article [https://medium.com/codex/creating-a-basic-dapp-with-web3-and-nextjs-2ee94af06517](https://medium.com/codex/creating-a-basic-dapp-with-web3-and-nextjs-2ee94af06517)
 - Writing smart contracts [https://solidity-by-example.org/structs/](https://solidity-by-example.org/structs/)
 - useLocalStorage and useAsync [https://usehooks.com/useAsync/](https://usehooks.com/useAsync/)
+- [https://hardhat.org/tutorial/testing-contracts.html](https://hardhat.org/tutorial/testing-contracts.html)
 
 #### Notes
 Flow of Application
@@ -109,8 +116,14 @@ User simply uses frontend and changes accounts with MetaMask as needed between M
 #### Retrospective
 - MetaMask + Next.js do not work well together since calls to Ether.js require window.ethereum to be present which is not present on the Server Side, therefore Next.js cannot SSR nor perform static site generation.
 - Frontend takes way more time than I expected even with a component library. Also, I should use component libraries I'm more familiar with.
+- Challenging to write solidity code - I moved most of my logic into JS utils but in hindsight, if I knew Solidity better, I wouldn't need to
+  - For Example, I kept trying to return an array of structs but then realized that it won't work since it's dynamic data.
 
 #### Next Steps
+- Remove all instances of SimpleAuction
+- Learn Solidity for a proper insertion - improve runtime by not running findHighestVoter each time vote is called
+  - learn Mapping vs Array
+- Add toggle to display address for table (chakra ui + react-table)
 
 ## Hardhat README
 This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts.
