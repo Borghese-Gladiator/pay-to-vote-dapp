@@ -1,5 +1,5 @@
 import { createContext } from "react"
 
-const ContractContext = createContext()
+const ContractAddressesContext = createContext()
 
-export default ContractContext
+export default ContractAddressesContext

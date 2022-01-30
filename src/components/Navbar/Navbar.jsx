@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import ContractContext from "../../context/ContractContext";
+import ContractAddressesContext from "../../context/ContractAddressesContext";
 
 import Logo from "./Logo";
 import { Link, Box, Flex, Text, Stack, Icon, IconButton, Image } from "@chakra-ui/react";
@@ -35,7 +35,7 @@ const MenuToggle = ({ toggle, isOpen }) => {
 };
 
 const MenuLinks = ({ isOpen }) => {
-  const { greeterAddress, simpleAuctionAddress } = useContext(ContractContext);
+  const { greeterAddress, simpleAuctionAddress } = useContext(ContractAddressesContext);
   return (
     <Box
       display={{ base: isOpen ? "block" : "none", md: "block" }}
