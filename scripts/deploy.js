@@ -6,8 +6,8 @@ require('dotenv').config()
 // Runtime Environment's members available in the global scope.
 const hre = require("hardhat");
 
-// Value of Date: Wed Aug 22 16:37:36 CST 2012
-const dateUINT = 1345619256308
+const ONE_DAY_IN_SECONDS = 86400;
+const dateUINT = 1345619256308 // Value of Date: Wed Aug 22 16:37:36 CST 2012
 
 async function main() {
   // Hardhat always runs the compile task when running scripts with its command
@@ -20,18 +20,22 @@ async function main() {
   // We get the contract to deploy
   const Greeter = await hre.ethers.getContractFactory("Greeter");
   const SimpleAuction = await hre.ethers.getContractFactory("SimpleAuction");
+  const CustomCashGrab = await hre.ethers.getContractFactory("CustomCashGrab");
   
   const greeter = await Greeter.deploy("Hello, Hardhat!");
   const simpleAuction = await SimpleAuction.deploy(
       dateUINT,
       process.env.ACCOUNT_PUBLIC_ADDRESS
     );
+  const customCashGrab = await CustomCashGrab.deploy(ONE_DAY_IN_SECONDS);
   
   await greeter.deployed();
   await simpleAuction.deployed();
+  await customCashGrab.deployed();
 
   console.log("Greeter deployed to:", greeter.address);
   console.log("Simple Auction deployed to:", simpleAuction.address);
+  console.log("Custom Cash Grab deployed to:", customCashGrab.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
