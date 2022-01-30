@@ -8,14 +8,9 @@ import {
   Td,
   Heading,
   Center,
-  IconButton,
-  Collapse
 } from '@chakra-ui/react';
-import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 
 export default function LeaderTable({ players }) {
-  const [show, setShow] = useState(false);
-  const handleToggle = () => setShow(!show);
   return (
     <>
       <Center><Heading as='h3' size='lg'>Leaderboard</Heading></Center>
