@@ -1,6 +1,7 @@
 import useAsync from "../../hooks/useAsync";
 import { ethers } from 'ethers'
 import {
+  Container,
   Box,
   Button,
   Flex,
@@ -24,26 +25,28 @@ export default function ConnectWallet({ userInfo, setUserInfo }) {
     }
   }
   return (
-    <Box
-      borderWidth={2}
-      p={3}
-    >
-      {status === "idle" && <div>Waiting to get address from MetaMask...</div>}
-      {status === "success" && <div>{value}</div>}
-      {status === "error" && <div>{error}</div>}
-      <Button onClick={execute} disabled={status === "pending"}>
-        <Flex alignItems="center">
-          <Text>Connect to MetaMask</Text>
-          {status === "pending"
-            && <Spinner
-              thickness='4px'
-              speed='0.65s'
-              emptyColor='gray.200'
-              color='blue.500'
-              size='xl'
-            />}
-        </Flex>
-      </Button>
-    </Box>
+    <Container maxW='container.sm'>
+      <Box
+        borderWidth={2}
+        p={3}
+      >
+        {status === "idle" && <div>Waiting to get address from MetaMask...</div>}
+        {status === "success" && <div>{value}</div>}
+        {status === "error" && <div>{error}</div>}
+        <Button onClick={execute} disabled={status === "pending"}>
+          <Flex alignItems="center">
+            <Text>Connect to MetaMask</Text>
+            {status === "pending"
+              && <Spinner
+                thickness='4px'
+                speed='0.65s'
+                emptyColor='gray.200'
+                color='blue.500'
+                size='xl'
+              />}
+          </Flex>
+        </Button>
+      </Box>
+    </Container>
   )
 }
