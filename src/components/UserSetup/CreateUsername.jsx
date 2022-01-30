@@ -18,6 +18,7 @@ export default function CreateUsername({ userInfo, setUserInfo }) {
   const { execute, status, value, error } = useAsync(updateUsername, false);
   async function updateUsername() {
     try {
+      // request access to the user's MetaMask account
       const message = `Hello! I will sign this message with name: ${username}`;
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
       const account = accounts[0]; // MetaMask gets current account
