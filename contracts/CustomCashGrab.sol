@@ -1,27 +1,16 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.4;
 contract CustomCashGrab {
-    struct winner {
-        address payable voterAddress;
-        string name;
-        uint contribution;
-    }
-    struct voter {
+    struct Voter {
         address voterAddress;
         string name;
         uint contribution;
     }
     // Current state of the bidding.
-    voter public highestVoter;
-    voter[] public runnerups;
+    Voter[] public voterList;
     uint public contributionTotal;
     bool ended; // Set to true at the end, disallows any change. By default initialized to `false`.
     
-    // User Attributes
-    string private name;
-    uint private contribution;
-    uint private rank;
-
     // Allowed withdrawals of previous bids
     mapping(address => uint) pendingReturns;
 
@@ -29,8 +18,8 @@ contract CustomCashGrab {
     uint public votingEndTime;
     
     // Events that will be emitted on changes.
-    event HighestBidIncreased(voter highestVoter);
-    event VotingEnded(voter winner);
+    event HighestBidIncreased(Voter highestVoter);
+    event VotingEnded(Voter winner);
     
     /// The auction has already ended.
     error VotingAlreadyEnded();
@@ -58,25 +47,14 @@ contract CustomCashGrab {
         if (block.timestamp > votingEndTime)
             revert VotingAlreadyEnded();
 
-        // If the bid is not higher, send the
-        // money back (the revert statement
-        // will revert all changes in this
-        // function execution including
-        // it having received the money).
-        if (msg.value <= highestVoter.contribution)
-            revert BidNotHighEnough(highestVoter.contribution);
-
-        if (highestVoter.contribution != 0) {
-            // Sending back the money by simply using
-            // highestBidder.send(highestBid) is a security risk
-            // because it could execute an untrusted contract.
-            // It is always safer to let the recipients
-            // withdraw their money themselves.
-            pendingReturns[highestVoter.voterAddress] += highestVoter.contribution;
-        }
-        highestVoter.name = _name;
-        highestVoter.voterAddress = msg.sender;
-        highestVoter.contribution = msg.value;
+        uint idx = voterList.length;
+        Voter memory voter;
+        voter.name = _name;
+        voter.voterAddress = msg.sender; // msg.sender is always the address where the current (external) function call came from
+        voter.contribution = msg.value;
+        voterList.push(voter);
+        
+        Voter memory highestVoter = findHighestVoter();
         emit HighestBidIncreased(highestVoter);
     }
     /// Withdraw a bid that was overbid.
@@ -119,22 +97,28 @@ contract CustomCashGrab {
 
         // 2. Effects
         ended = true;
+        Voter memory highestVoter = findHighestVoter();
         emit VotingEnded(highestVoter);
         
         // 3. Interaction
         address payable wallet = payable(highestVoter.voterAddress);
         wallet.transfer(contributionTotal);
     }
-    function getName() public view returns (string memory) {
-        return name;
+    function findHighestVoter() private view returns (Voter) {
+        uint highestContribution = 0;
+        Voter memory highestVoter;
+        for (uint i = 0; i < voterList.length; i++) {
+            if (highestContribution < voterList[i].contribution) {
+                highestVoter = voterList[i];
+                highestContribution = voterList[i].contribution;
+            }
+        }
+        return highestVoter;
     }
-    function setName(string memory _name) public {
-        name = _name;
+    function getVoterList() public view returns (uint[] memory) {
+        return voterList;
     }
-    function getContribution() public view returns (uint) {
-        return contribution;
-    }
-    function setContribution(uint _contribution) public {
-        contribution = _contribution;
+    function getContributionTotal() public view returns (uint) {
+        return contributionTotal;
     }
 }
