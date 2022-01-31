@@ -41,7 +41,6 @@ export default function GreeterDisplay() {
       const contract = new ethers.Contract(greeterAddress, Greeter.abi, provider)
       try {
         const data = await contract.greet()
-        console.log('data: ', data)
         return data;
       } catch (err) {
         console.log("Error: ", err)

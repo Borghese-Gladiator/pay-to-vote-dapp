@@ -60,7 +60,6 @@ export default function UserSetup({ setLoadingSetup }) {
   const animationDelay = 5000; // ms
   const totalAnimationDelay = animationDelay * setupList.length;
   const shouldShowApp = setupList.every(val => val.condition === false);
-  console.log(shouldShowApp);
   
   function showApp() {
     setLoadingSetup(false)

@@ -7,7 +7,6 @@ function Wait({ wait, show, children }) {
   useEffect(() => {
     setTimeout(() => {
       setWaitTimeOver(true)
-      console.log("WAIT TIME OVER");
     }, wait)
   }, [])
 
