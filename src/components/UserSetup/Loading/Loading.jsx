@@ -59,8 +59,8 @@ function Loading({ wait, loadingText, condition, children }) {
 
   return (
     <>
-      <Flex direction="column" justify="center" alignItems="center">
-        <Heading as="xl">{loadingText}</Heading>
+      <Flex direction="row" justify="center" alignItems="center">
+        <Heading as='h3' size='lg'>{loadingText}</Heading>
         {status === "idle" || status === "pending" && <Lottie options={loadingOptions} height={120} width={120} />}
         {status === "error" && <Lottie options={errorOptions} height={120} width={120} />}
         {status === "success" && <Lottie options={doneOptions} height={120} width={120} />}

@@ -6,14 +6,19 @@
  * check user is connected to MetaMask
  * check user has signed in before using Web3 message signing
  */
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 // Context
 import UserInfoContext from "../../context/UserInfoContext";
 // Custom components
-import Loading from "./Loading";
+import { Loading, Wait } from "./Loading";
 import NoWalletDetected from "./NoWalletDetected";
 import ConnectWallet from "./ConnectWallet";
 import CreateUsername from "./CreateUsername";
+import {
+  Container,
+  Flex,
+  Button
+} from "@chakra-ui/react";
 
 // Dynamic Import Components to avoid SSR
 /*
@@ -32,19 +37,19 @@ const CreateUsername = dynamic(
 )
 */
 
-const componentsToLoadList = [
+const setupList = [
   {
-    loadingText: "Detecting MetaMask chrome extension is present (or any other Ethereum Provider)",
+    loadingText: "Detecting MetaMask",
     condition: typeof window !== "undefined" && typeof window.ethereum === "undefined",
     Component: NoWalletDetected
   },
   {
-    loadingText: "Detecting user account from Ethereum Provider",
+    loadingText: "Detecting MetaMask Account",
     condition: typeof window !== "undefined" && typeof window.ethereum === "undefined" && !("selectedAddress" in userInfo),
     Component: ConnectWallet
   },
   {
-    loadingText: "Detecting if user has created username",
+    loadingText: "Detecting Username",
     condition: typeof window !== "undefined" && typeof window.ethereum === "undefined" && !("name" in userInfo),
     Component: CreateUsername
   },
@@ -52,22 +57,30 @@ const componentsToLoadList = [
 
 export default function UserSetup({ setLoadingSetup }) {
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
-  const animationDelay = 5;
-
-  // Display actual application, setup complete
-  // setLoadingSetup(false);
+  const animationDelay = 5000; // ms
+  const totalAnimationDelay = animationDelay * setupList.length;
+  const shouldShowApp = setupList.every(val => val.condition === false);
+  console.log(shouldShowApp);
+  
+  function showApp() {
+    setLoadingSetup(false)
+  }
 
   return (
-    <>
-      {componentsToLoadList.map((props, idx) => {
-        const { Component, condition, loadingText } = props;
-        const currentDelay = animationDelay * idx;
-        return (
-          <Loading wait={currentDelay} loadingText={loadingText} condition={condition}>
-            <Component userInfo={userInfo} setUserInfo={setUserInfo} />
-          </Loading>
-        )
-      })}
-    </>
+    <Container maxW='container.md'>
+      <Flex direction="column" justify="center" alignItems="center">
+        {setupList.map(({ Component, condition, loadingText }, idx) => {
+          const currentDelay = animationDelay * idx;
+          return (
+            <Loading key={`loading-step-${idx}`} wait={currentDelay} loadingText={loadingText} condition={condition}>
+              <Component userInfo={userInfo} setUserInfo={setUserInfo} />
+            </Loading>
+          )
+        })}
+        <Wait wait={totalAnimationDelay} show={shouldShowApp}>
+          <Button onClick={showApp}>Enter App</Button>
+        </Wait>
+      </Flex>
+    </Container>
   )
 }
