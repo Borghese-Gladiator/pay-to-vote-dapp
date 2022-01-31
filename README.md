@@ -1,5 +1,5 @@
 # Pay2Vote DApp
-DApp to pay to win the prize pool. Each voter contributes an amount and the highestVoter takes the pool home.
+DApp to pay to win a prize pool. Each voter contributes an amount and the highestVoter takes the pool home.
 - Live Demo: [https://pay-to-vote-dapp.vercel.app/](https://pay-to-vote-dapp.vercel.app/)
 
 ## Table of Contents
@@ -27,11 +27,8 @@ DApp to pay to win the prize pool. Each voter contributes an amount and the high
 - Start up both smart contract local network and frontend display - ```npm run dev```
 - Compile smart contracts - ```npx hardhat compile```
 - Deploy to local network - ```npx hardhat run scripts/deploy.js --network localhost```
-
-####  Deploy Steps
-Since CD (Continuous Deployment) from Vercel is set up with GitHub, every pushed commit will push right to PRD.
-1. Compile smart contracts - ```npx hardhat compile```
-2. Deploy to Ropsten live network - ```npx hardhat run scripts/deploy.js --network ropsten```
+- Deploy to Ropsten Testnet network - ```npx hardhat run scripts/deploy.js --network ropsten```
+- All Frontend commits deploy to Vercel since CD (Continuous Deployment) is set up with GitHub
 
 #### Full Setup Guide
 - Installed MetaMask Wallet Chrome extension - [https://metamask.io/download/](https://metamask.io/download/)
@@ -83,12 +80,18 @@ Since CD (Continuous Deployment) from Vercel is set up with GitHub, every pushed
     - SIMPLE_AUCTION_DEPLOYED_ADDRESS, GREETER_DEPLOYED_ADDRESS - saved values after running deploy to Ropsten Network command
   - Fixed frontend to load env variables by passing in getStaticProps, storing into Context Provider and loading from Context Consumer in GreeterDisplay
 - Wrote smart contract CustomCashGrab.sol using SimpleAuction as reference [https://docs.soliditylang.org/en/v0.8.11/solidity-by-example.html](https://docs.soliditylang.org/en/v0.8.11/solidity-by-example.html)
+  - Added environment variable CUSTOM_CASH_GRAB_DEPLOYED_ADDRESS
   - Added to deploy.js
 - Wrote src/components/UserSetup components and UserInfoContext to get User Address info globally
 - Wrote Hardhat tests
   - Renamed sample-test to test-greeter
   - Wrote test-custom-cash-grab.js
-  
+- Rewrote UserSetup by using custom Loading component
+  - Used animations from Lottie [https://lottiefiles.com/4397-loading-blocks](https://lottiefiles.com/4397-loading-blocks)
+  - ```npm i react-lottie```
+  - Display loading for every setup check that user needs to go through. Show button to enter app if all checked.
+- Rewrote components to have PropTypes to debug more easily
+
 #### Bugs
 - When you have 0 ETH, check which account you are using and what network you are on. In MetaMask, name your accounts names like Local_Test_Account and Ropsten_Test_Account to clearly see which network you should be on when using them.
 - ```Error: call revert exception (method="greet()", errorArgs=null, errorName=null, errorSignature=null, reason=null, code=CALL_EXCEPTION, version=abi/5.5.0)```
@@ -96,7 +99,9 @@ Since CD (Continuous Deployment) from Vercel is set up with GitHub, every pushed
   - check .env has the correct ACCOUNT_PUBLIC_ADDRESS and ACCOUNT_PRIVATE_KEY for the local network
 - ```{"code":-32602,"message":"Trying to send a raw transaction with an invalid chainId. The expected chainId is 31337"``` - fix by updating hardhat.config.js (missing ```hardhat: { chainId: 337 }```) [https://hardhat.org/metamask-issue.html](https://hardhat.org/metamask-issue.html)
 - ```MetaMask - RPC Error: [ethjs-query] while formatting outputs from RPC '{"value":{"code":-32603,"data":{"code":-32000,"message":"Nonce too high. Expected nonce to be 2 but got 9. Note that transactions can't be queued when automining."}}}'``` - Reset Account (occurred when using same account but switching which app was running)
-- ```Warning: Can't perform a React state update on an unmounted component.``` - Occurred after I used dynamic imports. Fix with useAsync hook
+- ```Warning: Can't perform a React state update on an unmounted component.``` - Occurred after I used dynamic imports. Fix with useAsync hook.
+- ```Error: invalid address or ENS name (argument="name", value="<SignerWithAddress 0x70997970C51812dc3A010C7d01b50e0d17dc79C8>", code=INVALID_ARGUMENT, version=contracts/5.5.0)``` - null address as input (needed to add Contract Address in .env)
+- ```ProviderError: rejected due to project ID settings``` - Infura security setting when I set which accounts can deploy (check .env has values of the PUBLIC ACCOUNT you want to use with Ropsten Testnet)
 
 #### References
 - Basis for initializing project [https://dev.to/dabit3/the-complete-guide-to-full-stack-ethereum-development-3j13](https://dev.to/dabit3/the-complete-guide-to-full-stack-ethereum-development-3j13)
@@ -119,6 +124,7 @@ User simply uses frontend and changes accounts with MetaMask as needed between M
 - Frontend takes way more time than I expected even with a component library. Also, I should use component libraries I'm more familiar with.
 - Challenging to write solidity code - I moved most of my logic into JS utils but in hindsight, if I knew Solidity better, I wouldn't need to
   - For Example, I kept trying to return an array of structs but then realized that it won't work since it's dynamic data.
+- DApps require lots of information to be loaded before they can be used. Writing this setup component was not expected.
 
 #### Next Steps
 - Remove all instances of SimpleAuction
