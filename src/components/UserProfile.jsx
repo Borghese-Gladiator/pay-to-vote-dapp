@@ -9,6 +9,7 @@ import {
   Tr,
   Td,
   Button,
+  Heading
 } from '@chakra-ui/react';
 import { rankOrdinalSuffix, toTitleCase, textOneLineStyle } from "../utils";
 
@@ -19,7 +20,7 @@ export default function UserProfile({ playerObj }) {
       FallbackComponent={ErrorFallback}
       onReset={() => setGreeting(defaultGreeting)}
     >
-      <Flex justify="center"><Text fontSize='2xl'>{toTitleCase(username)} Stats</Text></Flex>
+      <Flex justify="center"><Heading as='h4' size='md'>{toTitleCase(username)} Stats</Heading></Flex>
       <Table size='sm' variant='unstyled'>
         <Tbody>
           <Tr>

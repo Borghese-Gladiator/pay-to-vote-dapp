@@ -8,6 +8,7 @@ import {
   Td,
   Heading,
   Center,
+  Flex,
 } from '@chakra-ui/react';
 
 // Context
@@ -30,7 +31,7 @@ export default function LeaderTable({ players }) {
 
   return (
     <>
-      <Center><Heading as='h5' size='sm'>Leaderboard</Heading></Center>
+      <Center><Heading as='h4' size='md'>Leaderboard</Heading></Center>
       <Table variant='unstyled'>
         <Tbody>
           {loading
@@ -41,19 +42,21 @@ export default function LeaderTable({ players }) {
               color='blue.500'
               size='xl'
             />
-            : players
-              .sort((playerA, playerB) => playerA.contribution - playerB.contribution)
-              .slice(0, 3)
-              .map(({ name, address, contribution }, idx) => {
-                return (
-                  <Tr key={`leader-row-${idx}`}>
-                    <Td>{rankOrdinalSuffix(idx + 1)}</Td>
-                    <Td>{name}</Td>
-                    <Td>{address}</Td>
-                    <Td isNumeric>${contribution}</Td>
-                  </Tr>
-                )
-              })
+            : leaders.length === 0 
+            ? <Flex mt={3} justify="center">No Voters Found</Flex>
+            : leaders
+                .sort((playerA, playerB) => playerA.contribution - playerB.contribution)
+                .slice(0, 3)
+                .map(({ name, address, contribution }, idx) => {
+                  return (
+                    <Tr key={`leader-row-${idx}`}>
+                      <Td>{rankOrdinalSuffix(idx + 1)}</Td>
+                      <Td>{name}</Td>
+                      <Td>{address}</Td>
+                      <Td isNumeric>${contribution}</Td>
+                    </Tr>
+                  )
+                })
           }
         </Tbody>
       </Table>
