@@ -25,3 +25,29 @@ async function getVoterList(contractAddress) {
     console.log("Error: ", err)
   }
 }
+
+export function toTitleCase(str) {
+  return str.replace(
+    /\w\S*/g,
+    function(txt) {
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    }
+  );
+}
+
+export function rankOrdinalSuffix(i) {
+  // https://stackoverflow.com/questions/13627308/add-st-nd-rd-and-th-ordinal-suffix-to-a-number
+  const j = i % 10, k = i % 100;
+  if (j == 1 && k != 11) {
+    return i + "st";
+  }
+  if (j == 2 && k != 12) {
+    return i + "nd";
+  }
+  if (j == 3 && k != 13) {
+    return i + "rd";
+  }
+  return i + "th";
+}
+
+export const textOneLineStyle = { whiteSpace: "nowrap" }

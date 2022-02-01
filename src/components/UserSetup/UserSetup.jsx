@@ -57,7 +57,7 @@ const setupList = [
 
 export default function UserSetup({ setLoadingSetup }) {
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
-  const animationDelay = 5000; // ms
+  const animationDelay = 1000; // ms
   const totalAnimationDelay = animationDelay * (setupList.length - 1);
   const shouldShowApp = setupList.every(val => val.condition === false);
   

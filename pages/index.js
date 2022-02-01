@@ -5,7 +5,6 @@ import UserInfoContext from "../src/context/UserInfoContext";
 // Custom Components
 import RootLayout from "../src/components/_layouts/RootLayout";
 import UserSetup from "../src/components/UserSetup";
-import GreeterDisplay from "../src/components/GreeterDisplay";
 import LeaderTable from "../src/components/LeaderTable";
 import UserProfile from "../src/components/UserProfile";
 import UserTxnTable from "../src/components/UserTxnTable";
@@ -24,7 +23,7 @@ const players = [
 
 const playerObj = {
   username: "Trevor",
-  highest: 50,
+  contribution: 50,
   rank: 34
 };
 
@@ -53,19 +52,16 @@ export default function Home({ greeterAddress, simpleAuctionAddress, customCashG
                   <Grid
                     h={'100%'}
                     templateRows='repeat(3, 1fr)'
-                    templateColumns='repeat(2, 1fr)'
-                    gap={2}
+                    templateColumns='repeat(5, 1fr)'
+                    gap={4}
                   >
                     <GridItem colSpan={2}>
-                      <GreeterDisplay />
-                    </GridItem>
-                    <GridItem colSpan={1}>
                       <LeaderTable players={players} />
                     </GridItem>
-                    <GridItem colSpan={1}>
+                    <GridItem colSpan={3}>
                       <UserProfile playerObj={playerObj} />
                     </GridItem>
-                    <GridItem colSpan={2}>
+                    <GridItem colSpan={5}>
                       <UserTxnTable transactions={transactions} />
                     </GridItem>
                   </Grid>

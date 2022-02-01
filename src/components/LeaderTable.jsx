@@ -13,7 +13,8 @@ import {
 // Context
 import ContractAddressesContext from "../context/ContractAddressesContext";
 
-import { getLeaders } from "../utils";
+// Utils
+import { getLeaders, rankOrdinalSuffix } from "../utils";
 
 export default function LeaderTable({ players }) {
   const { customCashGrabAddress } = useContext(ContractAddressesContext);
@@ -29,16 +30,8 @@ export default function LeaderTable({ players }) {
 
   return (
     <>
-      <Center><Heading as='h3' size='lg'>Leaderboard</Heading></Center>
-      <Table variant='simple'>
-        <Thead>
-          <Tr>
-            <Th>Rank</Th>
-            <Th>Name</Th>
-            <Th>Address</Th>
-            <Th isNumeric>Contribution</Th>
-          </Tr>
-        </Thead>
+      <Center><Heading as='h5' size='sm'>Leaderboard</Heading></Center>
+      <Table variant='unstyled'>
         <Tbody>
           {loading
             ? <Spinner
@@ -48,13 +41,13 @@ export default function LeaderTable({ players }) {
               color='blue.500'
               size='xl'
             />
-            : leaders
+            : players
               .sort((playerA, playerB) => playerA.contribution - playerB.contribution)
               .slice(0, 3)
               .map(({ name, address, contribution }, idx) => {
                 return (
                   <Tr key={`leader-row-${idx}`}>
-                    <Td>{idx + 1}</Td>
+                    <Td>{rankOrdinalSuffix(idx + 1)}</Td>
                     <Td>{name}</Td>
                     <Td>{address}</Td>
                     <Td isNumeric>${contribution}</Td>

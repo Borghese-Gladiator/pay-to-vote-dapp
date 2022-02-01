@@ -1,8 +1,9 @@
 /**
  * Table for User's Past Transactions
  */
-
+import { useState } from "react";
 import {
+  Button,
   Heading,
   Center,
   Table,
@@ -18,6 +19,14 @@ import {
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 
 export default function UserTxnTable({ transactions }) {
+  const [isOpen, setIsOpen] = useState(false);
+  if (!isOpen) {
+    return (
+      <Flex justify="Center">
+        <Button onClick={() => setIsOpen(true)}>Load Transactions</Button>
+      </Flex>
+    )
+  }
   return (
     <>
       <Center><Heading as='h3' size='md' m={2}>Past Transactions</Heading></Center>
