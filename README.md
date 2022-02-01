@@ -94,9 +94,9 @@ DApp to pay to win a prize pool. Each voter contributes an amount and the highes
 
 #### Bugs
 - When you have 0 ETH, check which account you are using and what network you are on. In MetaMask, name your accounts names like Local_Test_Account and Ropsten_Test_Account to clearly see which network you should be on when using them.
-- ```Error: call revert exception (method="greet()", errorArgs=null, errorName=null, errorSignature=null, reason=null, code=CALL_EXCEPTION, version=abi/5.5.0)```
-  - redeploy contract && switch to Test Account in MetaMask (one of the accounts listed when hardhat is starting up locally)
-  - check .env has the correct ACCOUNT_PUBLIC_ADDRESS and ACCOUNT_PRIVATE_KEY for the local network
+- ```Error: call revert exception (method="greet()", errorArgs=null, errorName=null, errorSignature=null, reason=null, code=CALL_EXCEPTION, version=abi/5.5.0)``` - error since it can't find contract method (most likely wrong address)
+  - redeploy contracts to local network and update values in .env.local
+  - in MetaMask, switch to Test Account in MetaMask (one of the accounts listed when hardhat is starting up locally)
 - ```{"code":-32602,"message":"Trying to send a raw transaction with an invalid chainId. The expected chainId is 31337"``` - fix by updating hardhat.config.js (missing ```hardhat: { chainId: 337 }```) [https://hardhat.org/metamask-issue.html](https://hardhat.org/metamask-issue.html)
 - ```MetaMask - RPC Error: [ethjs-query] while formatting outputs from RPC '{"value":{"code":-32603,"data":{"code":-32000,"message":"Nonce too high. Expected nonce to be 2 but got 9. Note that transactions can't be queued when automining."}}}'``` - Reset Account (occurred when using same account but switching which app was running)
 - ```Warning: Can't perform a React state update on an unmounted component.``` - Occurred after I used dynamic imports. Fix with useAsync hook.
