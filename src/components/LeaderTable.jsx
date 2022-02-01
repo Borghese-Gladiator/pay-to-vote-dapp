@@ -6,6 +6,7 @@ import {
   Tr,
   Th,
   Td,
+  Spinner,
   Heading,
   Center,
   Flex,
@@ -42,9 +43,9 @@ export default function LeaderTable({ players }) {
               color='blue.500'
               size='xl'
             />
-            : leaders.length === 0 
-            ? <Flex mt={3} justify="center">No Voters Found</Flex>
-            : leaders
+            : leaders.length === 0
+              ? <Flex mt={3} justify="center">No Voters Found</Flex>
+              : leaders
                 .sort((playerA, playerB) => playerA.contribution - playerB.contribution)
                 .slice(0, 3)
                 .map(({ name, address, contribution }, idx) => {
