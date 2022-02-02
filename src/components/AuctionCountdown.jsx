@@ -30,7 +30,7 @@ export default function AuctionCountdown() {
   /*
   useEffect(() => {
     setPrizePoolLoading(true);
-    getVotingEndTime(customCashGrabAddress)
+    getTotalContribution(customCashGrabAddress)
       .then(response =>
         setPrizePool(response)
       )
