@@ -1,10 +1,56 @@
 import { ethers } from 'ethers'
 import CustomCashGrabAddress from "./artifacts/contracts/CustomCashGrab.sol/CustomCashGrab.json";
 
-export async function getLeaders(address) {
+export async function getUserContribution(contractAddress) {
+  // @precondition window.ethereum is defined
+  const provider = new ethers.providers.Web3Provider(window.ethereum)
+  const contract = new ethers.Contract(contractAddress, CustomCashGrabAddress.abi, provider)
+  try {
+    return await contract.getContribution();
+  } catch(err) {
+    console.log("Error: ", err);
+  }
+}
+
+export async function getVotingEndTime() {
+  // @precondition window.ethereum is defined
+  const provider = new ethers.providers.Web3Provider(window.ethereum)
+  const contract = new ethers.Contract(contractAddress, CustomCashGrabAddress.abi, provider)
+  try {
+    return await contract.getVotingEndTime();
+  } catch(err) {
+    console.log("Error: ", err);
+  }
+  
+}
+
+export async function submitUserContribution(contractAddress, contribution) {
+  // @precondition window.ethereum is defined
+  const provider = new ethers.providers.Web3Provider(window.ethereum)
+  const contract = new ethers.Contract(contractAddress, CustomCashGrabAddress.abi, provider)
+  try {
+    const newValue = await contract.setContribution(contribution);
+    return newValue;
+  } catch(err) {
+    console.log("Error: ", err);
+  }
+}
+
+export async function getTotalContribution(contractAddress) {
+  // @precondition window.ethereum is defined
+  const provider = new ethers.providers.Web3Provider(window.ethereum)
+  const contract = new ethers.Contract(contractAddress, CustomCashGrabAddress.abi, provider)
+  try {
+    return await contract.getTotalContribution();
+  } catch(err) {
+    console.log("Error: ", err);
+  }
+}
+
+export async function getLeaders(contractAddress) {
   // @return First, Second, Third, Fourth palces
-  console.log(`ADDRESS: ${address}`);
-  const voterList = await getVoterList(address);
+  console.log(`ADDRESS: ${contractAddress}`);
+  const voterList = await getVoterList(contractAddress);
   return voterList.slice(0, 5)
 }
 
@@ -51,3 +97,8 @@ export function rankOrdinalSuffix(i) {
 }
 
 export const textOneLineStyle = { whiteSpace: "nowrap" }
+
+export function convertDateToStr(date) {
+  const options = { day: 'numeric', hour: '2-digit', minute: '2-digit' };
+  return date.toLocaleDateString("en-US", options);
+}

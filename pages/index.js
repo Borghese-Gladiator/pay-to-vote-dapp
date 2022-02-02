@@ -5,6 +5,7 @@ import UserInfoContext from "../src/context/UserInfoContext";
 // Custom Components
 import RootLayout from "../src/components/_layouts/RootLayout";
 import UserSetup from "../src/components/UserSetup";
+import AuctionCountdown from "../src/components/AuctionCountdown";
 import LeaderTable from "../src/components/LeaderTable";
 import UserProfile from "../src/components/UserProfile";
 import UserTxnTable from "../src/components/UserTxnTable";
@@ -51,10 +52,15 @@ export default function Home({ greeterAddress, simpleAuctionAddress, customCashG
                 <Container h={'100%'} maxW='container.lg'>
                   <Grid
                     h={'100%'}
-                    templateRows='repeat(3, 1fr)'
+                    templateRows='repeat(4, 1fr)'
                     templateColumns='repeat(5, 1fr)'
-                    gap={4}
+                    gap={8}
                   >
+                    <GridItem colSpan={1} />
+                    <GridItem colSpan={3}>
+                      <AuctionCountdown />
+                    </GridItem>
+                    <GridItem colSpan={1} />
                     <GridItem colSpan={2}>
                       <LeaderTable players={players} />
                     </GridItem>
