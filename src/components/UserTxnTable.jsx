@@ -17,16 +17,23 @@ import {
   Text
 } from '@chakra-ui/react';
 import { ExternalLinkIcon } from "@chakra-ui/icons";
+import { getUserTransactions } from "../utils";
 
-export default function UserTxnTable({ transactions }) {
-  const [isOpen, setIsOpen] = useState(false);
-  if (!isOpen) {
-    return (
-      <Flex justify="Center">
-        <Button onClick={() => setIsOpen(true)}>Load Transactions</Button>
-      </Flex>
-    )
-  }
+export default function UserTxnTable() {
+  const { customCashGrabAddress } = useContext(ContractAddressesContext);
+  const [transactionList, setTransactionList] = useState([]);
+  const [loading, setLoading] = useState(true);
+  /*
+  useEffect(() => {
+    setLoading(true);
+    getUserTransactions(customCashGrabAddress)
+      .then(response =>
+        setTransactionList(response)
+      )
+      .catch(e => alert(`Getting data failed: ${e.message}`))
+      .finally(() => setLoading(false))
+  }, [leaderList])
+  */
   return (
     <>
       <Center><Heading as='h3' size='md' m={2}>Past Transactions</Heading></Center>
@@ -40,34 +47,46 @@ export default function UserTxnTable({ transactions }) {
           </Tr>
         </Thead>
         <Tbody>
-          {transactions
-            .sort((txnA, txnB) => txnB.date - txnA.date)
-            .map(({ date, contribution, txnHash }, idx) => {
-              const order = transactions.length - idx;
-              const dateString = date
-                .toLocaleString('en-us', { year: 'numeric', month: '2-digit', day: '2-digit' })
-                .replace(/(\d+)\/(\d+)\/(\d+)/, '$3-$1-$2');
-              return (
-                <Tr key={`txn-row-${order}`}>
-                  <Td>{order}</Td>
-                  <Td>{dateString}</Td>
-                  <Td>${contribution}</Td>
-                  <Td>
-                    <Link
-                      href={`https://etherscan.io/tx/${txnHash}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      isExternal
-                    >
-                      <Flex alignItems="center">
-                        <Text as={"p"}>{txnHash}</Text>
-                        <ExternalLinkIcon w={8} h={8} p={1} />
-                      </Flex>
-                    </Link>
-                  </Td>
-                </Tr>
-              )
-            })
+          {loading
+            ?
+            <Spinner
+              thickness='4px'
+              speed='0.65s'
+              emptyColor='gray.200'
+              color='blue.500'
+              size='xl'
+            />
+            :
+            transactionList.length === 0
+              ? <Flex mt={3} justify="center">No Voters Found</Flex>
+              : transactionList
+                .sort((txnA, txnB) => txnB.date - txnA.date)
+                .map(({ date, contribution, txnHash }, idx) => {
+                  const order = transactions.length - idx;
+                  const dateString = date
+                    .toLocaleString('en-us', { year: 'numeric', month: '2-digit', day: '2-digit' })
+                    .replace(/(\d+)\/(\d+)\/(\d+)/, '$3-$1-$2');
+                  return (
+                    <Tr key={`txn-row-${order}`}>
+                      <Td>{order}</Td>
+                      <Td>{dateString}</Td>
+                      <Td>${contribution}</Td>
+                      <Td>
+                        <Link
+                          href={`https://etherscan.io/tx/${txnHash}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          isExternal
+                        >
+                          <Flex alignItems="center">
+                            <Text as={"p"}>{txnHash}</Text>
+                            <ExternalLinkIcon w={8} h={8} p={1} />
+                          </Flex>
+                        </Link>
+                      </Td>
+                    </Tr>
+                  )
+                })
           }
         </Tbody>
       </Table>

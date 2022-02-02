@@ -1,6 +1,21 @@
 import { ethers } from 'ethers'
 import CustomCashGrabAddress from "./artifacts/contracts/CustomCashGrab.sol/CustomCashGrab.json";
 
+export async function getUserTransactions(contractAddress) {
+  return []
+}
+
+export async function getUserProfile(contractAddress) {
+  // @precondition window.ethereum is defined
+  const provider = new ethers.providers.Web3Provider(window.ethereum)
+  const contract = new ethers.Contract(contractAddress, CustomCashGrabAddress.abi, provider)
+  try {
+    return await contract.getUserProfile();
+  } catch(err) {
+    console.log("Error: ", err);
+  }
+}
+
 export async function getUserContribution(contractAddress) {
   // @precondition window.ethereum is defined
   const provider = new ethers.providers.Web3Provider(window.ethereum)
@@ -47,14 +62,7 @@ export async function getTotalContribution(contractAddress) {
   }
 }
 
-export async function getLeaders(contractAddress) {
-  // @return First, Second, Third, Fourth palces
-  console.log(`ADDRESS: ${contractAddress}`);
-  const voterList = await getVoterList(contractAddress);
-  return voterList.slice(0, 5)
-}
-
-async function getVoterList(contractAddress) {
+export async function getVoterList(contractAddress) {
   // @precondition window.ethereum is defined
   const provider = new ethers.providers.Web3Provider(window.ethereum)
   const contract = new ethers.Contract(contractAddress, CustomCashGrabAddress.abi, provider)

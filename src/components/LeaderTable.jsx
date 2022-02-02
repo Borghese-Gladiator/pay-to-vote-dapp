@@ -16,19 +16,23 @@ import {
 import ContractAddressesContext from "../context/ContractAddressesContext";
 
 // Utils
-import { getLeaders, rankOrdinalSuffix } from "../utils";
+import { getVoterList, rankOrdinalSuffix } from "../utils";
 
 export default function LeaderTable({ players }) {
   const { customCashGrabAddress } = useContext(ContractAddressesContext);
-  const [leaders, setLeaders] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [leaderList, setLeaderList] = useState([]);
+  const [loading, setLoading] = useState(true);
+  /*
   useEffect(() => {
-    getLeaders(customCashGrabAddress).then((val) => {
-      setLeaders(val);
-    })
+    setLoading(true);
+    getVoterList(customCashGrabAddress)
+      .then(response =>
+        setLeaderList(response.slice(0, 5))
+      )
       .catch(e => alert(`Getting data failed: ${e.message}`))
       .finally(() => setLoading(false))
-  }, []);
+  }, [leaderList])
+  */
 
   return (
     <>
@@ -43,9 +47,9 @@ export default function LeaderTable({ players }) {
               color='blue.500'
               size='xl'
             />
-            : leaders.length === 0
+            : leaderList.length === 0
               ? <Flex mt={3} justify="center">No Voters Found</Flex>
-              : leaders
+              : leaderList
                 .sort((playerA, playerB) => playerA.contribution - playerB.contribution)
                 .slice(0, 3)
                 .map(({ name, address, contribution }, idx) => {
