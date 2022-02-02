@@ -1,4 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from 'react';
+import ContractAddressesContext from "../context/ContractAddressesContext";
+import { ErrorBoundary } from 'react-error-boundary';
+import ErrorFallback from "./ErrorFallback";
 import CountdownTimer from "./CountdownTimer";
 import {
   Table,
@@ -12,10 +15,10 @@ import {
 import { getTotalContribution, getVotingEndTime } from "../utils";
 
 export default function AuctionCountdown() {
+  const { customCashGrabAddress } = useContext(ContractAddressesContext);
   const [endTime, setEndTime] = useState("");
   const [endTimeLoading, setEndTimeLoading] = useState(true);
-  /*
-  useEffect(() => {
+  function resetEndTime() {
     setEndTimeLoading(true);
     getVotingEndTime(customCashGrabAddress)
       .then(response =>
@@ -23,12 +26,15 @@ export default function AuctionCountdown() {
       )
       .catch(e => alert(`Getting end time failed: ${e.message}`))
       .finally(() => setEndTimeLoading(false))
+  }
+  /*
+  useEffect(() => {
+    resetEndTime()
   }, [endTime])
   */
   const [prizePool, setPrizePool] = useState("");
   const [prizePoolLoading, setPrizePoolLoading] = useState(true);
-  /*
-  useEffect(() => {
+  function resetPrizePool() {
     setPrizePoolLoading(true);
     getTotalContribution(customCashGrabAddress)
       .then(response =>
@@ -36,11 +42,21 @@ export default function AuctionCountdown() {
       )
       .catch(e => alert(`Getting prize pool failed: ${e.message}`))
       .finally(() => setPrizePoolLoading(false))
-  }, [endTime])
+  }
+  /*
+  useEffect(() => {
+    resetPrizePool()
+  }, [prizePool])
   */
 
   return (
-    <>
+    <ErrorBoundary
+      FallbackComponent={ErrorFallback}
+      onReset={() => {
+        resetEndTime()
+        resetPrizePool()
+      }}
+    >
       <Container h={'100%'} maxW='container.sm'>
         <Table size='sm' variant='simple'>
           <Tbody>
@@ -55,6 +71,6 @@ export default function AuctionCountdown() {
           </Tbody>
         </Table>
       </Container>
-    </>
+    </ErrorBoundary>
   )
 }

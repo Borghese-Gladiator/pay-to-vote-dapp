@@ -1,4 +1,7 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import ContractAddressesContext from "../context/ContractAddressesContext";
+import { ErrorBoundary } from 'react-error-boundary';
+import ErrorFallback from "./ErrorFallback";
 import {
   Table,
   Thead,
@@ -11,19 +14,13 @@ import {
   Center,
   Flex,
 } from '@chakra-ui/react';
-
-// Context
-import ContractAddressesContext from "../context/ContractAddressesContext";
-
-// Utils
 import { getVoterList, rankOrdinalSuffix } from "../utils";
 
 export default function LeaderTable({ players }) {
   const { customCashGrabAddress } = useContext(ContractAddressesContext);
   const [leaderList, setLeaderList] = useState([]);
   const [loading, setLoading] = useState(true);
-  /*
-  useEffect(() => {
+  function resetLeaderList() {
     setLoading(true);
     getVoterList(customCashGrabAddress)
       .then(response =>
@@ -31,11 +28,18 @@ export default function LeaderTable({ players }) {
       )
       .catch(e => alert(`Getting data failed: ${e.message}`))
       .finally(() => setLoading(false))
+  }
+  /*
+  useEffect(() => {
+    resetLeaderList()
   }, [leaderList])
   */
 
   return (
-    <>
+    <ErrorBoundary
+      FallbackComponent={ErrorFallback}
+      onReset={() => resetLeaderList()}
+    >
       <Center><Heading as='h4' size='md'>Leaderboard</Heading></Center>
       <Table variant='unstyled'>
         <Tbody>
@@ -65,6 +69,6 @@ export default function LeaderTable({ players }) {
           }
         </Tbody>
       </Table>
-    </>
+    </ErrorBoundary>
   )
 }

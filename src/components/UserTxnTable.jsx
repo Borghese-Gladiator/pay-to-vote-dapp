@@ -1,8 +1,11 @@
 /**
  * Table for User's Past Transactions
  */
-import { useState } from "react";
-import {
+ import { useState, useEffect, useContext } from 'react';
+ import ContractAddressesContext from "../context/ContractAddressesContext";
+ import { ErrorBoundary } from 'react-error-boundary';
+ import ErrorFallback from "./ErrorFallback";
+ import {
   Button,
   Heading,
   Center,
@@ -23,8 +26,7 @@ export default function UserTxnTable() {
   const { customCashGrabAddress } = useContext(ContractAddressesContext);
   const [transactionList, setTransactionList] = useState([]);
   const [loading, setLoading] = useState(true);
-  /*
-  useEffect(() => {
+  function resetTransactionList() {
     setLoading(true);
     getUserTransactions(customCashGrabAddress)
       .then(response =>
@@ -32,10 +34,17 @@ export default function UserTxnTable() {
       )
       .catch(e => alert(`Getting data failed: ${e.message}`))
       .finally(() => setLoading(false))
-  }, [leaderList])
+  }
+  /*
+  useEffect(() => {
+    resetTransactionList()
+  }, [transactionList])
   */
   return (
-    <>
+    <ErrorBoundary
+      FallbackComponent={ErrorFallback}
+      onReset={() => resetTransactionList()}
+    >
       <Center><Heading as='h3' size='md' m={2}>Past Transactions</Heading></Center>
       <Table size='sm'>
         <Thead>
@@ -90,6 +99,6 @@ export default function UserTxnTable() {
           }
         </Tbody>
       </Table>
-    </>
+    </ErrorBoundary>
   )
 }

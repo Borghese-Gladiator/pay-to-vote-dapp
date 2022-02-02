@@ -20,8 +20,8 @@ export default function UserProfile() {
   const { customCashGrabAddress } = useContext(ContractAddressesContext);
   const [profile, setProfile] = useState("");
   const [profileLoading, setProfileLoading] = useState(true);
-  /*
-  useEffect(() => {
+
+  function resetProfile() {
     setProfileLoading(true);
     getUserProfile(customCashGrabAddress)
       .then(response =>
@@ -29,11 +29,14 @@ export default function UserProfile() {
       )
       .catch(e => alert(`Getting profile failed: ${e.message}`))
       .finally(() => setProfileLoading(false))
+  }
+  /*
+  useEffect(() => {
+    resetProfile()
   }, [profile])
   */
 
   const [contributionLoading, setContributionLoading] = useState(false);
-  /*
   async function handleSubmit() {
     setContributionLoading(true);
     submitUserContribution(customCashGrabAddress)
@@ -43,12 +46,11 @@ export default function UserProfile() {
       .catch(e => alert(`Sending failed: ${e.message}`))
       .finally(() => setContributionLoading(false))
   }
-  */
 
   return (
     <ErrorBoundary
       FallbackComponent={ErrorFallback}
-      onReset={() => setGreeting(defaultGreeting)}
+      onReset={() => resetProfile()}
     >
       <Flex justify="center"><Heading as='h4' size='md'>{profileLoading ? "Loading Stats" : `${toTitleCase(profile.username)}  Stats`}</Heading></Flex>
       <Table size='sm' variant='unstyled'>
