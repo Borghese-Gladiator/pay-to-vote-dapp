@@ -75,7 +75,7 @@ export default function UserProfile() {
           </Popover>
         }
       </Flex>
-      <Table size='sm' variant='unstyled'>
+      <Table variant='simple' size='md'>
         <Tbody>
           <Tr>
             <Td><Text fontSize='md'>Current Rank</Text></Td>

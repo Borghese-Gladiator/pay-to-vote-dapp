@@ -58,7 +58,7 @@ export default function AuctionCountdown() {
       }}
     >
       <Container h={'100%'} maxW='container.sm'>
-        <Table size='sm' variant='simple'>
+        <Table variant='simple' size="md">
           <Tbody>
             <Tr>
               <Td isNumeric><Heading as='h2' size='xl'>Time Left</Heading></Td>
