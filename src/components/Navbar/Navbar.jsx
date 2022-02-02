@@ -35,7 +35,7 @@ const MenuToggle = ({ toggle, isOpen }) => {
 };
 
 const MenuLinks = ({ isOpen }) => {
-  const { greeterAddress, simpleAuctionAddress } = useContext(ContractAddressesContext);
+  const { customCashGrabAddress } = useContext(ContractAddressesContext);
   return (
     <Box
       display={{ base: isOpen ? "block" : "none", md: "block" }}
@@ -49,39 +49,13 @@ const MenuLinks = ({ isOpen }) => {
         pt={[4, 2, 0, 0]}
       >
         <Link
-          href={`https://etherscan.io/address/${greeterAddress}`}
+          href={`https://etherscan.io/address/${customCashGrabAddress}`}
           target="_blank"
           rel="noopener noreferrer"
           isExternal
         >
           <Flex alignItems="center">
-            <Image
-              src="/etherscan-logo-circle.jpg"
-              borderRadius='full'
-              htmlHeight={16}
-              htmlWidth={16}
-              mr={1}
-            />
-            <Text fontSize='sm'>View Greeter</Text>
-            <ExternalLinkIcon w={6} h={6} p={1} />
-          </Flex>
-        </Link>
-        <Divider orientation='vertical' variant="solid" h="50px" />
-        <Link
-          href={`https://etherscan.io/address/${simpleAuctionAddress}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          isExternal
-        >
-          <Flex alignItems="center">
-            <Image
-              src="/etherscan-logo-circle.jpg"
-              borderRadius='full'
-              htmlHeight={16}
-              htmlWidth={16}
-              mr={1}
-            />
-            <Text fontSize='sm'>View SimpleAuction</Text>
+            <Text fontSize='sm'>View Deployed Contract</Text>
             <ExternalLinkIcon w={6} h={6} p={1} />
           </Flex>
         </Link>
