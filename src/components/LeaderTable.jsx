@@ -4,21 +4,26 @@ import { ErrorBoundary } from 'react-error-boundary';
 import ErrorFallback from "./ErrorFallback";
 import {
   Table,
-  Thead,
   Tbody,
   Tr,
-  Th,
   Td,
   Spinner,
   Heading,
   Center,
   Flex,
+  Box,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverArrow,
+  PopoverCloseButton,
 } from '@chakra-ui/react';
 import { getVoterList, rankOrdinalSuffix } from "../utils";
 
 export default function LeaderTable({ players }) {
   const { customCashGrabAddress } = useContext(ContractAddressesContext);
-  const [leaderList, setLeaderList] = useState([]);
+  const [leaderList, setLeaderList] = useState(players);
   const [loading, setLoading] = useState(true);
   function resetLeaderList() {
     setLoading(true);
@@ -41,7 +46,7 @@ export default function LeaderTable({ players }) {
       onReset={() => resetLeaderList()}
     >
       <Center><Heading as='h4' size='md'>Leaderboard</Heading></Center>
-      {loading
+      {!loading
         ?
         <Flex mt={3} justify="center">
           <Spinner
@@ -53,20 +58,30 @@ export default function LeaderTable({ players }) {
           />
         </Flex>
         :
-        <Table variant='unstyled'>
+        <Table variant='simple' size="sm">
           <Tbody>
             {leaderList.length === 0
               ? <Flex mt={3} justify="center">Empty Leaderboard!!</Flex>
               : leaderList
-                .sort((playerA, playerB) => playerA.contribution - playerB.contribution)
+                .sort((leaderA, leaderB) => leaderB.contribution - leaderA.contribution)
                 .slice(0, 3)
                 .map(({ name, address, contribution }, idx) => {
                   return (
                     <Tr key={`leader-row-${idx}`}>
-                      <Td>{rankOrdinalSuffix(idx + 1)}</Td>
-                      <Td>{name}</Td>
-                      <Td>{address}</Td>
-                      <Td isNumeric>${contribution}</Td>
+                      <Td isNumeric>{rankOrdinalSuffix(idx + 1)}</Td>
+                      <Td>
+                        <Popover trigger="hover">
+                          <PopoverTrigger>
+                            <Box borderWidth={1} p={2} _hover={{ bg: "teal.600" }}>{name}</Box>
+                          </PopoverTrigger>
+                          <PopoverContent>
+                            <PopoverArrow />
+                            <PopoverCloseButton />
+                            <PopoverHeader>Address: {address}</PopoverHeader>
+                          </PopoverContent>
+                        </Popover>
+                      </Td>
+                      <Td>${contribution}</Td>
                     </Tr>
                   )
                 })}
