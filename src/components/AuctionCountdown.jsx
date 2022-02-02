@@ -5,13 +5,14 @@ import {
   Tbody,
   Tr,
   Td,
-  Heading
+  Heading,
+  Text,
+  Container
 } from '@chakra-ui/react';
 import { getTotalContribution, getVotingEndTime } from "../utils";
 
 export default function AuctionCountdown() {
-  const blah = { hours: 0, minutes: 60, seconds: 0 }
-  const [endTime, setEndTime] = useState(0);
+  const [endTime, setEndTime] = useState("");
   const [prizePool, setPrizePool] = useState("");
   /*
   useEffect(async () => {
@@ -24,18 +25,20 @@ export default function AuctionCountdown() {
   */
   return (
     <>
-      <Table size='sm' variant='unstyled'>
+    <Container h={'100%'} maxW='container.sm'>
+      <Table size='sm' variant='simple'>
         <Tbody>
           <Tr>
-            <Td isNumeric><Heading as='h2' size='2xl'>Time Left</Heading></Td>
-            <Td>{endTime === "" ? "Loading" : <CountdownTimer endTime={blah} />}</Td>
+          <Td isNumeric><Heading as='h2' size='xl'>Time Left</Heading></Td>
+            <Td><Text fontSize='lg'>{endTime === "" ? "Loading" : <CountdownTimer endTime={endTime} />}</Text></Td>
           </Tr>
           <Tr>
-            <Td isNumeric><Heading as='h2' size='2xl'>Prize Pool</Heading></Td>
-            <Td>{prizePool === "" ? "Loading" : `${prizePool} ETH`}</Td>
+            <Td isNumeric><Heading as='h3' size='xl'>Prize Pool</Heading></Td>
+            <Td><Text fontSize='lg'>{prizePool === "" ? "Loading" : `${prizePool} ETH`}</Text></Td>
           </Tr>
         </Tbody>
       </Table>
+      </Container>
     </>
   )
 }
