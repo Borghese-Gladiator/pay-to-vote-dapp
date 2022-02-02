@@ -21,9 +21,9 @@ import {
 } from '@chakra-ui/react';
 import { getVoterList, rankOrdinalSuffix } from "../utils";
 
-export default function LeaderTable({ players }) {
+export default function LeaderTable() {
   const { customCashGrabAddress } = useContext(ContractAddressesContext);
-  const [leaderList, setLeaderList] = useState(players);
+  const [leaderList, setLeaderList] = useState([]);
   const [loading, setLoading] = useState(true);
   function resetLeaderList() {
     setLoading(true);
@@ -46,7 +46,7 @@ export default function LeaderTable({ players }) {
       onReset={() => resetLeaderList()}
     >
       <Center><Heading as='h4' size='md'>Leaderboard</Heading></Center>
-      {!loading
+      {loading
         ?
         <Flex mt={3} justify="center">
           <Spinner
