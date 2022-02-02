@@ -41,18 +41,22 @@ export default function LeaderTable({ players }) {
       onReset={() => resetLeaderList()}
     >
       <Center><Heading as='h4' size='md'>Leaderboard</Heading></Center>
-      <Table variant='unstyled'>
-        <Tbody>
-          {loading
-            ? <Spinner
-              thickness='4px'
-              speed='0.65s'
-              emptyColor='gray.200'
-              color='blue.500'
-              size='xl'
-            />
-            : leaderList.length === 0
-              ? <Flex mt={3} justify="center">No Voters Found</Flex>
+      {loading
+        ?
+        <Flex mt={3} justify="center">
+          <Spinner
+            thickness='4px'
+            speed='0.65s'
+            emptyColor='gray.200'
+            color='blue.500'
+            size='xl'
+          />
+        </Flex>
+        :
+        <Table variant='unstyled'>
+          <Tbody>
+            {leaderList.length === 0
+              ? <Flex mt={3} justify="center">Empty Leaderboard!!</Flex>
               : leaderList
                 .sort((playerA, playerB) => playerA.contribution - playerB.contribution)
                 .slice(0, 3)
@@ -65,10 +69,10 @@ export default function LeaderTable({ players }) {
                       <Td isNumeric>${contribution}</Td>
                     </Tr>
                   )
-                })
-          }
-        </Tbody>
-      </Table>
+                })}
+          </Tbody>
+        </Table>
+      }
     </ErrorBoundary>
   )
 }
