@@ -12,20 +12,26 @@ import {
   Td,
   Button,
   Heading,
-  Spinner
+  Spinner,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverArrow,
+  PopoverCloseButton,
 } from '@chakra-ui/react';
 import { rankOrdinalSuffix, toTitleCase, textOneLineStyle, getUserProfile, setUserContribution } from "../utils";
 
 export default function UserProfile() {
   const { customCashGrabAddress } = useContext(ContractAddressesContext);
-  const [profile, setProfile] = useState("");
+  const [profile, setProfile] = useState({ username: "Username A", address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266" });
   const [profileLoading, setProfileLoading] = useState(true);
 
   function resetProfile() {
     setProfileLoading(true);
     getUserProfile(customCashGrabAddress)
       .then(response =>
-        setProfile(response) // { username, rank, contribution }
+        setProfile(response) // { username, address, rank, contribution }
       )
       .catch(e => alert(`Getting profile failed: ${e.message}`))
       .finally(() => setProfileLoading(false))
@@ -52,7 +58,23 @@ export default function UserProfile() {
       FallbackComponent={ErrorFallback}
       onReset={() => resetProfile()}
     >
-      <Flex justify="center"><Heading as='h4' size='md'>{profileLoading ? "Loading Stats" : `${toTitleCase(profile.username)}  Stats`}</Heading></Flex>
+      <Flex justify="center">
+        {!profileLoading
+          ?
+          <Heading as='h4' size='md'>Loading Stats</Heading>
+          :
+          <Popover trigger="hover">
+            <PopoverTrigger>
+              <Heading as='h4' size='md'>{`${toTitleCase(profile.username)} Stats`}</Heading>
+            </PopoverTrigger>
+            <PopoverContent>
+              <PopoverArrow />
+              <PopoverCloseButton />
+              <PopoverHeader>Address: {profile.address}</PopoverHeader>
+            </PopoverContent>
+          </Popover>
+        }
+      </Flex>
       <Table size='sm' variant='unstyled'>
         <Tbody>
           <Tr>
