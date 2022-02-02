@@ -17,8 +17,8 @@ import {
 
 const players = [
   { name: "User 1", address: "300303", contribution: 100 },
-  { name: "User 1", address: "300303", contribution: 100 },
-  { name: "User 1", address: "300303", contribution: 100 },
+  { name: "User 1", address: "300303", contribution: 13 },
+  { name: "User 1", address: "300303", contribution: 10 },
   { name: "User 1", address: "300303", contribution: 100 }
 ];
 
