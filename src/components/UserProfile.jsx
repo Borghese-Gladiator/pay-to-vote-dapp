@@ -59,7 +59,7 @@ export default function UserProfile() {
       onReset={() => resetProfile()}
     >
       <Flex justify="center">
-        {!profileLoading
+        {profileLoading
           ?
           <Heading as='h4' size='md'>Loading Stats</Heading>
           :
