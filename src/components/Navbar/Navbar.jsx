@@ -2,7 +2,7 @@ import { useState, useContext } from "react";
 import ContractAddressesContext from "../../context/ContractAddressesContext";
 
 import Logo from "./Logo";
-import { Link, Box, Flex, Text, Stack, Icon, IconButton, Image } from "@chakra-ui/react";
+import { Link, Box, Flex, Text, Stack, Icon, IconButton, Image, Divider } from "@chakra-ui/react";
 
 // Icons
 import { ExternalLinkIcon } from "@chakra-ui/icons";
@@ -66,6 +66,7 @@ const MenuLinks = ({ isOpen }) => {
             <ExternalLinkIcon w={6} h={6} p={1} />
           </Flex>
         </Link>
+        <Divider orientation='vertical' variant="solid" h="50px" />
         <Link
           href={`https://etherscan.io/address/${simpleAuctionAddress}`}
           target="_blank"
@@ -84,6 +85,7 @@ const MenuLinks = ({ isOpen }) => {
             <ExternalLinkIcon w={6} h={6} p={1} />
           </Flex>
         </Link>
+        <Divider orientation='vertical' variant="solid" h="50px" />
         <Link
           href='https://github.com/Borghese-Gladiator/pay-to-vote-dapp'
           target="_blank"
