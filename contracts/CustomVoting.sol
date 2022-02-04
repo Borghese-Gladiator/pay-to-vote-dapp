@@ -88,8 +88,8 @@ contract CustomVoting {
         }
         return (highestVoterAddress, highestVoter);
     }
-    // Vote function
-    function updateContribution(address voterAddress, uint256 _contribution)
+    // Update Contribution function
+    function vote(address voterAddress, uint256 _contribution)
         public
         returns (bool success)
     {
