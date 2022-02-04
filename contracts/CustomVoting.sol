@@ -17,9 +17,8 @@ contract CustomVoting {
     // Parameters for CustomVoting - Times are either absolute unix timestamps (seconds since 1970-01-01) or time periods in seconds
     uint public votingEndTime;
 
-    // Events for voting
+    // Events for updating state
     event VotingEnded(Voter winner);
-    // Events for struct list
     event LogNewVoter(
         address indexed voterAddress,
         uint256 index,
@@ -30,6 +29,10 @@ contract CustomVoting {
         address indexed voterAddress,
         uint256 index,
         bytes32 username,
+        uint256 contribution
+    );
+    event LogUpdateContributionTotal(
+        address indexed voterAddress,
         uint256 contribution
     );
 
@@ -101,7 +104,16 @@ contract CustomVoting {
             voterStructList[voterAddress].username,
             _contribution
         );
+        contributionTotal += _contribution;
+        emit LogUpdateContributionTotal(
+            voterAddress,
+            _contribution
+        );
         return true;
+    }
+    // CRUD for contribution total
+    function getTotalContribution() public view returns (uint256 total) {
+        return contributionTotal;
     }
     // CRUD functions for struct list
     function isVoter(address voterAddress)
