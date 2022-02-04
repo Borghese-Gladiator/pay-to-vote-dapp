@@ -16,11 +16,18 @@ DApp to pay to win a prize pool. Each voter contributes an amount and the highes
   - User past transactions
 
 ## Technologies
-- Hardhat.js - Ethereum development environment
-- Ether.js - Library to interact with Ethereum blockchain
-- Next.js - React framework with default routing and serverless functions
-- Chakra UI - Component library
-- Vercel - Platform to host JAMStack apps (frontend with serverless functions)
+Account Data flows MetaMask address to Frontend (HTML/CSS/JS(React)) to deployed Solidity contract in Ropsten Testnet
+- Frontend
+  - React - JavaScript library to build components
+  - Next.js - React framework with routing and serverless functions
+  - Ethers.js - Library to interact with Ethereum blockchain (through MetaMask chrome extension)
+  - Chakra UI - Component library
+  - Vercel - Platform to host JAMStack apps (frontend with serverless functions)
+- Smart Contract Development and Deployment
+  - Hardhat.js - Ethereum development environment
+  - Ropsten Testnet - Ethereum test network that allows for blockchain development testing before deployment on Mainnet. The only Proof of Work testnet (Ethereum is PoW as well).
+- User requires extension to use conventional browsers with Web3.0 DApps
+  - MetaMask
 
 ## Local Setup Commands
 - Install dependencies - ```npm install```
@@ -79,8 +86,8 @@ DApp to pay to win a prize pool. Each voter contributes an amount and the highes
     - INFURA_PROJECT_ID - created Infura project
     - SIMPLE_AUCTION_DEPLOYED_ADDRESS, GREETER_DEPLOYED_ADDRESS - saved values after running deploy to Ropsten Network command
   - Fixed frontend to load env variables by passing in getStaticProps, storing into Context Provider and loading from Context Consumer in GreeterDisplay
-- Wrote smart contract CustomCashGrab.sol using SimpleAuction as reference [https://docs.soliditylang.org/en/v0.8.11/solidity-by-example.html](https://docs.soliditylang.org/en/v0.8.11/solidity-by-example.html)
-  - Added environment variable CUSTOM_CASH_GRAB_DEPLOYED_ADDRESS
+- Wrote smart contract CustomVoting.sol using SimpleAuction as reference [https://docs.soliditylang.org/en/v0.8.11/solidity-by-example.html](https://docs.soliditylang.org/en/v0.8.11/solidity-by-example.html)
+  - Added environment variable CUSTOM_VOTING_DEPLOYED_ADDRESS
   - Added to deploy.js
 - Wrote src/components/UserSetup components and UserInfoContext to get User Address info globally
 - Wrote Hardhat tests
@@ -91,6 +98,8 @@ DApp to pay to win a prize pool. Each voter contributes an amount and the highes
   - ```npm i react-lottie```
   - Display loading for every setup check that user needs to go through. Show button to enter app if all checked.
 - Rewrote components to have PropTypes to debug more easily
+- Rewrote smart contract backend to be called more easily (used reference [https://medium.com/robhitchens/solidity-crud-part-1-824ffa69509a](https://medium.com/robhitchens/solidity-crud-part-1-824ffa69509a))
+- Set up src/components/UserSetup to use MetaMask and ethers.js to check for account properly and prompt for input
 
 #### Bugs
 - When you have 0 ETH, check which account you are using and what network you are on. In MetaMask, name your accounts names like Local_Test_Account and Ropsten_Test_Account to clearly see which network you should be on when using them.
@@ -105,10 +114,14 @@ DApp to pay to win a prize pool. Each voter contributes an amount and the highes
 
 #### References
 - Basis for initializing project [https://dev.to/dabit3/the-complete-guide-to-full-stack-ethereum-development-3j13](https://dev.to/dabit3/the-complete-guide-to-full-stack-ethereum-development-3j13)
-- Connecting frontend to Smart Contract - [https://gist.github.com/mbvissers/ad96c21706d25194be6f30b076eb25c1](https://gist.github.com/mbvissers/ad96c21706d25194be6f30b076eb25c1) which was from this article [https://medium.com/codex/creating-a-basic-dapp-with-web3-and-nextjs-2ee94af06517](https://medium.com/codex/creating-a-basic-dapp-with-web3-and-nextjs-2ee94af06517)
-- Writing smart contracts [https://solidity-by-example.org/structs/](https://solidity-by-example.org/structs/)
-- useLocalStorage and useAsync [https://usehooks.com/useAsync/](https://usehooks.com/useAsync/)
-- [https://hardhat.org/tutorial/testing-contracts.html](https://hardhat.org/tutorial/testing-contracts.html)
+- Smart Contract reference [https://solidity-by-example.org/structs/](https://solidity-by-example.org/structs/)
+- copying custom hooks [https://usehooks.com/useAsync/](https://usehooks.com/useAsync/)
+- Validating smart contract [https://hardhat.org/tutorial/testing-contracts.html](https://hardhat.org/tutorial/testing-contracts.html)
+- Validating user MetaMask browser selections with Ethers.js [https://docs.ethers.io/v4/api-providers.html#provider-connect](https://docs.ethers.io/v4/api-providers.html#provider-connect)
+  - call GET functions of contract using Provider (Web3Provider used with MetaMask - inherits from JsonRpcSigner)
+    - ```let provider = new ethers.providers.Web3Provider(web3.currentProvider);```
+  - call SET functions of contract using Signer (JsonRpCSigner)
+    - ```let signer = jsonRpcProvider.getSigner(accounts[1]);```
 
 #### Notes
 Flow of Application
