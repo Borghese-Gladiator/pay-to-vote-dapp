@@ -1,7 +1,6 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
-
 /*
 THINGS TO TEST
 - test initial pool value from owner is 1 ETH
