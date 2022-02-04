@@ -22,12 +22,12 @@ import {
 import { getVoterList, rankOrdinalSuffix } from "../utils";
 
 export default function LeaderTable() {
-  const { customCashGrabAddress } = useContext(ContractAddressesContext);
+  const { customVotingAddress } = useContext(ContractAddressesContext);
   const [leaderList, setLeaderList] = useState([]);
   const [loading, setLoading] = useState(true);
   function resetLeaderList() {
     setLoading(true);
-    getVoterList(customCashGrabAddress)
+    getVoterList(customVotingAddress)
       .then(response =>
         setLeaderList(response.slice(0, 5))
       )

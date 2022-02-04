@@ -23,13 +23,13 @@ import {
 import { rankOrdinalSuffix, toTitleCase, textOneLineStyle, getUserProfile, setUserContribution } from "../utils";
 
 export default function UserProfile() {
-  const { customCashGrabAddress } = useContext(ContractAddressesContext);
+  const { customVotingAddress } = useContext(ContractAddressesContext);
   const [profile, setProfile] = useState({ username: "Username A", address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266" });
   const [profileLoading, setProfileLoading] = useState(true);
 
   function resetProfile() {
     setProfileLoading(true);
-    getUserProfile(customCashGrabAddress)
+    getUserProfile(customVotingAddress)
       .then(response =>
         setProfile(response) // { username, address, rank, contribution }
       )
@@ -45,7 +45,7 @@ export default function UserProfile() {
   const [contributionLoading, setContributionLoading] = useState(false);
   async function handleSubmit() {
     setContributionLoading(true);
-    submitUserContribution(customCashGrabAddress)
+    submitUserContribution(customVotingAddress)
       .then(response => {
         setProfile(""); // reset profile to refresh contribution amount
       })

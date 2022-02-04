@@ -15,12 +15,12 @@ import {
 import { getTotalContribution, getVotingEndTime } from "../utils";
 
 export default function AuctionCountdown() {
-  const { customCashGrabAddress } = useContext(ContractAddressesContext);
+  const { customVotingAddress } = useContext(ContractAddressesContext);
   const [endTime, setEndTime] = useState("");
   const [endTimeLoading, setEndTimeLoading] = useState(true);
   function resetEndTime() {
     setEndTimeLoading(true);
-    getVotingEndTime(customCashGrabAddress)
+    getVotingEndTime(customVotingAddress)
       .then(response =>
         setEndTime(response)
       )
@@ -36,7 +36,7 @@ export default function AuctionCountdown() {
   const [prizePoolLoading, setPrizePoolLoading] = useState(true);
   function resetPrizePool() {
     setPrizePoolLoading(true);
-    getTotalContribution(customCashGrabAddress)
+    getTotalContribution(customVotingAddress)
       .then(response =>
         setPrizePool(response)
       )

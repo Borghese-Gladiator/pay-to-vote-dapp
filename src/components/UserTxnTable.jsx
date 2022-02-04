@@ -23,12 +23,12 @@ import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { getUserTransactions } from "../utils";
 
 export default function UserTxnTable() {
-  const { customCashGrabAddress } = useContext(ContractAddressesContext);
+  const { customVotingAddress } = useContext(ContractAddressesContext);
   const [transactionList, setTransactionList] = useState([]);
   const [loading, setLoading] = useState(true);
   function resetTransactionList() {
     setLoading(true);
-    getUserTransactions(customCashGrabAddress)
+    getUserTransactions(customVotingAddress)
       .then(response =>
         setTransactionList(response)
       )

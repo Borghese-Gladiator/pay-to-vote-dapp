@@ -1,5 +1,5 @@
 import { ethers } from 'ethers'
-import CustomCashGrabAddress from "./artifacts/contracts/CustomCashGrab.sol/CustomCashGrab.json";
+import CustomVoting from "./artifacts/contracts/CustomVoting.sol/CustomVoting.json";
 
 export async function getUserTransactions(contractAddress) {
   return []
@@ -8,7 +8,7 @@ export async function getUserTransactions(contractAddress) {
 export async function getUserProfile(contractAddress) {
   // @precondition window.ethereum is defined
   const provider = new ethers.providers.Web3Provider(window.ethereum)
-  const contract = new ethers.Contract(contractAddress, CustomCashGrabAddress.abi, provider)
+  const contract = new ethers.Contract(contractAddress, CustomVoting.abi, provider)
   try {
     return await contract.getUserProfile();
   } catch(err) {
@@ -19,7 +19,7 @@ export async function getUserProfile(contractAddress) {
 export async function getUserContribution(contractAddress) {
   // @precondition window.ethereum is defined
   const provider = new ethers.providers.Web3Provider(window.ethereum)
-  const contract = new ethers.Contract(contractAddress, CustomCashGrabAddress.abi, provider)
+  const contract = new ethers.Contract(contractAddress, CustomVoting.abi, provider)
   try {
     return await contract.getContribution();
   } catch(err) {
@@ -30,7 +30,7 @@ export async function getUserContribution(contractAddress) {
 export async function getVotingEndTime() {
   // @precondition window.ethereum is defined
   const provider = new ethers.providers.Web3Provider(window.ethereum)
-  const contract = new ethers.Contract(contractAddress, CustomCashGrabAddress.abi, provider)
+  const contract = new ethers.Contract(contractAddress, CustomVoting.abi, provider)
   try {
     return await contract.getVotingEndTime();
   } catch(err) {
@@ -42,7 +42,7 @@ export async function getVotingEndTime() {
 export async function submitUserContribution(contractAddress, contribution) {
   // @precondition window.ethereum is defined
   const provider = new ethers.providers.Web3Provider(window.ethereum)
-  const contract = new ethers.Contract(contractAddress, CustomCashGrabAddress.abi, provider)
+  const contract = new ethers.Contract(contractAddress, CustomVoting.abi, provider)
   try {
     const newValue = await contract.setContribution(contribution);
     return newValue;
@@ -54,7 +54,7 @@ export async function submitUserContribution(contractAddress, contribution) {
 export async function getTotalContribution(contractAddress) {
   // @precondition window.ethereum is defined
   const provider = new ethers.providers.Web3Provider(window.ethereum)
-  const contract = new ethers.Contract(contractAddress, CustomCashGrabAddress.abi, provider)
+  const contract = new ethers.Contract(contractAddress, CustomVoting.abi, provider)
   try {
     return await contract.getTotalContribution();
   } catch(err) {
@@ -65,7 +65,7 @@ export async function getTotalContribution(contractAddress) {
 export async function getVoterList(contractAddress) {
   // @precondition window.ethereum is defined
   const provider = new ethers.providers.Web3Provider(window.ethereum)
-  const contract = new ethers.Contract(contractAddress, CustomCashGrabAddress.abi, provider)
+  const contract = new ethers.Contract(contractAddress, CustomVoting.abi, provider)
   try {
     const n = await contract.getVoterCount();
     console.log(`Voter Count: ${n}`);

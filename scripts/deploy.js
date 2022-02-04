@@ -20,22 +20,22 @@ async function main() {
   // We get the contract to deploy
   const Greeter = await hre.ethers.getContractFactory("Greeter");
   const SimpleAuction = await hre.ethers.getContractFactory("SimpleAuction");
-  const CustomCashGrab = await hre.ethers.getContractFactory("CustomCashGrab");
+  const CustomVoting = await hre.ethers.getContractFactory("CustomVoting");
   
   const greeter = await Greeter.deploy("Hello, Hardhat!");
   const simpleAuction = await SimpleAuction.deploy(
       dateUINT,
       process.env.ACCOUNT_PUBLIC_ADDRESS
     );
-  const customCashGrab = await CustomCashGrab.deploy(ONE_DAY_IN_SECONDS);
+  const customVoting = await CustomVoting.deploy(ONE_DAY_IN_SECONDS);
   
   await greeter.deployed();
   await simpleAuction.deployed();
-  await customCashGrab.deployed();
+  await customVoting.deployed();
 
   console.log("Greeter deployed to:", greeter.address);
   console.log("Simple Auction deployed to:", simpleAuction.address);
-  console.log("Custom Cash Grab deployed to:", customCashGrab.address);
+  console.log("Custom Voting deployed to:", customVoting.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

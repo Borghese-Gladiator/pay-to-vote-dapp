@@ -35,7 +35,7 @@ const MenuToggle = ({ toggle, isOpen }) => {
 };
 
 const MenuLinks = ({ isOpen }) => {
-  const { customCashGrabAddress } = useContext(ContractAddressesContext);
+  const { customVotingAddress } = useContext(ContractAddressesContext);
   return (
     <Box
       display={{ base: isOpen ? "block" : "none", md: "block" }}
@@ -49,7 +49,7 @@ const MenuLinks = ({ isOpen }) => {
         pt={[4, 2, 0, 0]}
       >
         <Link
-          href={`https://etherscan.io/address/${customCashGrabAddress}`}
+          href={`https://etherscan.io/address/${customVotingAddress}`}
           target="_blank"
           rel="noopener noreferrer"
           isExternal
