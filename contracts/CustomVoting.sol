@@ -11,48 +11,48 @@ contract CustomVoting {
     mapping(address => Voter) private voterStructList;
     address[] private voterIndex;
 
-    event LogNewUser(
-        address indexed userAddress,
+    event LogNewVoter(
+        address indexed voterAddress,
         uint256 index,
         bytes32 username,
         uint256 contribution
     );
-    event LogUpdateUser(
-        address indexed userAddress,
+    event LogUpdateVoter(
+        address indexed voterAddress,
         uint256 index,
         bytes32 username,
         uint256 contribution
     );
 
-    function isVoter(address userAddress)
+    function isVoter(address voterAddress)
         public
         view
         returns (bool isIndeed)
     {
         if (voterIndex.length == 0) return false;
-        return (voterIndex[voterStructList[userAddress].index] == userAddress);
+        return (voterIndex[voterStructList[voterAddress].index] == voterAddress);
     }
 
-    function insertUser(
-        address userAddress,
+    function insertVoter(
+        address voterAddress,
         bytes32 username,
         uint256 contribution
     ) public returns (uint256 index) {
-        if (isVoter(userAddress)) revert();
-        voterStructList[userAddress].username = username;
-        voterStructList[userAddress].contribution = contribution;
-        voterIndex.push(userAddress);
-        voterStructList[userAddress].index = voterIndex.length - 1;
-        emit LogNewUser(
-            userAddress,
-            voterStructList[userAddress].index,
+        if (isVoter(voterAddress)) revert();
+        voterStructList[voterAddress].username = username;
+        voterStructList[voterAddress].contribution = contribution;
+        voterIndex.push(voterAddress);
+        voterStructList[voterAddress].index = voterIndex.length - 1;
+        emit LogNewVoter(
+            voterAddress,
+            voterStructList[voterAddress].index,
             username,
             contribution
         );
         return voterIndex.length - 1;
     }
 
-    function getVoter(address userAddress)
+    function getVoter(address voterAddress)
         public
         view
         returns (
@@ -61,49 +61,49 @@ contract CustomVoting {
             uint256 index
         )
     {
-        if (!isVoter(userAddress)) revert();
+        if (!isVoter(voterAddress)) revert();
         return (
-            voterStructList[userAddress].username,
-            voterStructList[userAddress].contribution,
-            voterStructList[userAddress].index
+            voterStructList[voterAddress].username,
+            voterStructList[voterAddress].contribution,
+            voterStructList[voterAddress].index
         );
     }
 
-    function updateUsername(address userAddress, bytes32 username)
+    function updateVotername(address voterAddress, bytes32 username)
         public
         returns (bool success)
     {
-        if (!isVoter(userAddress)) revert();
-        voterStructList[userAddress].username = username;
-        emit LogUpdateUser(
-            userAddress,
-            voterStructList[userAddress].index,
+        if (!isVoter(voterAddress)) revert();
+        voterStructList[voterAddress].username = username;
+        emit LogUpdateVoter(
+            voterAddress,
+            voterStructList[voterAddress].index,
             username,
-            voterStructList[userAddress].contribution
+            voterStructList[voterAddress].contribution
         );
         return true;
     }
 
-    function updateContribution(address userAddress, uint256 contribution)
+    function updateContribution(address voterAddress, uint256 contribution)
         public
         returns (bool success)
     {
-        if (!isVoter(userAddress)) revert();
-        voterStructList[userAddress].contribution = contribution;
-        emit LogUpdateUser(
-            userAddress,
-            voterStructList[userAddress].index,
-            voterStructList[userAddress].username,
+        if (!isVoter(voterAddress)) revert();
+        voterStructList[voterAddress].contribution = contribution;
+        emit LogUpdateVoter(
+            voterAddress,
+            voterStructList[voterAddress].index,
+            voterStructList[voterAddress].username,
             contribution
         );
         return true;
     }
 
-    function getUserCount() public view returns (uint256 count) {
+    function getVoterCount() public view returns (uint256 count) {
         return voterIndex.length;
     }
 
-    function getUserAtIndex(uint256 index) public view returns (address userAddress)
+    function getVoterAtIndex(uint256 index) public view returns (address voterAddress)
     {
         return voterIndex[index];
     }
