@@ -112,7 +112,7 @@ contract CustomVoting {
         return true;
     }
     // CRUD for contribution total
-    function getTotalContribution() public view returns (uint256 total) {
+    function getContributionTotal() public view returns (uint256 total) {
         return contributionTotal;
     }
     // CRUD functions for struct list
