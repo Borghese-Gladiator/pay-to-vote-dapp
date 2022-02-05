@@ -21,7 +21,6 @@ import {
   Spinner
 } from '@chakra-ui/react';
 
-const textOneLineStyle = { whiteSpace: "nowrap" }
 const defaultGreeting = "";
 
 export default function GreeterDisplay() {
@@ -94,7 +93,7 @@ export default function GreeterDisplay() {
           <form onSubmit={updateGreeting}>
             <FormControl isRequired>
               <Flex alignItems="center" m={1}>
-                <Text style={textOneLineStyle}>Set Greeting</Text>
+                <Text noOfLines={1}>Set Greeting</Text>
                 <Box pl={1} />
                 <Input name="greeting" placeholder={greeting} size="lg" />
                 <Button type="submit">Submit</Button>

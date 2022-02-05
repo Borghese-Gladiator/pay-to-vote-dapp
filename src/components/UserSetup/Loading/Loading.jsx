@@ -16,7 +16,6 @@ import {
   Text,
   SlideFade
 } from '@chakra-ui/react';
-const textOneLineStyle = { whiteSpace: "nowrap" }
 
 const loadingOptions = {
   loop: true,
@@ -66,7 +65,7 @@ function Loading({ wait, loadingText, condition, errorText, children }) {
         {status === "idle" || status === "pending" && <Lottie options={loadingOptions} height={120} width={120} />}
         {status === "error" && <Flex alignItems="center">
           <Lottie options={errorOptions} height={120} width={120} />
-          <Text style={textOneLineStyle}>{errorText}</Text>
+          <Text noOfLines={1}>{errorText}</Text>
         </Flex>}
         {status === "success" && <Lottie options={doneOptions} height={120} width={120} />}
       </Flex>

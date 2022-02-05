@@ -23,11 +23,8 @@ async function main() {
   const CustomVoting = await hre.ethers.getContractFactory("CustomVoting");
   
   const greeter = await Greeter.deploy("Hello, Hardhat!");
-  const simpleAuction = await SimpleAuction.deploy(
-      dateUINT,
-      process.env.ACCOUNT_PUBLIC_ADDRESS
-    );
-  const customVoting = await CustomVoting.deploy(ONE_DAY_IN_SECONDS);
+  const simpleAuction = await SimpleAuction.deploy(dateUINT, process.env.ACCOUNT_PUBLIC_ADDRESS);
+  const customVoting = await CustomVoting.deploy(ONE_DAY_IN_SECONDS); // voting ends one day from now
   
   await greeter.deployed();
   await simpleAuction.deployed();
