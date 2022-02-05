@@ -37,7 +37,6 @@ export default function UserSetup({ setLoadingSetup }) {
       loadingText: "Detecting Account and Username",
       errorText: "Account not seen before",
       condition: async () => {
-        console.log(userInfo);
         if (!("address" in userInfo)) {
           return true
         }
@@ -94,7 +93,6 @@ export default function UserSetup({ setLoadingSetup }) {
           loadingText={"Detecting Account and Username"}
           errorText={"Account not seen before"}
           condition={async () => {
-            console.log(userInfo);
             if (!("address" in userInfo)) {
               return true
             }
@@ -105,6 +103,7 @@ export default function UserSetup({ setLoadingSetup }) {
         </Loading>
         <Wait wait={totalAnimationDelay} show={shouldShowApp}>
           <Button
+            mt={5}
             leftIcon={<CheckIcon />}
             colorScheme='pink'
             variant='solid'
