@@ -99,7 +99,7 @@ export async function getContributionTotal(contractAddress) {
    */
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const contract = new ethers.Contract(contractAddress, CustomVoting.abi, provider);
-  await contract.getContributionTotal();
+  return await contract.getContributionTotal();
 }
 
 export async function vote(contractAddress, address, contribution) {
