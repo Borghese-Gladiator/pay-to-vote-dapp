@@ -27,15 +27,14 @@ function findHighestVoter(voterList) {
 
 describe("CustomVoting", function () {
   const ONE_DAY_SECONDS = 86400;
-  let addr1;
-  let addr2;
   const userAVote1 = 3;
   const userBVote = 10;
   const userAVote2 = 20;
 
   // `beforeEach` will run before each test, re-deploying the contract every time
   beforeEach(async function () {
-    inititalTotal = 1;
+    initialTotal = 0;
+    minContribution = 0;
     // Get the ContractFactory and Signers here.
     CustomVoting = await ethers.getContractFactory("CustomVoting");
     [owner, addr1, addr2] = await ethers.getSigners();
@@ -43,45 +42,66 @@ describe("CustomVoting", function () {
     // Deploy contract to local network
     contract = await CustomVoting.deploy(ONE_DAY_SECONDS);
   });
-  describe("Voting", function () {
-    it("Should start with 1 ETH", async function () {
-      expect(await contract.getContributionTotal()).to.equal(inititalTotal);
-    })
-    it("Should let A vote once", async function () {
-      expect(await contract.getContributionTotal()).to.equal(inititalTotal);
-      await contract.vote(addr1, userAVote1);
-      const voter = findHighestVoter(await contract.getVoterList());
-      expect(voter.contribution).to.equal(userAVote1);
-      expect(await contract.getContributionTotal()).to.equal(inititalTotal + userAVote1);
-    });
-    it("Should only take highest vote of A who votes twice", async function () {
-      expect(await contract.getContributionTotal()).to.equal(inititalTotal);
-      await contract.vote(addr1, userAVote1);
-      await contract.vote(addr1, userAVote2);
-      const voter = findHighestVoter(await contract.getVoterList());
-      expect(voter.contribution).to.equal(userAVote2);
-      expect(await contract.getContributionTotal()).to.equal(inititalTotal + userAVote2);
-    });
-    it("Should let A vote then B vote and keep highest", async function () {
-      expect(await contract.getContributionTotal()).to.equal(inititalTotal);
-      await contract.vote(addr1, userAVote1);
-      await contract.vote(addr1, userBVote);
-      const voter = findHighestVoter(await contract.getVoterList());
-      expect(voter.contribution).to.equal(userBVote);
-      expect(await contract.getContributionTotal()).to.equal(inititalTotal + userAVote1 + userBVote);
-    });
-    it("Should let A vote then B Vote then A vote again to win", async function () {
-      expect(await contract.getContributionTotal()).to.equal(inititalTotal);
-      await contract.vote(addr1, userAVote1);
-      await contract.vote(addr1, userBVote);
-      await contract.vote(addr1, userAVote2);
-      const voter = findHighestVoter(await contract.getVoterList());
-      expect(voter.contribution).to.equal(userAVote2);
-      expect(await contract.getContributionTotal()).to.equal(inititalTotal + userBVote + userAVote2);
+  describe("Create Voters", function() {
+    it("Should Create Voter", async function() {
+      const usernameA = ethers.utils.formatBytes32String("Jack");
+      const usernameB = ethers.utils.formatBytes32String("Jill");
+      await contract.insertVoter(addr1.address, usernameA, minContribution);
+      await contract.insertVoter(addr2.address, usernameB, minContribution);
+      const voterA = await contract.getVoter(addr1.address);
+      const voterB = await contract.getVoter(addr2.address);
+      expect(voterA.contribution).to.equal(ethers.BigNumber.from(minContribution));
+      expect(voterB.contribution).to.equal(ethers.BigNumber.from(minContribution));
     });
   })
-  describe("Timing", function () {
+  describe("Voting", function () {
+    beforeEach(async function () {
+      const usernameA = ethers.utils.formatBytes32String("Jack");
+      const usernameB = ethers.utils.formatBytes32String("Jill");
+      await contract.insertVoter(addr1.address, usernameA, minContribution);
+      await contract.insertVoter(addr2.address, usernameB, minContribution);
+    })
+    it("Should start with 0 ETH", async function () {
+      expect(await contract.getContributionTotal()).to.equal(initialTotal);
+    })
+    it("Should let A vote once", async function () {
+      expect(await contract.getContributionTotal()).to.equal(initialTotal);
+      await contract.vote(addr1.address, userAVote1);
+      const voter = findHighestVoter(await contract.getVoterList());
+      expect(voter.contribution).to.equal(userAVote1);
+      expect(await contract.getContributionTotal()).to.equal(initialTotal + userAVote1);
+    });
+    it("Should only take highest vote of A who votes twice", async function () {
+      expect(await contract.getContributionTotal()).to.equal(initialTotal);
+      await contract.vote(addr1.address, userAVote1);
+      await contract.vote(addr1.address, userAVote2);
+      const voter = findHighestVoter(await contract.getVoterList());
+      expect(voter.contribution).to.equal(userAVote2);
+      expect(await contract.getContributionTotal()).to.equal(initialTotal + userAVote2);
+    });
+    it("Should let A vote then B vote and keep highest", async function () {
+      expect(await contract.getContributionTotal()).to.equal(initialTotal);
+      await contract.vote(addr1.address, userAVote1);
+      await contract.vote(addr2.address, userBVote);
+      const voter = findHighestVoter(await contract.getVoterList());
+      expect(voter.contribution).to.equal(userBVote);
+      expect(await contract.getContributionTotal()).to.equal(initialTotal + userAVote1 + userBVote);
+    });
+    it("Should let A vote then B Vote then A vote again to win", async function () {
+      expect(await contract.getContributionTotal()).to.equal(initialTotal);
+      await contract.vote(addr1.address, userAVote1);
+      await contract.vote(addr2.address, userBVote);
+      await contract.vote(addr1.address, userAVote2);
+      const voter = findHighestVoter(await contract.getVoterList());
+      expect(voter.contribution).to.equal(userAVote2);
+      expect(await contract.getContributionTotal()).to.equal(initialTotal + userBVote + userAVote2);
+    });
+  })
+  describe("End of Auction", function () {
     it("Should end at correct time", async function () {
+    });
+    it("Should pay money out to people who were outbid", async function() {
+
     });
   });
 });
