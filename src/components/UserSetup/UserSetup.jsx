@@ -101,7 +101,7 @@ export default function UserSetup({ setLoadingSetup }) {
             return await !isVoter(userInfo.address)
           }}
         >
-          <CreateUsername />
+          <CreateUsername userInfo={userInfo} setUserInfo={setUserInfo} />
         </Loading>
         <Wait wait={totalAnimationDelay} show={shouldShowApp}>
           <Button

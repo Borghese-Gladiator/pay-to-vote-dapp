@@ -50,15 +50,12 @@ function Loading({ wait, loadingText, condition, errorText, children }) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
   async function loadPage() {
-    console.log("LOADING HERE");
     await timeout(wait);
     if (await condition()) {
-      console.log("Throwing error")
       throw new Error(errorText)
     }
   }
   useEffect(() => {
-    console.log(error)
     execute()
   }, [])
 
