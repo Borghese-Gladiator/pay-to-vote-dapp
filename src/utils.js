@@ -92,21 +92,14 @@ export async function getVotingEndTime(contractAddress) {
    */
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const contract = new ethers.Contract(contractAddress, CustomVoting.abi, provider);
-  const endTime = await contract.votingEndTime();
-  const nowSeconds = Math.floor(Date.now() / 1000);
-  const now = ethers.BigNumber.from(nowSeconds);
-  console.log(now.toNumber(), endTime.toNumber())
-  const diff = endTime.sub(now);
-  let diffInt = parseInt(diff.toString(), 10);
-  const hours = Math.floor(diffInt / 60);
-  diffInt /= 60;
-  const minutes = Math.floor(diffInt / 60);
-  diffInt /= 60;
-  const seconds = Math.floor(diffInt / 60);
+  const endBigNumber = await contract.votingEndTime();
+  const nowBigNumber = ethers.BigNumber.from(Math.floor(Date.now() / 1000));
+  const diffBigNumber = endBigNumber.sub(nowBigNumber);
+  let diffInt = parseInt(diffBigNumber.toString(), 10);
   return {
-    hours: hours,
-    minutes: minutes,
-    seconds: seconds
+    hours: Math.floor(diffInt / 60),
+    minutes: Math.floor(diffInt / (60 * 60)),
+    seconds: Math.floor(diffInt / (60 * 60 * 60)),
   }
 }
 export async function getContributionTotal(contractAddress) {
