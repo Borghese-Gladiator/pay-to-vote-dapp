@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import PropTypes from "prop-types";
 import { Text } from "@chakra-ui/react";
+import { textOneLineStyle } from "../../utils";
 
 function CountdownTimer({ endTime }) {
   const { hours = 0, minutes = 0, seconds = 60 } = endTime;
@@ -24,10 +25,10 @@ function CountdownTimer({ endTime }) {
   });
 
   return (
-    <Text fontSize='lg'>
-      {`${hrs.toString().padStart(2, '0')}:${mins
-        .toString()
-        .padStart(2, '0')}:${secs.toString().padStart(2, '0')}`}
+    <Text fontSize='lg' noOfLines={1}>
+      {`${hrs.toString().padStart(2, '0')} hours
+      ${mins.toString().padStart(2, '0')} minutes
+      ${secs.toString().padStart(2, '0')} seconds`}
     </Text>
   );
 }
@@ -41,41 +42,3 @@ CountdownTimer.propTypes = {
 }
 
 export default CountdownTimer;
-/*
-import React, { useEffect, useState } from "react";
-import { convertDateToStr } from "../../utils";
-
-function CountdownTimer({ endTime }) {
-  const [timeStr, setTimeStr] = useState();
-  function calculateTimeLeft(endTime) {
-    const difference = endTime - new Date();
-    if (difference <= 0) {
-      return { hours: 0, minutes: 0, seconds: 0}
-    }
-    const hours = Math.floor(difference / (60 * 60));
-
-    let divisor_for_minutes = secs % (60 * 60);
-    let minutes = Math.floor(divisor_for_minutes / 60);
-
-    let divisor_for_seconds = divisor_for_minutes % 60;
-    let seconds = Math.ceil(divisor_for_seconds);
-    return convertDateToStr(difference);
-  };
-
-  useEffect(() => {
-    setTimeout(() => {
-      setTimeStr(calculateTimeLeft())
-    }, 1000);
-  });
-  
-  return (
-    <Heading as={"h3"}>{timeStr}</Heading>
-  );
-}
-
-CountdownTimer.propTypes = {
-  date: PropTypes.instanceOf(Date)
-}
-
-export default CountdownTimer;
-*/

@@ -87,19 +87,37 @@ export async function getTopVoters(contractAddress) {
 }
 export async function getVotingEndTime(contractAddress) {
   /**
-   * GET voting end time
+   * GET voting end time - convert BigNumber to object { hours, minutes, seconds}
+   * @return object
    */
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const contract = new ethers.Contract(contractAddress, CustomVoting.abi, provider);
-  return await contract.votingEndTime();
+  const endTime = await contract.votingEndTime();
+  const nowSeconds = Math.floor(Date.now() / 1000);
+  const now = ethers.BigNumber.from(nowSeconds);
+  console.log(now.toNumber(), endTime.toNumber())
+  const diff = endTime.sub(now);
+  let diffInt = parseInt(diff.toString(), 10);
+  const hours = Math.floor(diffInt / 60);
+  diffInt /= 60;
+  const minutes = Math.floor(diffInt / 60);
+  diffInt /= 60;
+  const seconds = Math.floor(diffInt / 60);
+  return {
+    hours: hours,
+    minutes: minutes,
+    seconds: seconds
+  }
 }
 export async function getContributionTotal(contractAddress) {
   /**
-   * GET total contribution
+   * GET total contribution - convert BigNumber result to string
+   * @return string
    */
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const contract = new ethers.Contract(contractAddress, CustomVoting.abi, provider);
-  return await contract.getContributionTotal();
+  const total = await contract.getContributionTotal();
+  return total.toString()
 }
 
 export async function vote(contractAddress, address, contribution) {
@@ -119,7 +137,6 @@ export async function vote(contractAddress, address, contribution) {
 }
 
 // UTILS
-export const textOneLineStyle = { whiteSpace: "nowrap" }
 export function toTitleCase(str) {
   return str.replace(
     /\w\S*/g,

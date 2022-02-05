@@ -24,15 +24,17 @@ export default function AuctionCountdown() {
   function resetEndTime() {
     setEndTimeLoading(true);
     getVotingEndTime(customVotingAddress)
-      .then(response =>
+      .then(response => {
+        console.log(response)
         setEndTime(response)
-      )
-      .catch(e => alert(`Getting end time failed: ${e.message}`))
+      })
+      .catch(e => console.log(`Getting end time failed: ${e.message}`))
       .finally(() => setEndTimeLoading(false))
   }
+  // Call setEndTime only on initial load
   useEffect(() => {
     resetEndTime()
-  }, [endTime])
+  }, [])
 
   const [prizePool, setPrizePool] = useState("");
   const [prizePoolLoading, setPrizePoolLoading] = useState(true);
@@ -42,7 +44,7 @@ export default function AuctionCountdown() {
       .then(response =>
         setPrizePool(response)
       )
-      .catch(e => alert(`Getting prize pool failed: ${e.message}`))
+      .catch(e => console.log(`Getting prize pool failed: ${e.message}`))
       .finally(() => setPrizePoolLoading(false))
   }
   useEffect(() => {
