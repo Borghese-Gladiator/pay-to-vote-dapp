@@ -31,6 +31,7 @@ Account Data flows MetaMask address to Frontend (HTML/CSS/JS(React)) to deployed
 
 ## Local Setup Commands
 - Install dependencies - ```npm install```
+- Run smart contract tests - ```npx hardhat test```
 - Start up both smart contract local network and frontend display - ```npm run dev```
 - Compile smart contracts - ```npx hardhat compile```
 - Deploy to local network - ```npx hardhat run scripts/deploy.js --network localhost```
