@@ -59,39 +59,37 @@ export default function LeaderTable() {
           />
         </Flex>
         :
-        <Table variant='simple' size="sm">
-          {
-            leaderList.length === 0
-              ? <Flex mt={3} justify="center">Empty Leaderboard!!</Flex>
-              : <Tbody>
-                {
-                  leaderList
-                    .sort((leaderA, leaderB) => leaderB.contribution - leaderA.contribution)
-                    .slice(0, 3)
-                    .map(({ username, address, contribution, rank }, idx) => {
-                      return (
-                        <Tr key={`leader-row-${idx}`}>
-                          <Td isNumeric>{rankOrdinalSuffix(rank)}</Td>
-                          <Td>
-                            <Popover trigger="hover">
-                              <PopoverTrigger>
-                                <Box borderWidth={1} p={2} _hover={{ bg: "teal.600" }}>{name}</Box>
-                              </PopoverTrigger>
-                              <PopoverContent>
-                                <PopoverArrow />
-                                <PopoverCloseButton />
-                                <PopoverHeader>Address: {address}</PopoverHeader>
-                              </PopoverContent>
-                            </Popover>
-                          </Td>
-                          <Td>${contribution}</Td>
-                        </Tr>
-                      )
-                    })}
-              </Tbody>
-          }
-
-        </Table>
+        leaderList.length === 0
+          ? <Flex mt={3} justify="center">Empty Leaderboard!!</Flex>
+          :
+          <Table variant='simple' size="sm">
+            <Tbody>
+              {
+                leaderList
+                  .sort((leaderA, leaderB) => leaderB.contribution - leaderA.contribution)
+                  .slice(0, 3)
+                  .map(({ username, address, contribution, rank }, idx) => {
+                    return (
+                      <Tr key={`leader-row-${idx}`}>
+                        <Td isNumeric>{rankOrdinalSuffix(rank)}</Td>
+                        <Td>
+                          <Popover trigger="hover">
+                            <PopoverTrigger>
+                              <Box borderWidth={1} p={2} _hover={{ bg: "teal.600" }}>{name}</Box>
+                            </PopoverTrigger>
+                            <PopoverContent>
+                              <PopoverArrow />
+                              <PopoverCloseButton />
+                              <PopoverHeader>Address: {address}</PopoverHeader>
+                            </PopoverContent>
+                          </Popover>
+                        </Td>
+                        <Td>${contribution}</Td>
+                      </Tr>
+                    )
+                  })}
+            </Tbody>
+          </Table>
       }
     </ErrorBoundary>
   )

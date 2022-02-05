@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import PropTypes from "prop-types";
+import { Text } from "@chakra-ui/react";
 
 function CountdownTimer({ endTime }) {
   const { hours = 0, minutes = 0, seconds = 60 } = endTime;
@@ -23,11 +24,11 @@ function CountdownTimer({ endTime }) {
   });
 
   return (
-    <div>
-      <p>{`${hrs.toString().padStart(2, '0')}:${mins
+    <Text fontSize='lg'>
+      {`${hrs.toString().padStart(2, '0')}:${mins
         .toString()
-        .padStart(2, '0')}:${secs.toString().padStart(2, '0')}`}</p>
-    </div>
+        .padStart(2, '0')}:${secs.toString().padStart(2, '0')}`}
+    </Text>
   );
 }
 

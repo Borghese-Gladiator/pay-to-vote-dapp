@@ -19,7 +19,7 @@ export default function AuctionCountdown() {
   const { customVotingAddress } = useContext(ContractAddressesContext);
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
 
-  const [endTime, setEndTime] = useState("");
+  const [endTime, setEndTime] = useState({ hours: 0, minutes: 0, seconds: 0});
   const [endTimeLoading, setEndTimeLoading] = useState(true);
   function resetEndTime() {
     setEndTimeLoading(true);
@@ -62,7 +62,7 @@ export default function AuctionCountdown() {
           <Tbody>
             <Tr>
               <Td isNumeric><Heading as='h2' size='xl'>Time Left</Heading></Td>
-              <Td><Text fontSize='lg'>{endTimeLoading ? "Loading" : <CountdownTimer endTime={endTime} />}</Text></Td>
+              <Td>{endTimeLoading ? <Text fontSize='lg'>"Loading"</Text> : <CountdownTimer endTime={endTime} />}</Td>
             </Tr>
             <Tr>
               <Td isNumeric><Heading as='h3' size='xl'>Prize Pool</Heading></Td>
