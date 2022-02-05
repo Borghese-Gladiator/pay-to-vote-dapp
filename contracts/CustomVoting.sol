@@ -89,7 +89,7 @@ contract CustomVoting {
             voterStructList[voterAddress].username,
             _contribution
         );
-        contributionTotal += _contribution;
+        contributionTotal = sumContributionTotal();
         emit LogUpdateContributionTotal(
             voterAddress,
             _contribution
@@ -130,7 +130,8 @@ contract CustomVoting {
         address payable wallet = payable(highestVoterAddress);
         wallet.transfer(contributionTotal);
     }
-    // Utility to find highest voter for end voting
+    
+    // UTIL functions for CustomVoting State
     function findHighestVoter() private view returns (address _voterAddress, Voter memory) {
         // voterIndex.length is a dummy value so highestVoter can be compared with other Voter objects
         Voter memory highestVoter = Voter("Temp_User", 0, voterIndex.length);
@@ -149,8 +150,20 @@ contract CustomVoting {
         }
         return (highestVoterAddress, highestVoter);
     }
-    
-    // CRUD functions for CustomVoting State
+    function sumContributionTotal() private view returns (uint256 sum) {
+        // voterIndex.length is a dummy value so highestVoter can be compared with other Voter objects
+        uint256 result = 0;
+        for (uint i = 0; i < voterIndex.length; i++) {
+            address voterAddress = getVoterAtIndex(i);
+            (
+                bytes32 username,
+                uint256 contribution,
+                uint256 index
+            ) = getVoter(voterAddress);
+            result += contribution;
+        }
+        return result;
+    }
     function isVoter(address voterAddress)
         public
         view
@@ -159,6 +172,7 @@ contract CustomVoting {
         if (voterIndex.length == 0) return false;
         return (voterIndex[voterStructList[voterAddress].index] == voterAddress);
     }
+    // SET functions for CustomVoting State
     function insertVoter(
         address voterAddress,
         bytes32 username,
@@ -177,6 +191,22 @@ contract CustomVoting {
         );
         return voterIndex.length - 1;
     }
+    function updateUsername(address voterAddress, bytes32 username)
+        public
+        returns (bool success)
+    {
+        if (!isVoter(voterAddress)) revert AddressNotVoter();
+        voterStructList[voterAddress].username = username;
+        emit LogUpdateVoter(
+            voterAddress,
+            voterStructList[voterAddress].index,
+            username,
+            voterStructList[voterAddress].contribution
+        );
+        return true;
+    }
+    
+    // GET functions for CustomVoting State
     function getVoter(address voterAddress)
         public
         view
@@ -192,20 +222,6 @@ contract CustomVoting {
             voterStructList[voterAddress].contribution,
             voterStructList[voterAddress].index
         );
-    }
-    function updateUsername(address voterAddress, bytes32 username)
-        public
-        returns (bool success)
-    {
-        if (!isVoter(voterAddress)) revert AddressNotVoter();
-        voterStructList[voterAddress].username = username;
-        emit LogUpdateVoter(
-            voterAddress,
-            voterStructList[voterAddress].index,
-            username,
-            voterStructList[voterAddress].contribution
-        );
-        return true;
     }
     function getVoterCount() public view returns (uint256 count) {
         return voterIndex.length;
