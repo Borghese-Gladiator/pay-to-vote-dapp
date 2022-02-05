@@ -52,7 +52,6 @@ export default function UserSetup({ setLoadingSetup }) {
     setLoadingSetup(false)
   }
 
-  console.log(typeof window !== "undefined" && typeof window.ethereum === "undefined");
   if (typeof window !== "undefined" && typeof window.ethereum === "undefined") {
     return (
       <Container maxW='container.md'>
