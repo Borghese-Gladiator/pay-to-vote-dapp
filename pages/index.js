@@ -5,7 +5,7 @@ import UserInfoContext from "../src/context/UserInfoContext";
 // Custom Components
 import RootLayout from "../src/components/_layouts/RootLayout";
 import UserSetup from "../src/components/UserSetup";
-import AuctionCountdown from "../src/components/AuctionCountdown";
+import VotingCountdown from "../src/components/VotingCountdown";
 import LeaderTable from "../src/components/LeaderTable";
 import UserProfile from "../src/components/UserProfile";
 import UserTxnTable from "../src/components/UserTxnTable";
@@ -69,7 +69,7 @@ export default function Home({ greeterAddress, simpleAuctionAddress, customVotin
                   >
                     <GridItem colSpan={1} />
                     <GridItem colSpan={3}>
-                      <AuctionCountdown />
+                      <VotingCountdown />
                     </GridItem>
                     <GridItem colSpan={1} />
                     <GridItem colSpan={2}>

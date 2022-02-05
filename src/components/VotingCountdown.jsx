@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react';
 import { getContributionTotal, getVotingEndTime } from "../utils";
 
-export default function AuctionCountdown() {
+export default function VotingCountdown() {
   const { customVotingAddress } = useContext(ContractAddressesContext);
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
 
