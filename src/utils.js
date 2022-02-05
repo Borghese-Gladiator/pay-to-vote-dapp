@@ -4,10 +4,6 @@
 import { ethers } from 'ethers'
 import CustomVoting from "./artifacts/contracts/CustomVoting.sol/CustomVoting.json";
 
-async function getUserTransactions() {
-  const voterList = await getVoterList();
-  return voterList.map((val, idx) => val.voter.transactions);
-}
 async function getVoterList(contractAddress) {
   /**
    * GET utility function to get list of voters
@@ -41,6 +37,11 @@ async function getUserRank(contractAddress, address) {
   })
   return voterList.findIndex(x => x.address === address);
 }
+export async function isVoter(contractAddress, address) {
+   const provider = new ethers.providers.Web3Provider(window.ethereum);
+   const contract = new ethers.Contract(contractAddress, CustomVoting.abi, provider);
+   return await contract.isVoter(address)
+}
 export async function getProfile(contractAddress, address) {
   /**
    * GET profile information in one object
@@ -53,7 +54,7 @@ export async function getProfile(contractAddress, address) {
    */
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const contract = new ethers.Contract(contractAddress, CustomVoting.abi, provider);
-  const voter = await contract.getVoter(contractAddress);
+  const voter = await contract.getVoter(address);
   const rank = await getUserRank(contractAddress, address);
   return {
     address: address,
@@ -62,7 +63,14 @@ export async function getProfile(contractAddress, address) {
     rank: rank
   };
 }
+export async function getVoterTransactions() {
+  const voterList = await getVoterList();
+  return voterList.map((val, idx) => val.voter.transactions);
+}
 export async function getTopVoters(contractAddress) {
+  /**
+   * GET 4 top highest contributors to prize pool 
+   */
   const voterList = await getVoterList(contractAddress);
   voterList.sort((a, b) => {
     b.voter.contribution.sub(a.voter.contribution)

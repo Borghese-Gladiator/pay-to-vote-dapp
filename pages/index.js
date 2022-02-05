@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ContractAddressesContext from "../src/context/ContractAddressesContext";
 import UserInfoContext from "../src/context/UserInfoContext";
 
@@ -38,6 +38,17 @@ const transactions = [
 export default function Home({ greeterAddress, simpleAuctionAddress, customVotingAddress }) {
   const [loadingSetup, setLoadingSetup] = useState(true);
   const [userInfo, setUserInfo] = useState({});
+
+  function handleAccountsChanged() {
+    // Reloads account after account change
+    setLoadingSetup(true); 
+  }
+
+  useEffect(() => {
+    if (!loadingSetup) {
+      window.ethereum.on('accountsChanged', handleAccountsChanged);
+    }
+  }, [])
 
   return (
     <UserInfoContext.Provider value={{ userInfo, setUserInfo }}>

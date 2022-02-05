@@ -1,4 +1,5 @@
 import {
+  Heading,
   VStack,
   Button,
   Text,
@@ -18,6 +19,7 @@ export default function NoWalletDetected() {
       <VStack
         spacing={4}
       >
+        <Heading>MetaMask is not installed</Heading>
         <form
           action="https://metamask.io/"
           target="_blank"

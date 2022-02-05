@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import ContractAddressesContext from "../context/ContractAddressesContext";
+import UserInfoContext from "../context/UserInfoContext";
 import { ErrorBoundary } from 'react-error-boundary';
 import ErrorFallback from "./ErrorFallback";
 import {
@@ -24,14 +25,14 @@ import { rankOrdinalSuffix, toTitleCase, textOneLineStyle, getProfile, vote } fr
 
 export default function UserProfile() {
   const { customVotingAddress } = useContext(ContractAddressesContext);
+  const { userInfo, setUserInfo } = useContext(UserInfoContext);
 
   // Get and Display Profile
   const [profile, setProfile] = useState({ username: "Username A", address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266" });
   const [profileLoading, setProfileLoading] = useState(true);
   function resetProfile() {
     setProfileLoading(true);
-    const accoutAddress = "";
-    getProfile(customVotingAddress, accoutAddress)
+    getProfile(customVotingAddress, userInfo.address)
       .then(response =>
         setProfile(response) // { username, address, rank, contribution }
       )
@@ -48,8 +49,7 @@ export default function UserProfile() {
   const [contributionLoading, setContributionLoading] = useState(false);
   async function handleSubmit() {
     setContributionLoading(true);
-    const accoutAddress = "";
-    vote(customVotingAddress, accountAddress, contribution)
+    vote(customVotingAddress, userInfo.address, contribution)
       .then(response => {
         setProfile(""); // reset profile to refresh contribution amount
       })

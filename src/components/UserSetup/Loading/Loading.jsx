@@ -13,8 +13,10 @@ import * as errorData from "./14651-error-animation.json";
 import {
   Flex,
   Heading,
+  Text,
   SlideFade
 } from '@chakra-ui/react';
+const textOneLineStyle = { whiteSpace: "nowrap" }
 
 const loadingOptions = {
   loop: true,
@@ -41,19 +43,22 @@ const errorOptions = {
   }
 }
 
-function Loading({ wait, loadingText, condition, children }) {
+function Loading({ wait, loadingText, condition, errorText, children }) {
   const { execute, status, value, error } = useAsync(loadPage, false);
 
   function timeout(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
   async function loadPage() {
+    console.log("LOADING HERE");
     await timeout(wait);
-    if (condition) {
+    if (await condition()) {
+      console.log("Throwing error")
       throw new Error(errorText)
     }
   }
   useEffect(() => {
+    console.log(error)
     execute()
   }, [])
 
@@ -62,7 +67,10 @@ function Loading({ wait, loadingText, condition, children }) {
       <Flex direction="row" justify="center" alignItems="center">
         <Heading as='h3' size='lg'>{loadingText}</Heading>
         {status === "idle" || status === "pending" && <Lottie options={loadingOptions} height={120} width={120} />}
-        {status === "error" && <Lottie options={errorOptions} height={120} width={120} />}
+        {status === "error" && <Flex alignItems="center">
+          <Lottie options={errorOptions} height={120} width={120} />
+          <Text style={textOneLineStyle}>{errorText}</Text>
+        </Flex>}
         {status === "success" && <Lottie options={doneOptions} height={120} width={120} />}
       </Flex>
       {status === "error" && <SlideFade in={true} offsetY='20px'>{children}</SlideFade>}
@@ -73,7 +81,7 @@ function Loading({ wait, loadingText, condition, children }) {
 Loading.propTypes = {
   wait: PropTypes.number,
   loadingText: PropTypes.string,
-  condition: PropTypes.bool,
+  condition: PropTypes.func,
 }
 
 export default Loading;

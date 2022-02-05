@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import ContractAddressesContext from "../context/ContractAddressesContext";
+import UserInfoContext from "../context/UserInfoContext";
 import { ErrorBoundary } from 'react-error-boundary';
 import ErrorFallback from "./ErrorFallback";
 import CountdownTimer from "./CountdownTimer";
@@ -16,6 +17,8 @@ import { getContributionTotal, getVotingEndTime } from "../utils";
 
 export default function AuctionCountdown() {
   const { customVotingAddress } = useContext(ContractAddressesContext);
+  const { userInfo, setUserInfo } = useContext(UserInfoContext);
+
   const [endTime, setEndTime] = useState("");
   const [endTimeLoading, setEndTimeLoading] = useState(true);
   function resetEndTime() {

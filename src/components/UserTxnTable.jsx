@@ -3,6 +3,7 @@
  */
 import { useState, useEffect, useContext } from 'react';
 import ContractAddressesContext from "../context/ContractAddressesContext";
+import UserInfoContext from "../context/UserInfoContext";
 import { ErrorBoundary } from 'react-error-boundary';
 import ErrorFallback from "./ErrorFallback";
 import {
@@ -20,26 +21,27 @@ import {
   Text
 } from '@chakra-ui/react';
 import { ExternalLinkIcon } from "@chakra-ui/icons";
-import { getUserTransactions } from "../utils";
+import { getVoterTransactions } from "../utils";
 
 export default function UserTxnTable() {
   const { customVotingAddress } = useContext(ContractAddressesContext);
+  const { userInfo, setUserInfo } = useContext(UserInfoContext);
+
   const [transactionList, setTransactionList] = useState([]);
   const [loading, setLoading] = useState(true);
   function resetTransactionList() {
     setLoading(true);
-    getUserTransactions(customVotingAddress)
+    getVoterTransactions(customVotingAddress)
       .then(response =>
         setTransactionList(response)
       )
       .catch(e => alert(`Getting data failed: ${e.message}`))
       .finally(() => setLoading(false))
   }
-  /*
   useEffect(() => {
     resetTransactionList()
-  }, [transactionList])
-  */
+  }, [transactionList]);
+
   return (
     <ErrorBoundary
       FallbackComponent={ErrorFallback}

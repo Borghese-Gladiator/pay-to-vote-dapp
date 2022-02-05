@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useAsync from "../../hooks/useAsync";
 import {
   Box,
@@ -6,58 +6,68 @@ import {
   Text,
   Button,
   Flex,
-  Spinner
+  Spinner,
+  Container,
+  Alert,
+  AlertIcon,
+  Heading
 } from '@chakra-ui/react';
-
 const textOneLineStyle = { whiteSpace: "nowrap" }
 
 export default function CreateUsername({ userInfo, setUserInfo }) {
+  const [address, setAddress] = useState('');
   const [username, setUsername] = useState('')
   const handleChange = (event) => setUsername(event.target.value);
 
   const { execute, status, value, error } = useAsync(updateUsername, false);
   async function updateUsername() {
-    try {
-      // request access to the user's MetaMask account
-      const message = `Hello! I will sign this message with name: ${username}`;
-      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      const account = accounts[0]; // MetaMask gets current account
-      const signature = await window.ethereum.request({ method: 'personal_sign', params: [message, account] });
-      setUserInfo({
-        ...userInfo,
-        name: username
-      });
-    } catch (e) {
-      throw new Error(e.message);
-    }
+    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    console.log(accounts);
+    const account = accounts[0];
+    setUserInfo({
+      username: username,
+      address: account.address
+    });
   }
 
+  useEffect(async () => {
+    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    console.log(accounts);
+    const account = accounts[0];
+    setAddress(account.address)
+  }, [address])
+
   return (
-    <Box
-      borderWidth={2}
-      mb={1}
-      p={3}
-    >
-      {status === "idle" && <div>Waiting to set username by using Web3 Message signing given user address...</div>}
-      {status === "success" && <div>{value}</div>}
-      {status === "error" && <div>{error}</div>}
-      <Flex alignItems="center" m={1}>
-        <Text style={textOneLineStyle}>Set Username</Text>
-        <Box pl={1} />
-        <Input
-          value={username}
-          onChange={handleChange}
-          placeholder={"Winged Victory of Samothrace"} size="lg" />
-        <Button onClick={execute} disabled={status === "pending"}>Submit</Button>
-        {status === "pending"
-          && <Spinner
-            thickness='4px'
-            speed='0.65s'
-            emptyColor='gray.200'
-            color='blue.500'
-            size='xl'
-          />}
-      </Flex>
-    </Box>
+    <Container maxW='container.sm'>
+      <Box
+        borderWidth={2}
+        mb={1}
+        p={3}
+      >
+        <Flex direction="column" p={3} m={1}>
+          <Heading as='h4' size='md'>First Time Seeing This Account!</Heading>
+          {status === "idle" && <Text>Submit to load account info</Text>}
+          {status === "success" && <Alert status='success'><AlertIcon />{value}</Alert>}
+          {status === "error" && <Alert status='error'><AlertIcon />{error.message}</Alert>
+          }
+          <Text mt={5} style={textOneLineStyle}>Enter Username</Text>
+          <Flex alignItems="center">
+            <Input
+              value={username}
+              onChange={handleChange}
+              placeholder={"Winged Victory of Samothrace"} size="lg" />
+            <Button onClick={execute} disabled={status === "pending"}>Submit</Button>
+            {status === "pending"
+              && <Spinner
+                thickness='4px'
+                speed='0.65s'
+                emptyColor='gray.200'
+                color='blue.500'
+                size='xl'
+              />}
+          </Flex>
+        </Flex>
+      </Box>
+    </Container>
   )
 }
