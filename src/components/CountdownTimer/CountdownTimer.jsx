@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import PropTypes from "prop-types";
 import { Text } from "@chakra-ui/react";
-import { textOneLineStyle } from "../../utils";
 
 function CountdownTimer({ endTime }) {
   const { hours = 0, minutes = 0, seconds = 60 } = endTime;
