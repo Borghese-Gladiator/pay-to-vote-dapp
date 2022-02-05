@@ -19,7 +19,7 @@ import {
   PopoverArrow,
   PopoverCloseButton,
 } from '@chakra-ui/react';
-import { getVoterList, rankOrdinalSuffix } from "../utils";
+import { getTopVoters, rankOrdinalSuffix } from "../utils";
 
 export default function LeaderTable() {
   const { customVotingAddress } = useContext(ContractAddressesContext);
@@ -27,18 +27,16 @@ export default function LeaderTable() {
   const [loading, setLoading] = useState(true);
   function resetLeaderList() {
     setLoading(true);
-    getVoterList(customVotingAddress)
+    getTopVoters(customVotingAddress)
       .then(response =>
-        setLeaderList(response.slice(0, 5))
+        setLeaderList(response)
       )
       .catch(e => alert(`Getting data failed: ${e.message}`))
-      .finally(() => setLoading(false))
+      .finally(() => setLoading(false));
   }
-  /*
   useEffect(() => {
     resetLeaderList()
   }, [leaderList])
-  */
 
   return (
     <ErrorBoundary
@@ -65,10 +63,10 @@ export default function LeaderTable() {
               : leaderList
                 .sort((leaderA, leaderB) => leaderB.contribution - leaderA.contribution)
                 .slice(0, 3)
-                .map(({ name, address, contribution }, idx) => {
+                .map(({ username, address, contribution, rank }, idx) => {
                   return (
                     <Tr key={`leader-row-${idx}`}>
-                      <Td isNumeric>{rankOrdinalSuffix(idx + 1)}</Td>
+                      <Td isNumeric>{rankOrdinalSuffix(rank)}</Td>
                       <Td>
                         <Popover trigger="hover">
                           <PopoverTrigger>

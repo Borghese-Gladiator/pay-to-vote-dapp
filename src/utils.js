@@ -4,8 +4,8 @@
 import { ethers } from 'ethers'
 import CustomVoting from "./artifacts/contracts/CustomVoting.sol/CustomVoting.json";
 
-function getUserTransactions() {
-  const voterList = getVoterList();
+async function getUserTransactions() {
+  const voterList = await getVoterList();
   return voterList.map((val, idx) => val.voter.transactions);
 }
 async function getVoterList(contractAddress) {
@@ -26,7 +26,7 @@ async function getVoterList(contractAddress) {
   }
   return voterList;
 };
-function getUserRank(contractAddress, address) {
+async function getUserRank(contractAddress, address) {
   /**
    * GET rank of user relative to others by sorting array
    * - sort highest to lowest (b - a)
@@ -35,13 +35,13 @@ function getUserRank(contractAddress, address) {
    * @param address
    * @return rank of user
    */
-  const voterList = getVoterList(contractAddress);
+  const voterList = await getVoterList(contractAddress);
   voterList.sort((a, b) => {
     b.voter.contribution.sub(a.voter.contribution)
   })
   return voterList.findIndex(x => x.address === address);
 }
-export async function getUserProfile(contractAddress, address) {
+export async function getProfile(contractAddress, address) {
   /**
    * GET profile information in one object
    * - calls calculateRank
@@ -51,14 +51,31 @@ export async function getUserProfile(contractAddress, address) {
    * @param address for user
    * @return { address, username, contribution, rank }
    */
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const contract = new ethers.Contract(contractAddress, CustomVoting.abi, provider);
   const voter = await contract.getVoter(contractAddress);
-  const rank = getUserRank(contractAddress, address);
+  const rank = await getUserRank(contractAddress, address);
   return {
     address: address,
     username: ethers.utils.parseBytes32String(voter.username),
     contribution: voter.contribution.toString(),
     rank: rank
   };
+}
+export async function getTopVoters(contractAddress) {
+  const voterList = await getVoterList(contractAddress);
+  voterList.sort((a, b) => {
+    b.voter.contribution.sub(a.voter.contribution)
+  })
+  const topVoters = voterList.slice(0, 5).map(({ address, voter }, idx) => {
+    return {
+      address: address,
+      username: ethers.utils.parseBytes32String(voter.username),
+      contribution: voter.contribution.toString(),
+      rank: idx + 1
+    }
+  })
+  return topVoters;
 }
 export async function getVotingEndTime(contractAddress) {
   /**
@@ -68,13 +85,13 @@ export async function getVotingEndTime(contractAddress) {
   const contract = new ethers.Contract(contractAddress, CustomVoting.abi, provider);
   return await contract.votingEndTime();
 }
-export async function getTotalContribution() {
+export async function getContributionTotal(contractAddress) {
   /**
    * GET total contribution
    */
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const contract = new ethers.Contract(contractAddress, CustomVoting.abi, provider);
-  await contract.getTotalContribution();
+  await contract.getContributionTotal();
 }
 
 export async function vote(contractAddress, address, contribution) {

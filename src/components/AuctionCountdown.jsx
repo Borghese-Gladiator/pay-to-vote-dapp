@@ -12,7 +12,7 @@ import {
   Text,
   Container
 } from '@chakra-ui/react';
-import { getTotalContribution, getVotingEndTime } from "../utils";
+import { getContributionTotal, getVotingEndTime } from "../utils";
 
 export default function AuctionCountdown() {
   const { customVotingAddress } = useContext(ContractAddressesContext);
@@ -27,27 +27,24 @@ export default function AuctionCountdown() {
       .catch(e => alert(`Getting end time failed: ${e.message}`))
       .finally(() => setEndTimeLoading(false))
   }
-  /*
   useEffect(() => {
     resetEndTime()
   }, [endTime])
-  */
+
   const [prizePool, setPrizePool] = useState("");
   const [prizePoolLoading, setPrizePoolLoading] = useState(true);
   function resetPrizePool() {
     setPrizePoolLoading(true);
-    getTotalContribution(customVotingAddress)
+    getContributionTotal(customVotingAddress)
       .then(response =>
         setPrizePool(response)
       )
       .catch(e => alert(`Getting prize pool failed: ${e.message}`))
       .finally(() => setPrizePoolLoading(false))
   }
-  /*
   useEffect(() => {
     resetPrizePool()
   }, [prizePool])
-  */
 
   return (
     <ErrorBoundary

@@ -20,32 +20,36 @@ import {
   PopoverArrow,
   PopoverCloseButton,
 } from '@chakra-ui/react';
-import { rankOrdinalSuffix, toTitleCase, textOneLineStyle, getUserProfile, setUserContribution } from "../utils";
+import { rankOrdinalSuffix, toTitleCase, textOneLineStyle, getProfile, vote } from "../utils";
 
 export default function UserProfile() {
   const { customVotingAddress } = useContext(ContractAddressesContext);
+
+  // Get and Display Profile
   const [profile, setProfile] = useState({ username: "Username A", address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266" });
   const [profileLoading, setProfileLoading] = useState(true);
-
   function resetProfile() {
     setProfileLoading(true);
-    getUserProfile(customVotingAddress)
+    const accoutAddress = "";
+    getProfile(customVotingAddress, accoutAddress)
       .then(response =>
         setProfile(response) // { username, address, rank, contribution }
       )
       .catch(e => alert(`Getting profile failed: ${e.message}`))
       .finally(() => setProfileLoading(false))
   }
-  /*
   useEffect(() => {
     resetProfile()
   }, [profile])
-  */
 
+  // Set contribution through voting
+  const [contribution, setContribution] = useState('');
+  const handleChange = (event) => setValue(event.target.value);
   const [contributionLoading, setContributionLoading] = useState(false);
   async function handleSubmit() {
     setContributionLoading(true);
-    submitUserContribution(customVotingAddress)
+    const accoutAddress = "";
+    vote(customVotingAddress, accountAddress, contribution)
       .then(response => {
         setProfile(""); // reset profile to refresh contribution amount
       })
@@ -87,7 +91,7 @@ export default function UserProfile() {
           </Tr>
           <Tr>
             <Td><Text fontSize='md' style={textOneLineStyle}>Enter New Amount</Text></Td>
-            <Td><Input /></Td>
+            <Td><Input value={contribution} onChange={handleChange} /></Td>
             <Td>
               <Flex alignItems="center">
                 <Button onClick={handleSubmit}>Submit</Button>
