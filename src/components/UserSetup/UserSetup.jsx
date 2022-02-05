@@ -53,17 +53,56 @@ export default function UserSetup({ setLoadingSetup }) {
     setLoadingSetup(false)
   }
 
+  console.log(typeof window !== "undefined" && typeof window.ethereum === "undefined");
+  if (typeof window !== "undefined" && typeof window.ethereum === "undefined") {
+    return (
+      <Container maxW='container.md'>
+        <Flex direction="column" justify="center" alignItems="center">
+          <Loading
+            key={`loading-step-0`}
+            wait={animationDelay * 0}
+            loadingText={"Detecting MetaMask"}
+            errorText={"MetaMask Not Detected"}
+            condition={async () => {
+              return typeof window !== "undefined" && typeof window.ethereum === "undefined"
+            }}
+          >
+            <NoWalletDetected />
+          </Loading>
+        </Flex>
+      </Container>
+    )
+  }
+
   return (
     <Container maxW='container.md'>
       <Flex direction="column" justify="center" alignItems="center">
-        {setupList.map(({ Component, condition, loadingText, errorText }, idx) => {
-          const currentDelay = animationDelay * idx;
-          return (
-            <Loading key={`loading-step-${idx}`} wait={currentDelay} loadingText={loadingText} errorText={errorText} condition={condition}>
-              <Component userInfo={userInfo} setUserInfo={setUserInfo} />
-            </Loading>
-          )
-        })}
+        <Loading
+          key={`loading-step-0`}
+          wait={animationDelay * 0}
+          loadingText={"Detecting MetaMask"}
+          errorText={"MetaMask Not Detected"}
+          condition={async () => {
+            return typeof window !== "undefined" && typeof window.ethereum === "undefined"
+          }}
+        >
+          <NoWalletDetected />
+        </Loading>
+        <Loading
+          key={`loading-step-1`}
+          wait={animationDelay * 1}
+          loadingText={"Detecting Account and Username"}
+          errorText={"Account not seen before"}
+          condition={async () => {
+            console.log(userInfo);
+            if (!("address" in userInfo)) {
+              return true
+            }
+            return await !isVoter(userInfo.address)
+          }}
+        >
+          <CreateUsername />
+        </Loading>
         <Wait wait={totalAnimationDelay} show={shouldShowApp}>
           <Button
             leftIcon={<CheckIcon />}
