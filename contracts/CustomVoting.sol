@@ -8,11 +8,13 @@ contract CustomVoting {
         uint256 index;
     }
     
-    // Voting State
-    mapping(address => Voter) private voterStructList; // struct list
-    address[] private voterIndex; // struct list index
-    uint public contributionTotal;
-    bool ended;
+    // CustomVoting State - https://medium.com/robhitchens/solidity-crud-part-1-824ffa69509a
+    mapping(address => Voter) private voterStructList;
+    address[] private voterIndex;
+    uint256 public highestVote;
+    uint256 public contributionTotal;
+    mapping(address => uint) pendingReturns; // Allowed withdrawals of previous bids
+    bool ended; // Set to true at the end, disallows any change.
 
     // Parameters for CustomVoting - Times are either absolute unix timestamps (seconds since 1970-01-01) or time periods in seconds
     uint public votingEndTime;
@@ -44,14 +46,73 @@ contract CustomVoting {
     error VotingAlreadyEnded();
     // Error for address not present in voter list
     error AddressNotVoter();
-    // Error for contribution lower than current contribution
+    // Error for address already present in voter list
+    error AddressIsVoter();
+    // Error for contribution lower than current highest
     error ContributionNotHighEnough();
+    // Error for contribution lower than current contrigbution
+    error PreviousContributionWasHigher();
 
     // Start voting with `votingTime` seconds
     constructor(uint votingTime) {
         votingEndTime = block.timestamp + votingTime;
+        highestVote = 0;
     }
     
+    // Update Contribution through Vote
+    /// Bid on the auction with the value sent together with this transaction.
+    /// The value will only be refunded if the auction is not won.
+    function vote(address voterAddress, uint256 _contribution)
+        external
+        payable 
+        returns (bool success)
+    {
+        if (!isVoter(voterAddress)) revert AddressNotVoter();
+        if (_contribution <= voterStructList[voterAddress].contribution) {
+            revert PreviousContributionWasHigher();
+        }
+        if (_contribution <= highestVote) {
+            revert ContributionNotHighEnough();
+        }
+        if (voterIndex.length != 0) {
+            // Sending back the money by simply using
+            // voterAddress.send(highestBid) is a security risk
+            // because it could execute an untrusted contract.
+            // It is always safer to let the recipients
+            // withdraw their money themselves.
+            pendingReturns[voterAddress] += _contribution;
+        }
+        voterStructList[voterAddress].contribution = _contribution;
+        emit LogUpdateVoter(
+            voterAddress,
+            voterStructList[voterAddress].index,
+            voterStructList[voterAddress].username,
+            _contribution
+        );
+        contributionTotal += _contribution;
+        emit LogUpdateContributionTotal(
+            voterAddress,
+            _contribution
+        );
+        return true;
+    }
+    /// Withdraw a bid that was overbid.
+    function withdraw() external returns (bool) {
+        uint amount = pendingReturns[msg.sender];
+        if (amount > 0) {
+            // It is important to set this to zero because the recipient
+            // can call this function again as part of the receiving call
+            // before `send` returns.
+            pendingReturns[msg.sender] = 0;
+
+            if (!payable(msg.sender).send(amount)) {
+                // No need to call throw here, just reset the amount owing
+                pendingReturns[msg.sender] = amount;
+                return false;
+            }
+        }
+        return true;
+    }
     // End Voting and payout to winner
     function votingEnd() external {
         // Conditions
@@ -88,34 +149,8 @@ contract CustomVoting {
         }
         return (highestVoterAddress, highestVoter);
     }
-    // Update Contribution function
-    function vote(address voterAddress, uint256 _contribution)
-        public
-        returns (bool success)
-    {
-        if (!isVoter(voterAddress)) revert AddressNotVoter();
-        if (_contribution <= voterStructList[voterAddress].contribution || _contribution == 0) {
-            revert ContributionNotHighEnough();
-        }
-        voterStructList[voterAddress].contribution = _contribution;
-        emit LogUpdateVoter(
-            voterAddress,
-            voterStructList[voterAddress].index,
-            voterStructList[voterAddress].username,
-            _contribution
-        );
-        contributionTotal += _contribution;
-        emit LogUpdateContributionTotal(
-            voterAddress,
-            _contribution
-        );
-        return true;
-    }
-    // CRUD for contribution total
-    function getContributionTotal() public view returns (uint256 total) {
-        return contributionTotal;
-    }
-    // CRUD functions for struct list
+    
+    // CRUD functions for CustomVoting State
     function isVoter(address voterAddress)
         public
         view
@@ -129,7 +164,7 @@ contract CustomVoting {
         bytes32 username,
         uint256 contribution
     ) public returns (uint256 index) {
-        if (isVoter(voterAddress)) revert AddressNotVoter();
+        if (isVoter(voterAddress)) revert AddressIsVoter();
         voterStructList[voterAddress].username = username;
         voterStructList[voterAddress].contribution = contribution;
         voterIndex.push(voterAddress);
@@ -178,5 +213,8 @@ contract CustomVoting {
     function getVoterAtIndex(uint256 index) public view returns (address voterAddress)
     {
         return voterIndex[index];
+    }
+    function getContributionTotal() public view returns (uint256 total) {
+        return contributionTotal;
     }
 }
