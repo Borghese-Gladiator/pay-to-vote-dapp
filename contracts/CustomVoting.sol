@@ -226,11 +226,14 @@ contract CustomVoting {
     function getVoterCount() public view returns (uint256 count) {
         return voterIndex.length;
     }
-    function getVoterAtIndex(uint256 index) public view returns (address voterAddress)
+    function getVoterAtIndex(uint256 index) public view returns (address)
     {
         return voterIndex[index];
     }
-    function getContributionTotal() public view returns (uint256 total) {
+    function getContributionTotal() public view returns (uint256) {
         return contributionTotal;
+    }
+    function getVotingEndTime() public view returns (uint) {
+        return votingEndTime;
     }
 }
