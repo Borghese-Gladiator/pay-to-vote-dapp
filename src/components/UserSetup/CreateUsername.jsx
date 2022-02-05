@@ -12,7 +12,7 @@ import {
   Heading
 } from '@chakra-ui/react';
 
-export default function CreateUsername({ userInfo, setUserInfo }) {
+export default function CreateUsername({ userInfo, setUserInfo, setupComplete }) {
   const [address, setAddress] = useState('');
   const [username, setUsername] = useState('')
   const handleChange = (event) => setUsername(event.target.value);
@@ -26,6 +26,7 @@ export default function CreateUsername({ userInfo, setUserInfo }) {
       username: username,
       address: account.address
     });
+    setupComplete();
   }
 
   return (
@@ -38,9 +39,8 @@ export default function CreateUsername({ userInfo, setUserInfo }) {
       <Flex direction="column" p={3} m={1}>
         <Heading as='h4' size='md'>First Time Seeing This Account!</Heading>
         {status === "idle" && <Text mt={5}>Create Username</Text>}
-        {status === "success" && <Alert status='success'><AlertIcon />{value}</Alert>}
-        {status === "error" && <Alert status='error'><AlertIcon />{error.message}</Alert>
-        }
+        {status === "success" && <Alert status='success' mt={5}><AlertIcon />Successfully created username: {username}</Alert>}
+        {status === "error" && <Alert status='error' mt={5}><AlertIcon />{error.message}</Alert>}
         <Flex alignItems="center">
           <Input
             value={username}

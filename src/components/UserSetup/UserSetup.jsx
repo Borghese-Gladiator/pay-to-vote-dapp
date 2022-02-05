@@ -6,7 +6,7 @@
  * check user is connected to MetaMask
  * check user has signed in before using Web3 message signing
  */
-import { useContext } from "react";
+import { useContext, useState } from "react";
 // Context
 import UserInfoContext from "../../context/UserInfoContext";
 // Custom components
@@ -47,7 +47,7 @@ export default function UserSetup({ setLoadingSetup }) {
     },
   ];
   const totalAnimationDelay = animationDelay * (setupList.length - 1);
-  const shouldShowApp = setupList.every(val => val.condition() === false);
+  const [shouldShowApp, setShouldShowApp] = useState(setupList.every(val => val.condition() === false));
 
   function showApp() {
     setLoadingSetup(false)
@@ -101,7 +101,7 @@ export default function UserSetup({ setLoadingSetup }) {
             return await !isVoter(userInfo.address)
           }}
         >
-          <CreateUsername userInfo={userInfo} setUserInfo={setUserInfo} />
+          <CreateUsername userInfo={userInfo} setUserInfo={setUserInfo} setupComplete={() => setShouldShowApp(true)} />
         </Loading>
         <Wait wait={totalAnimationDelay} show={shouldShowApp}>
           <Button
