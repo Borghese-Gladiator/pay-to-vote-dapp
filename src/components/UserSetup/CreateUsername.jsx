@@ -1,3 +1,4 @@
+import { ethers } from 'ethers'
 import { useState } from "react";
 import useAsync from "../../hooks/useAsync";
 import {
@@ -19,12 +20,20 @@ export default function CreateUsername({ userInfo, setUserInfo, setupComplete })
 
   const { execute, status, value, error } = useAsync(updateUsername, false);
   async function updateUsername() {
-    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    // A Web3Provider wraps a standard Web3 provider, which is
+    // what MetaMask injects as window.ethereum into each page
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // The MetaMask plugin also allows signing transactions to
+    // send ether and pay to change state within the blockchain.
+    // For this, you need the account signer...
+    const signer = provider.getSigner()
+    // MetaMask requires requesting permission to connect users accounts
+    const accounts = await provider.send("eth_requestAccounts", []);
     console.log(accounts);
     const account = accounts[0];
     setUserInfo({
       username: username,
-      address: account.address
+      address: account
     });
     setupComplete();
   }
