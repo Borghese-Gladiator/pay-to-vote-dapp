@@ -29,7 +29,6 @@ export default function CreateUsername({ userInfo, setUserInfo, setupComplete })
     const signer = provider.getSigner()
     // MetaMask requires requesting permission to connect users accounts
     const accounts = await provider.send("eth_requestAccounts", []);
-    console.log(accounts);
     const account = accounts[0];
     setUserInfo({
       username: username,

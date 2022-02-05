@@ -25,7 +25,6 @@ export default function VotingCountdown() {
     setEndTimeLoading(true);
     getVotingEndTime(customVotingAddress)
       .then(response => {
-        console.log(response)
         setEndTime(response)
       })
       .catch(e => console.log(`Getting end time failed: ${e.message}`))
