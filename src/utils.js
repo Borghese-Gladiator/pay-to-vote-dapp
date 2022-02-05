@@ -1,85 +1,100 @@
+/**
+ * All information contained in functions because window.ethereum must be defined
+ */
 import { ethers } from 'ethers'
 import CustomVoting from "./artifacts/contracts/CustomVoting.sol/CustomVoting.json";
 
-export async function getUserTransactions(contractAddress) {
-  return []
+function getUserTransactions() {
+  const voterList = getVoterList();
+  return voterList.map((val, idx) => val.voter.transactions);
 }
-
-export async function getUserProfile(contractAddress) {
-  // @precondition window.ethereum is defined
-  const provider = new ethers.providers.Web3Provider(window.ethereum)
-  const contract = new ethers.Contract(contractAddress, CustomVoting.abi, provider)
-  try {
-    return await contract.getUserProfile();
-  } catch(err) {
-    console.log("Error: ", err);
+async function getVoterList(contractAddress) {
+  /**
+   * GET utility function to get list of voters
+   */
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const contract = new ethers.Contract(contractAddress, CustomVoting.abi, provider);
+  const voterList = []
+  const count = await contract.getVoterCount();
+  for (let idx=0; idx < count; idx++) {
+    const address = await contract.getVoterAtIndex(idx);
+    const voter = await contract.getVoter(address);
+    voterList.push({
+      address: address,
+      voter: voter
+    });
   }
+  return voterList;
+};
+function getUserRank(contractAddress, address) {
+  /**
+   * GET rank of user relative to others by sorting array
+   * - sort highest to lowest (b - a)
+   * 
+   * @param contractAddress
+   * @param address
+   * @return rank of user
+   */
+  const voterList = getVoterList(contractAddress);
+  voterList.sort((a, b) => {
+    b.voter.contribution.sub(a.voter.contribution)
+  })
+  return voterList.findIndex(x => x.address === address);
+}
+export async function getUserProfile(contractAddress, address) {
+  /**
+   * GET profile information in one object
+   * - calls calculateRank
+   * - converts BigNumber to string and 32 bytes string to string
+   * 
+   * @param contractAddress
+   * @param address for user
+   * @return { address, username, contribution, rank }
+   */
+  const voter = await contract.getVoter(contractAddress);
+  const rank = getUserRank(contractAddress, address);
+  return {
+    address: address,
+    username: ethers.utils.parseBytes32String(voter.username),
+    contribution: voter.contribution.toString(),
+    rank: rank
+  };
+}
+export async function getVotingEndTime(contractAddress) {
+  /**
+   * GET voting end time
+   */
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const contract = new ethers.Contract(contractAddress, CustomVoting.abi, provider);
+  return await contract.votingEndTime();
+}
+export async function getTotalContribution() {
+  /**
+   * GET total contribution
+   */
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const contract = new ethers.Contract(contractAddress, CustomVoting.abi, provider);
+  await contract.getTotalContribution();
 }
 
-export async function getUserContribution(contractAddress) {
-  // @precondition window.ethereum is defined
-  const provider = new ethers.providers.Web3Provider(window.ethereum)
-  const contract = new ethers.Contract(contractAddress, CustomVoting.abi, provider)
-  try {
-    return await contract.getContribution();
-  } catch(err) {
-    console.log("Error: ", err);
-  }
+export async function vote(contractAddress, address, contribution) {
+  /**
+   * SET update contribution
+   * @param contractAddress
+   * @param address for user
+   * @param contribution amount of vote
+   * @return true for success
+   */
+  await window.ethereum.request({ method: 'eth_requestAccounts' });
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner()
+  const contract = new ethers.Contract(contractAddress, CustomVoting.abi, signer);
+  const transaction = await contract.vote(address, contribution);
+  return transaction
 }
 
-export async function getVotingEndTime() {
-  // @precondition window.ethereum is defined
-  const provider = new ethers.providers.Web3Provider(window.ethereum)
-  const contract = new ethers.Contract(contractAddress, CustomVoting.abi, provider)
-  try {
-    return await contract.getVotingEndTime();
-  } catch(err) {
-    console.log("Error: ", err);
-  }
-  
-}
-
-export async function submitUserContribution(contractAddress, contribution) {
-  // @precondition window.ethereum is defined
-  const provider = new ethers.providers.Web3Provider(window.ethereum)
-  const contract = new ethers.Contract(contractAddress, CustomVoting.abi, provider)
-  try {
-    const newValue = await contract.setContribution(contribution);
-    return newValue;
-  } catch(err) {
-    console.log("Error: ", err);
-  }
-}
-
-export async function getTotalContribution(contractAddress) {
-  // @precondition window.ethereum is defined
-  const provider = new ethers.providers.Web3Provider(window.ethereum)
-  const contract = new ethers.Contract(contractAddress, CustomVoting.abi, provider)
-  try {
-    return await contract.getTotalContribution();
-  } catch(err) {
-    console.log("Error: ", err);
-  }
-}
-
-export async function getVoterList(contractAddress) {
-  // @precondition window.ethereum is defined
-  const provider = new ethers.providers.Web3Provider(window.ethereum)
-  const contract = new ethers.Contract(contractAddress, CustomVoting.abi, provider)
-  try {
-    const n = await contract.getVoterCount();
-    console.log(`Voter Count: ${n}`);
-    const voterList = [];
-    for (let i = 0; i < n; i++) {
-      voterList.push(await contract.getVoter(i));
-    }
-    console.log(`Voter List: ${voterList.toString()}`);
-    return voterList
-  } catch (err) {
-    console.log("Error: ", err)
-  }
-}
-
+// UTILS
+export const textOneLineStyle = { whiteSpace: "nowrap" }
 export function toTitleCase(str) {
   return str.replace(
     /\w\S*/g,
@@ -88,7 +103,6 @@ export function toTitleCase(str) {
     }
   );
 }
-
 export function rankOrdinalSuffix(i) {
   // https://stackoverflow.com/questions/13627308/add-st-nd-rd-and-th-ordinal-suffix-to-a-number
   const j = i % 10, k = i % 100;
@@ -103,9 +117,6 @@ export function rankOrdinalSuffix(i) {
   }
   return i + "th";
 }
-
-export const textOneLineStyle = { whiteSpace: "nowrap" }
-
 export function convertDateToStr(date) {
   const options = { day: 'numeric', hour: '2-digit', minute: '2-digit' };
   return date.toLocaleDateString("en-US", options);
