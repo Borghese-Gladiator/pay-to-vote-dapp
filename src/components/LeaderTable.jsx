@@ -31,17 +31,17 @@ export default function LeaderTable() {
   function resetLeaderList() {
     setLoading(true);
     getTopVoters(customVotingAddress)
-      .then(response =>
+      .then(response => {
+        console.log(response)
         setLeaderList(response)
-      )
+      })
       .catch(e => console.log(`Getting data failed: ${e.message}`))
       .finally(() => setLoading(false));
   }
-  /*
+  // Call once on initial load
   useEffect(() => {
     resetLeaderList()
-  }, [leaderList])
-  */
+  }, [])
 
   return (
     <ErrorBoundary
