@@ -100,13 +100,15 @@ Account Data flows MetaMask address to Frontend (HTML/CSS/JS(React)) to deployed
   - Display loading for every setup check that user needs to go through. Show button to enter app if all checked.
 - Rewrote components to have PropTypes to debug more easily
 - Rewrote smart contract backend to be called more easily (used reference [https://medium.com/robhitchens/solidity-crud-part-1-824ffa69509a](https://medium.com/robhitchens/solidity-crud-part-1-824ffa69509a))
+- Wrote up HardHat tests to validate smart contract
 - Set up src/components/UserSetup to use MetaMask and ethers.js to check for account properly and prompt for input
 
 #### Bugs
 - When you have 0 ETH, check which account you are using and what network you are on. In MetaMask, name your accounts names like Local_Test_Account and Ropsten_Test_Account to clearly see which network you should be on when using them.
-- ```Error: call revert exception (method="greet()", errorArgs=null, errorName=null, errorSignature=null, reason=null, code=CALL_EXCEPTION, version=abi/5.5.0)``` - error since it can't find contract method (most likely wrong address)
-  - redeploy contracts to local network and update values in .env.local
-  - in MetaMask, switch to Test Account in MetaMask (one of the accounts listed when hardhat is starting up locally)
+- ```Error: call revert exception (method="greet()", errorArgs=null, errorName=null, errorSignature=null, reason=null, code=CALL_EXCEPTION, version=abi/5.5.0)``` AND server logs ```WARNING: Calling an account which is not a contract```
+  - REDEPLOY contracts to local network (usually running on wrong network I believe)
+  - Double check values in .env.local
+  - Switch to Test Account in MetaMask (one of the accounts listed when hardhat is starting up locally)
 - ```{"code":-32602,"message":"Trying to send a raw transaction with an invalid chainId. The expected chainId is 31337"``` - fix by updating hardhat.config.js (missing ```hardhat: { chainId: 337 }```) [https://hardhat.org/metamask-issue.html](https://hardhat.org/metamask-issue.html)
 - ```MetaMask - RPC Error: [ethjs-query] while formatting outputs from RPC '{"value":{"code":-32603,"data":{"code":-32000,"message":"Nonce too high. Expected nonce to be 2 but got 9. Note that transactions can't be queued when automining."}}}'``` - Reset Account (occurred when using same account but switching which app was running)
 - ```Warning: Can't perform a React state update on an unmounted component.``` - Occurred after I used dynamic imports. Fix with useAsync hook.
@@ -116,6 +118,7 @@ Account Data flows MetaMask address to Frontend (HTML/CSS/JS(React)) to deployed
 #### References
 - Basis for initializing project [https://dev.to/dabit3/the-complete-guide-to-full-stack-ethereum-development-3j13](https://dev.to/dabit3/the-complete-guide-to-full-stack-ethereum-development-3j13)
 - Smart Contract reference [https://solidity-by-example.org/structs/](https://solidity-by-example.org/structs/)
+- Setting up Smart Contract array of structs [https://medium.com/robhitchens/solidity-crud-part-1-824ffa69509a](https://medium.com/robhitchens/solidity-crud-part-1-824ffa69509a)
 - copying custom hooks [https://usehooks.com/useAsync/](https://usehooks.com/useAsync/)
 - Validating smart contract [https://hardhat.org/tutorial/testing-contracts.html](https://hardhat.org/tutorial/testing-contracts.html)
 - Validating user MetaMask browser selections with Ethers.js [https://docs.ethers.io/v4/api-providers.html#provider-connect](https://docs.ethers.io/v4/api-providers.html#provider-connect)
@@ -123,6 +126,7 @@ Account Data flows MetaMask address to Frontend (HTML/CSS/JS(React)) to deployed
     - ```let provider = new ethers.providers.Web3Provider(web3.currentProvider);```
   - call SET functions of contract using Signer (JsonRpCSigner)
     - ```let signer = jsonRpcProvider.getSigner(accounts[1]);```
+- Countdown timer [https://medium.com/bb-tutorials-and-thoughts/how-to-create-a-countdown-timer-in-react-app-e99916046292](https://medium.com/bb-tutorials-and-thoughts/how-to-create-a-countdown-timer-in-react-app-e99916046292)
 
 #### Notes
 Flow of Application
@@ -141,7 +145,7 @@ User simply uses frontend and changes accounts with MetaMask as needed between M
 - DApps require lots of information to be loaded before they can be used. Writing this setup component was not expected.
 
 #### Next Steps
-- Remove all instances of SimpleAuction
+- Refactor UserSetup to be reusable fancy loading animation
 - Learn Solidity for a proper insertion - improve runtime by not running findHighestVoter each time vote is called
   - learn Mapping vs Array
 - Add toggle to display address for table (chakra ui + react-table)
