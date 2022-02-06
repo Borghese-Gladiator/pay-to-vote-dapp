@@ -30,7 +30,6 @@ describe("CustomVoting", function () {
   // `beforeEach` will run before each test, re-deploying the contract every time
   beforeEach(async function () {
     initialTotal = 0;
-    minContribution = 0;
     // Get the ContractFactory and Signers here.
     CustomVoting = await ethers.getContractFactory("CustomVoting");
     [owner, addr1, addr2] = await ethers.getSigners();
@@ -56,32 +55,18 @@ describe("CustomVoting", function () {
       )
     }; 
   });
-  describe("Create Voters", function() {
-    it("Should Create Voter", async function() {
-      const usernameA = ethers.utils.formatBytes32String("Jack");
-      const usernameB = ethers.utils.formatBytes32String("Jill");
-      await contract.insertVoter(addr1.address, usernameA, minContribution);
-      await contract.insertVoter(addr2.address, usernameB, minContribution);
-      const voterA = await contract.getVoter(addr1.address);
-      const voterB = await contract.getVoter(addr2.address);
-      expect(voterA.contribution).to.equal(ethers.BigNumber.from(minContribution));
-      expect(voterB.contribution).to.equal(ethers.BigNumber.from(minContribution));
-    });
-  })
   describe("Voting", function () {
     beforeEach(async function () {
       // Create Voters
-      const usernameA = ethers.utils.formatBytes32String("Jack");
-      const usernameB = ethers.utils.formatBytes32String("Jill");
-      await contract.insertVoter(addr1.address, usernameA, minContribution);
-      await contract.insertVoter(addr2.address, usernameB, minContribution);
+      usernameA = ethers.utils.formatBytes32String("Jack");
+      usernameB = ethers.utils.formatBytes32String("Jill");
     })
     it("Should start with 0 ETH", async function () {
       expect(await contract.getContributionTotal()).to.equal(initialTotal);
     })
     it("Should let A vote once", async function () {
       expect(await contract.getContributionTotal()).to.equal(initialTotal);
-      await contract.vote(addr1.address, userAVote);
+      await contract.vote(addr1.address, usernameA, userAVote);
       const highestVoter = findHighestVoter(await getVoterList());
       expect(highestVoter.contribution).to.equal(userAVote);
       expect(await contract.getContributionTotal()).to.equal(initialTotal + userAVote);
@@ -89,33 +74,33 @@ describe("CustomVoting", function () {
     it("Should prevent second vote being lower than first", async function () {
       expect(await contract.getContributionTotal()).to.equal(initialTotal);
       try {
-        await contract.vote(addr1.address, userAVote);
-        await contract.vote(addr1.address, userALowVote);
+        await contract.vote(addr1.address, usernameA, userAVote);
+        await contract.vote(addr1.address, usernameA, userALowVote);
       } catch (e) {
         expect(e.message).to.equal("VM Exception while processing transaction: reverted with custom error 'PreviousContributionWasHigher()'");
       }
     });
     it("Should use highest vote of A who votes twice", async function () {
       expect(await contract.getContributionTotal()).to.equal(initialTotal);
-      await contract.vote(addr1.address, userAVote);
-      await contract.vote(addr1.address, userAHighVote);
+      await contract.vote(addr1.address, usernameA, userAVote);
+      await contract.vote(addr1.address, usernameA, userAHighVote);
       const highestVoter = findHighestVoter(await getVoterList());
       expect(highestVoter.contribution).to.equal(userAHighVote);
       expect(await contract.getContributionTotal()).to.equal(initialTotal + userAHighVote);
     });
     it("Should let A vote then B vote and keep highest", async function () {
       expect(await contract.getContributionTotal()).to.equal(initialTotal);
-      await contract.vote(addr1.address, userAVote);
-      await contract.vote(addr2.address, userBVote);
+      await contract.vote(addr1.address, usernameA, userAVote);
+      await contract.vote(addr2.address, usernameB, userBVote);
       const highestVoter = findHighestVoter(await getVoterList());
       expect(highestVoter.contribution).to.equal(userBVote);
       expect(await contract.getContributionTotal()).to.equal(initialTotal + userAVote + userBVote);
     });
     it("Should let A vote then B Vote then A vote again to win", async function () {
       expect(await contract.getContributionTotal()).to.equal(initialTotal);
-      await contract.vote(addr1.address, userAVote);
-      await contract.vote(addr2.address, userBVote);
-      await contract.vote(addr1.address, userAHighVote);
+      await contract.vote(addr1.address, usernameA, userAVote);
+      await contract.vote(addr2.address, usernameB, userBVote);
+      await contract.vote(addr1.address, usernameA, userAHighVote);
       const highestVoter = findHighestVoter(await getVoterList());
       expect(highestVoter.contribution).to.equal(userAHighVote);
       expect(await contract.getContributionTotal()).to.equal(initialTotal + userBVote + userAHighVote);

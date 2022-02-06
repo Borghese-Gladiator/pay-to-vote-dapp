@@ -62,13 +62,15 @@ contract CustomVoting {
     // Update Contribution through Vote
     /// Bid on the auction with the value sent together with this transaction.
     /// The value will only be refunded if the auction is not won.
-    function vote(address voterAddress, uint256 _contribution)
+    function vote(address voterAddress, bytes32 _username, uint256 _contribution)
         external
         payable 
         returns (bool success)
     {
-        if (!isVoter(voterAddress)) revert AddressNotVoter();
-        if (_contribution <= voterStructList[voterAddress].contribution) {
+        if (!isVoter(voterAddress)) {
+            insertVoter(voterAddress, _username, _contribution);
+        }
+        if (_contribution < voterStructList[voterAddress].contribution) {
             revert PreviousContributionWasHigher();
         }
         if (_contribution <= highestVote) {
@@ -177,7 +179,7 @@ contract CustomVoting {
         address voterAddress,
         bytes32 username,
         uint256 contribution
-    ) public returns (uint256 index) {
+    ) private returns (uint256 index) {
         if (isVoter(voterAddress)) revert AddressIsVoter();
         voterStructList[voterAddress].username = username;
         voterStructList[voterAddress].contribution = contribution;
