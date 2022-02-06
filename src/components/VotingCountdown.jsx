@@ -63,7 +63,7 @@ export default function VotingCountdown() {
           <Tbody>
             <Tr>
               <Td isNumeric><Heading as='h2' size='xl'>Time Left</Heading></Td>
-              <Td>{endTimeLoading ? <Text fontSize='lg'>"Loading"</Text> : <CountdownTimer endTime={endTime} />}</Td>
+              <Td>{endTimeLoading ? <Text fontSize='lg'>Loading</Text> : <CountdownTimer endTime={endTime} />}</Td>
             </Tr>
             <Tr>
               <Td isNumeric><Heading as='h3' size='xl'>Prize Pool</Heading></Td>
