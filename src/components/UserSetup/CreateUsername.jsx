@@ -12,9 +12,9 @@ import {
   AlertIcon,
   Heading
 } from '@chakra-ui/react';
+import { usernameTaken } from "../../utils";
 
-export default function CreateUsername({ userInfo, setUserInfo, setupComplete }) {
-  const [address, setAddress] = useState('');
+export default function CreateUsername({ customVotingAddress, userInfo, setUserInfo, setupComplete }) {
   const [username, setUsername] = useState('')
   const handleChange = (event) => setUsername(event.target.value);
 
@@ -30,11 +30,21 @@ export default function CreateUsername({ userInfo, setUserInfo, setupComplete })
     // MetaMask requires requesting permission to connect users accounts
     const accounts = await provider.send("eth_requestAccounts", []);
     const account = accounts[0];
-    setUserInfo({
-      username: username,
-      address: account
-    });
-    setupComplete();
+    if (await usernameTaken(customVotingAddress, username)) {
+      throw new Error("Username already taken");
+    }
+    // Check localhost or Ropsten Testnet - https://ethereum.stackexchange.com/questions/85194/how-to-check-the-current-metamask-network
+    console.log(window.ethereum.networkVersion)
+    if (window.ethereum.networkVersion !== "3" && window.ethereum.networkVersion !== "1337") {
+      alert("Please change to Ropsten network")
+    }
+    else {
+      setUserInfo({
+        username: username,
+        address: account
+      });
+      setupComplete();
+    }
   }
 
   return (
@@ -45,9 +55,9 @@ export default function CreateUsername({ userInfo, setUserInfo, setupComplete })
       borderColor='gray.200'
     >
       <Flex direction="column" p={3} m={1}>
-        <Heading as='h4' size='md'>First Time Seeing This Account!</Heading>
-        {status === "idle" && <Text mt={5}>Create Username</Text>}
-        {status === "success" && <Alert status='success' mt={5}><AlertIcon />Successfully created username: {username}</Alert>}
+        <Heading as='h4' size='md'>Please Create a User</Heading>
+        {status === "idle" && <Text mt={5}>Enter Username below</Text>}
+        {status === "success" && <Alert status='success' mt={5}><AlertIcon />Successfully created</Alert>}
         {status === "error" && <Alert status='error' mt={5}><AlertIcon />{error.message}</Alert>}
         <Flex alignItems="center">
           <Input

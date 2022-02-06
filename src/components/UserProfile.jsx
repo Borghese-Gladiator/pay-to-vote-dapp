@@ -28,7 +28,7 @@ export default function UserProfile() {
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
 
   // Get and Display Profile
-  const [profile, setProfile] = useState({ username: "Username A", address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266" });
+  const [profile, setProfile] = useState({ username: userInfo.username, address: userInfo.address, rank: 0, });
   const [profileLoading, setProfileLoading] = useState(true);
   function resetProfile() {
     setProfileLoading(true);
@@ -36,22 +36,28 @@ export default function UserProfile() {
       .then(response =>
         setProfile(response) // { username, address, rank, contribution }
       )
-      .catch(e => console.log(`Getting profile failed: ${e.message}`))
+      .catch(e => {
+        console.log(`Getting profile failed: ${e.message}`)
+        setProfile({
+          ...profile,
+          contribution: 0,
+          rank: "User has not voted"
+        })
+      })
       .finally(() => setProfileLoading(false))
   }
-  /*
+  // Call once on initial load
   useEffect(() => {
     resetProfile()
-  }, [profile])
-  */
+  }, [])
 
   // Set contribution through voting
   const [contribution, setContribution] = useState('');
-  const handleChange = (event) => setValue(event.target.value);
+  const handleChange = (event) => setContribution(event.target.value);
   const [contributionLoading, setContributionLoading] = useState(false);
   async function handleSubmit() {
     setContributionLoading(true);
-    vote(customVotingAddress, userInfo.address, contribution)
+    vote(customVotingAddress, userInfo.address, userInfo.username, contribution)
       .then(response => {
         setProfile(""); // reset profile to refresh contribution amount
       })
@@ -71,7 +77,7 @@ export default function UserProfile() {
           :
           <Popover trigger="hover">
             <PopoverTrigger>
-              <Heading as='h4' size='md'>{`${toTitleCase(profile.username)} Stats`}</Heading>
+              <Heading as='h4' size='md'>{`${profile.username}`}</Heading>
             </PopoverTrigger>
             <PopoverContent>
               <PopoverArrow />
@@ -85,7 +91,15 @@ export default function UserProfile() {
         <Tbody>
           <Tr>
             <Td><Text fontSize='md'>Current Rank</Text></Td>
-            <Td><Text fontSize='md' noOfLines={1}>{profileLoading ? "Loading" : rankOrdinalSuffix(profile.rank)}</Text></Td>
+            <Td>
+              <Text fontSize='md' noOfLines={1}>
+                {profileLoading
+                  ? "Loading"
+                  : typeof profile.rank === 'number'
+                    ? rankOrdinalSuffix(profile.rank)
+                    : profile.rank}
+              </Text>
+            </Td>
           </Tr>
           <Tr>
             <Td><Text fontSize='md'>Current Contribution</Text></Td>

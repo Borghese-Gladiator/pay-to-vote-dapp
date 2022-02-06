@@ -37,6 +37,12 @@ async function getUserRank(contractAddress, address) {
   })
   return voterList.findIndex(x => x.address === address);
 }
+export async function usernameTaken(contractAddress, username) {
+  const voterList = await getVoterList(contractAddress);
+  return voterList.filter(({ voter, address}, idx) => {
+    return voter.username === username;
+  }).length > 0
+}
 export async function isVoter(contractAddress, address) {
    const provider = new ethers.providers.Web3Provider(window.ethereum);
    const contract = new ethers.Contract(contractAddress, CustomVoting.abi, provider);
@@ -113,19 +119,22 @@ export async function getContributionTotal(contractAddress) {
   return total.toString()
 }
 
-export async function vote(contractAddress, address, contribution) {
+export async function vote(contractAddress, address, username, contribution) {
   /**
    * SET update contribution
    * @param contractAddress
    * @param address for user
+   * @param username for user
    * @param contribution amount of vote
    * @return true for success
    */
-  await window.ethereum.request({ method: 'eth_requestAccounts' });
   const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner()
+  const signer = provider.getSigner();
+  console.log(signer);
   const contract = new ethers.Contract(contractAddress, CustomVoting.abi, signer);
-  const transaction = await contract.vote(address, contribution);
+  console.log(contract);
+  const transaction = await contract.vote(address, ethers.utils.formatBytes32String(username), ethers.BigNumber.from(contribution));
+  console.log(transaction);
   return transaction
 }
 

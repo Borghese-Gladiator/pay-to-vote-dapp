@@ -61,19 +61,23 @@ function Loading({ wait, loadingText, condition, errorText, children }) {
   return (
     <>
       <Flex direction="row" justify="center" alignItems="center">
-        <Heading as='h3' size='lg'>{loadingText}</Heading>
-        {status === "idle" || status === "pending" && <Lottie options={loadingOptions} height={120} width={120} />}
-        {status === "error" && <Flex alignItems="center">
-          <Lottie options={errorOptions} height={120} width={120} />
-          <Text noOfLines={1}>{errorText}</Text>
-        </Flex>}
-        {status === "success" && <Lottie options={doneOptions} height={120} width={120} />}
+        {status === "idle" || status === "pending" && <>
+          <Heading as='h3' size='lg'>{loadingText}</Heading>
+          <Lottie options={loadingOptions} height={120} width={120} />
+        </>}
       </Flex>
       {status === "error" && <SlideFade in={true} offsetY='20px'>{children}</SlideFade>}
     </>
   )
 }
-
+// {status === "success" && <Lottie options={doneOptions} height={120} width={120} />}
+/*
+{status === "error" && <Flex alignItems="center">
+    <Heading as='h3' size='lg'>{errorText}</Heading>
+    <Lottie options={errorOptions} height={120} width={120} />
+  </Flex>
+}
+*/
 Loading.propTypes = {
   wait: PropTypes.number,
   loadingText: PropTypes.string,

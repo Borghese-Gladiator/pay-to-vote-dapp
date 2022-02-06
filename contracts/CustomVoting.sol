@@ -63,8 +63,8 @@ contract CustomVoting {
     /// Bid on the auction with the value sent together with this transaction.
     /// The value will only be refunded if the auction is not won.
     function vote(address voterAddress, bytes32 _username, uint256 _contribution)
-        external
-        payable 
+        external 
+        payable
         returns (bool success)
     {
         if (!isVoter(voterAddress)) {

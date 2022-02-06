@@ -9,6 +9,7 @@
 import { useContext, useState } from "react";
 // Context
 import UserInfoContext from "../../context/UserInfoContext";
+import ContractAddressesContext from "../../context/ContractAddressesContext";
 // Custom components
 import { Loading, Wait } from "./Loading";
 import NoWalletDetected from "./NoWalletDetected";
@@ -22,6 +23,7 @@ import { CheckIcon } from "@chakra-ui/icons";
 import { isVoter } from "../../utils";
 
 export default function UserSetup({ setLoadingSetup }) {
+  const { customVotingAddress } = useContext(ContractAddressesContext);
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
   const animationDelay = 1000; // ms
   const setupList = [
@@ -48,10 +50,6 @@ export default function UserSetup({ setLoadingSetup }) {
   const totalAnimationDelay = animationDelay * (setupList.length - 1);
   const [shouldShowApp, setShouldShowApp] = useState(setupList.every(val => val.condition() === false));
 
-  function showApp() {
-    setLoadingSetup(false)
-  }
-
   if (typeof window !== "undefined" && typeof window.ethereum === "undefined") {
     return (
       <Container maxW='container.md'>
@@ -59,7 +57,7 @@ export default function UserSetup({ setLoadingSetup }) {
           <Loading
             key={`loading-step-0`}
             wait={animationDelay * 0}
-            loadingText={"Detecting MetaMask"}
+            loadingText={"MetaMask"}
             errorText={"MetaMask Not Detected"}
             condition={async () => {
               return typeof window !== "undefined" && typeof window.ethereum === "undefined"
@@ -77,8 +75,8 @@ export default function UserSetup({ setLoadingSetup }) {
       <Flex direction="column" justify="center" alignItems="center">
         <Loading
           key={`loading-step-0`}
-          wait={animationDelay * 0}
-          loadingText={"Detecting MetaMask"}
+          wait={animationDelay * 1}
+          loadingText={"MetaMask"}
           errorText={"MetaMask Not Detected"}
           condition={async () => {
             return typeof window !== "undefined" && typeof window.ethereum === "undefined"
@@ -88,30 +86,42 @@ export default function UserSetup({ setLoadingSetup }) {
         </Loading>
         <Loading
           key={`loading-step-1`}
-          wait={animationDelay * 1}
-          loadingText={"Detecting Account and Username"}
+          wait={animationDelay * 2}
+          loadingText={"Loading Username"}
           errorText={"Account not seen before"}
           condition={async () => {
             if (!("address" in userInfo)) {
               return true
             }
+            console.log("HIT");
+            console.log(userInfo);
             return await !isVoter(userInfo.address)
           }}
         >
-          <CreateUsername userInfo={userInfo} setUserInfo={setUserInfo} setupComplete={() => setShouldShowApp(true)} />
+          <CreateUsername
+            customVotingAddress={customVotingAddress}
+            userInfo={userInfo}
+            setUserInfo={setUserInfo}
+            setupComplete={() => {
+              setShouldShowApp(true)
+              setLoadingSetup(false)
+            }}
+          />
         </Loading>
-        <Wait wait={totalAnimationDelay} show={shouldShowApp}>
-          <Button
-            mt={5}
-            leftIcon={<CheckIcon />}
-            colorScheme='pink'
-            variant='solid'
-            onClick={showApp}
-          >
-            Enter App
-          </Button>
-        </Wait>
       </Flex>
     </Container>
   )
 }
+/*
+
+<Wait wait={totalAnimationDelay} show={shouldShowApp}>
+  <Button
+    mt={5}
+    leftIcon={<CheckIcon />}
+    colorScheme='pink'
+    variant='solid'
+  >
+    Enter App
+  </Button>
+</Wait>
+*/

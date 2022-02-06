@@ -38,11 +38,10 @@ export default function UserTxnTable() {
       .catch(e => console.log(`Getting data failed: ${e.message}`))
       .finally(() => setLoading(false))
   }
-  /*
+  // Call once on initial load
   useEffect(() => {
     resetTransactionList()
-  }, [transactionList]);
-  */
+  }, []);
 
   return (
     <ErrorBoundary
