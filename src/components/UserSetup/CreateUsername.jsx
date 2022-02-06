@@ -34,7 +34,6 @@ export default function CreateUsername({ customVotingAddress, userInfo, setUserI
       throw new Error("Username already taken");
     }
     // Check localhost or Ropsten Testnet - https://ethereum.stackexchange.com/questions/85194/how-to-check-the-current-metamask-network
-    console.log(window.ethereum.networkVersion)
     if (window.ethereum.networkVersion !== "3" && window.ethereum.networkVersion !== "1337") {
       alert("Please change to Ropsten network")
     }

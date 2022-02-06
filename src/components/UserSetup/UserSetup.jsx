@@ -93,8 +93,6 @@ export default function UserSetup({ setLoadingSetup }) {
             if (!("address" in userInfo)) {
               return true
             }
-            console.log("HIT");
-            console.log(userInfo);
             return await !isVoter(userInfo.address)
           }}
         >

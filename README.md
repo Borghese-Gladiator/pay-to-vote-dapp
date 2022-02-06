@@ -116,6 +116,7 @@ Account Data flows MetaMask address to Frontend (HTML/CSS/JS(React)) to deployed
 - ```Error: invalid address or ENS name (argument="name", value="<SignerWithAddress 0x70997970C51812dc3A010C7d01b50e0d17dc79C8>", code=INVALID_ARGUMENT, version=contracts/5.5.0)``` - null address as input (needed to add Contract Address in .env)
 - ```ProviderError: rejected due to project ID settings``` - Infura security setting when I set which accounts can deploy (check .env has values of the PUBLIC ACCOUNT you want to use with Ropsten Testnet)
 - Solidity does not support floating point numbers. The default value is always Wei (one quintillionth of an ether) hence the BigNumber outlook, I need to change all my numbers to reflect that.
+- Addresses not equal - ends up some addressses are capital while others are lowercase. Convert all to lowercase [https://ethereum.stackexchange.com/questions/70764/how-to-compare-an-address-with-an-address-using-web3js](https://ethereum.stackexchange.com/questions/70764/how-to-compare-an-address-with-an-address-using-web3js)
 
 #### References
 - Basis for initializing project [https://dev.to/dabit3/the-complete-guide-to-full-stack-ethereum-development-3j13](https://dev.to/dabit3/the-complete-guide-to-full-stack-ethereum-development-3j13)
