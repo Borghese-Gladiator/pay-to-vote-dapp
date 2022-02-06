@@ -68,8 +68,6 @@ export default function LeaderTable() {
             <Tbody>
               {
                 leaderList
-                  .sort((leaderA, leaderB) => leaderB.contribution - leaderA.contribution)
-                  .slice(0, 3)
                   .map(({ username, address, contribution, rank }, idx) => {
                     return (
                       <Tr key={`leader-row-${idx}`}>
@@ -86,7 +84,7 @@ export default function LeaderTable() {
                             </PopoverContent>
                           </Popover>
                         </Td>
-                        <Td>${contribution}</Td>
+                        <Td>{contribution} Wei</Td>
                       </Tr>
                     )
                   })}

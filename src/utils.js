@@ -12,7 +12,7 @@ async function getVoterList(contractAddress) {
   const contract = new ethers.Contract(contractAddress, CustomVoting.abi, provider);
   const voterList = []
   const count = await contract.getVoterCount();
-  for (let idx=0; idx < count; idx++) {
+  for (let idx = 0; idx < count; idx++) {
     const address = await contract.getVoterAtIndex(idx);
     const voter = await contract.getVoter(address);
     voterList.push({
@@ -39,14 +39,14 @@ async function getUserRank(contractAddress, address) {
 }
 export async function usernameTaken(contractAddress, username) {
   const voterList = await getVoterList(contractAddress);
-  return voterList.filter(({ voter, address}, idx) => {
+  return voterList.filter(({ voter, address }, idx) => {
     return voter.username === username;
   }).length > 0
 }
 export async function isVoter(contractAddress, address) {
-   const provider = new ethers.providers.Web3Provider(window.ethereum);
-   const contract = new ethers.Contract(contractAddress, CustomVoting.abi, provider);
-   return await contract.isVoter(address)
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const contract = new ethers.Contract(contractAddress, CustomVoting.abi, provider);
+  return await contract.isVoter(address)
 }
 export async function getProfile(contractAddress, address) {
   /**
@@ -142,7 +142,7 @@ export async function vote(contractAddress, address, username, contribution) {
 export function toTitleCase(str) {
   return str.replace(
     /\w\S*/g,
-    function(txt) {
+    function (txt) {
       return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
     }
   );

@@ -21,7 +21,7 @@ import {
   PopoverArrow,
   PopoverCloseButton,
 } from '@chakra-ui/react';
-import { rankOrdinalSuffix, toTitleCase, getProfile, vote } from "../utils";
+import { rankOrdinalSuffix, numDecimalPlaces, getProfile, vote } from "../utils";
 
 export default function UserProfile() {
   const { customVotingAddress } = useContext(ContractAddressesContext);
@@ -57,12 +57,15 @@ export default function UserProfile() {
   const [contributionLoading, setContributionLoading] = useState(false);
   async function handleSubmit() {
     setContributionLoading(true);
-    vote(customVotingAddress, userInfo.address, userInfo.username, contribution)
-      .then(response => {
-        setProfile(""); // reset profile to refresh contribution amount
-      })
-      .catch(e => console.log(`Sending failed: ${e.message}`))
-      .finally(() => setContributionLoading(false))
+    // check contribution is a whole number
+    if (contribution % 1 != 0) {
+      vote(customVotingAddress, userInfo.address, userInfo.username, contribution)
+        .then(response => {
+          resetProfile(); // reset profile to refresh contribution amount
+        })
+        .catch(e => console.log(`Sending failed: ${e.message}`))
+        .finally(() => setContributionLoading(false))
+    }
   }
 
   return (
@@ -106,7 +109,7 @@ export default function UserProfile() {
             <Td><Text fontSize='md' noOfLines={1}>{profileLoading ? "Loading" : `${profile.contribution} ETH`}</Text></Td>
           </Tr>
           <Tr>
-            <Td><Text fontSize='md' noOfLines={1}>Enter New Amount</Text></Td>
+            <Td><Text fontSize='md' noOfLines={1}>Enter New Amount (Wei)</Text></Td>
             <Td><Input value={contribution} onChange={handleChange} /></Td>
             <Td>
               <Flex alignItems="center">

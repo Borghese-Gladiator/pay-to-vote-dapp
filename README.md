@@ -46,6 +46,7 @@ Account Data flows MetaMask address to Frontend (HTML/CSS/JS(React)) to deployed
   - [https://faucet.metamask.io/](https://faucet.metamask.io/)
   - [https://faucet.ropsten.be/](https://faucet.ropsten.be/)
   - [https://faucet.dimensions.network/](https://faucet.dimensions.network/)
+  - [https://faucet.egorfine.com/](https://faucet.egorfine.com/)
 - Created account with Infura - [https://infura.io/](https://infura.io/)
   - Created Ropsten project using tutorial [https://blog.infura.io/getting-started-with-infura-28e41844cc89/](https://blog.infura.io/getting-started-with-infura-28e41844cc89/)
   - Copied MetaMask Wallet Account 1 address to "CONTRACT ADDRESSES" AllowList
@@ -114,6 +115,7 @@ Account Data flows MetaMask address to Frontend (HTML/CSS/JS(React)) to deployed
 - ```Warning: Can't perform a React state update on an unmounted component.``` - Occurred after I used dynamic imports. Fix with useAsync hook.
 - ```Error: invalid address or ENS name (argument="name", value="<SignerWithAddress 0x70997970C51812dc3A010C7d01b50e0d17dc79C8>", code=INVALID_ARGUMENT, version=contracts/5.5.0)``` - null address as input (needed to add Contract Address in .env)
 - ```ProviderError: rejected due to project ID settings``` - Infura security setting when I set which accounts can deploy (check .env has values of the PUBLIC ACCOUNT you want to use with Ropsten Testnet)
+- Solidity does not support floating point numbers. The default value is always Wei (one quintillionth of an ether) hence the BigNumber outlook, I need to change all my numbers to reflect that.
 
 #### References
 - Basis for initializing project [https://dev.to/dabit3/the-complete-guide-to-full-stack-ethereum-development-3j13](https://dev.to/dabit3/the-complete-guide-to-full-stack-ethereum-development-3j13)
