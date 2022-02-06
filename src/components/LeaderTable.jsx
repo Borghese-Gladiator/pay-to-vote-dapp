@@ -77,7 +77,7 @@ export default function LeaderTable() {
                         <Td>
                           <Popover trigger="hover">
                             <PopoverTrigger>
-                              <Box borderWidth={1} p={2} _hover={{ bg: "teal.600" }}>{name}</Box>
+                              <Box borderWidth={1} p={2} _hover={{ bg: "teal.600" }}>{username}</Box>
                             </PopoverTrigger>
                             <PopoverContent>
                               <PopoverArrow />
