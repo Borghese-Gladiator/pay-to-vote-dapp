@@ -63,7 +63,7 @@ Account Data flows MetaMask address to Frontend (HTML/CSS/JS(React)) to deployed
   - GET: profile (username, address, contribution, transaction list (date, contribution, txnHash))
   - SET: setVote, setProfile
 - Smart Contract endpoint - contractUtils.js
-  - GET: contributionTotal, endTime, voterList
+  - GET: contributionTotal, endTime, voterList, isVoter
   - SET: setVote
 - utils.js - handle calling backend
   - API POST to set username
