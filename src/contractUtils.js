@@ -72,3 +72,22 @@ export async function getUserRank(contractAddress, address) {
   })
   return voterList.findIndex(x => x.address.toLowerCase() === address.toLowerCase()) + 1;
 }
+
+export async function getVoterList(contractAddress) {
+  /**
+   * GET utility function to get list of voters
+   */
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const contract = new ethers.Contract(contractAddress, CustomVoting.abi, provider);
+  const voterList = []
+  const count = await contract.getVoterCount();
+  for (let idx = 0; idx < count; idx++) {
+    const address = await contract.getVoterAtIndex(idx);
+    const voter = await contract.getVoter(address);
+    voterList.push({
+      address: address,
+      voter: voter
+    });
+  }
+  return voterList;
+};
