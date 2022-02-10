@@ -60,7 +60,7 @@ Account Data flows MetaMask address to Frontend (HTML/CSS/JS(React)) to deployed
 
 #### Backend
 - API Endpoints - Next.js Serverless Functinos
-  - GET: profile (username, address, contribution, transaction list)
+  - GET: profile (username, address, contribution, transaction list (date, contribution, txnHash))
   - SET: setVote, setProfile
 - Smart Contract endpoint - contractUtils.js
   - GET: contributionTotal, endTime, voterList
@@ -68,7 +68,7 @@ Account Data flows MetaMask address to Frontend (HTML/CSS/JS(React)) to deployed
 - utils.js - handle calling backend
   - API POST to set username
   - API POST to vote
-  - API GET for profile (use for profile & for transactions list)
+  - API GET for profile (use for profile & for transaction list)
   - API GET for leaders list
     - API GET all profiles
     - Return top 5 sorted by contribution amount
