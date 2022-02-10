@@ -1,5 +1,7 @@
 /**
  * Utilities to interact with Smart Contract
+ * 
+ * Address of contract is loaded from .env.local, passed through getStaticProps, to current utils
  */
 import { ethers } from 'ethers'
 import CustomVoting from "./artifacts/contracts/CustomVoting.sol/CustomVoting.json";
@@ -37,7 +39,7 @@ export async function getContributionTotal(contractAddress) {
   return total.toString()
 }
 
-export async function setVote(contractAddress, address, contribution) {
+export async function setVote(contractAddress, address, username, contribution) {
   /**
   * SET update contribution
   * @param contractAddress
