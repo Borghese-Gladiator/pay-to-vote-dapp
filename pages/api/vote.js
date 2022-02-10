@@ -3,7 +3,7 @@
  * sets vote
  */
 import { connectToDatabase } from "../../src/mongodb";
-import { setVote } from "../../src/contractUtils";
+import { setVote, getUserRank } from "../../src/contractUtils";
 
 const contractAddress = process.env.CUSTOM_VOTING_DEPLOYED_ADDRESS;
 export default async function handler(req, res) {
@@ -34,7 +34,7 @@ export default async function handler(req, res) {
         .collection("series_list")
         .updateOne(
           { address: address },
-          { $set: { highestContribution: contribution } },
+          { $set: { highestContribution: contribution, rank: await getUserRank(contractAddress, address) } },
           { $push: { transactionList: transactionObject }}
         )
       res.status(200).json({ response: response, message: "Success! New vote saved"});

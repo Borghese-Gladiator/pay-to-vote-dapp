@@ -11,6 +11,7 @@ export async function isVoter(contractAddress, address) {
   const contract = new ethers.Contract(contractAddress, CustomVoting.abi, provider);
   return await contract.isVoter(address)
 }
+
 export async function getEndTime(contractAddress) {
   /**
   * GET voting end time - convert BigNumber to object { hours, minutes, seconds}
@@ -54,4 +55,20 @@ export async function setVote(contractAddress, address, username, contribution) 
   const transaction = await contract.vote(address, ethers.utils.formatBytes32String(username), ethers.BigNumber.from(contribution));
   console.log(transaction);
   return transaction
+}
+
+export async function getUserRank(contractAddress, address) {
+  /**
+   * GET rank of user relative to others by sorting array
+   * - sort highest to lowest (b - a)
+   * 
+   * @param contractAddress
+   * @param address
+   * @return rank of user
+   */
+  const voterList = await getVoterList(contractAddress);
+  voterList.sort((a, b) => {
+    b.voter.contribution.sub(a.voter.contribution)
+  })
+  return voterList.findIndex(x => x.address.toLowerCase() === address.toLowerCase()) + 1;
 }
