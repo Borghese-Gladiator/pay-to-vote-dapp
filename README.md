@@ -58,6 +58,24 @@ Account Data flows MetaMask address to Frontend (HTML/CSS/JS(React)) to deployed
 
 ## Implementation
 
+#### Backend
+- API Endpoints - Next.js Serverless Functinos
+  - GET: profile (username, address, contribution, transaction list)
+  - SET: setVote, setProfile
+- Smart Contract endpoint - contractUtils.js
+  - GET: contributionTotal, endTime, voterList
+  - SET: setVote
+- utils.js - handle calling backend
+  - API POST to set username
+  - API POST to vote
+  - API GET for profile (use for profile & for transactions list)
+  - API GET for leaders list
+    - API GET all profiles
+    - Return top 5 sorted by contribution amount
+  - contract GET for countdown component
+    - contract GET contributionTotal
+    - contract GET endTime
+
 #### Steps
 - npx create-react-app pay-to-vote-dapp
 - Created frontend
