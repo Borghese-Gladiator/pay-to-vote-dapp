@@ -1,6 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
 import ContractAddressesContext from "../context/ContractAddressesContext";
-import UserInfoContext from "../context/UserInfoContext";
 import { ErrorBoundary } from 'react-error-boundary';
 import ErrorFallback from "./ErrorFallback";
 import {
@@ -24,7 +23,6 @@ import { getTopVoters, rankOrdinalSuffix } from "../utils";
 
 export default function LeaderTable() {
   const { customVotingAddress } = useContext(ContractAddressesContext);
-  const { userInfo, setUserInfo } = useContext(UserInfoContext);
 
   const [leaderList, setLeaderList] = useState([]);
   const [loading, setLoading] = useState(true);

@@ -3,7 +3,6 @@
  */
 import { useState, useEffect, useContext } from 'react';
 import ContractAddressesContext from "../context/ContractAddressesContext";
-import UserInfoContext from "../context/UserInfoContext";
 import { ErrorBoundary } from 'react-error-boundary';
 import ErrorFallback from "./ErrorFallback";
 import {
@@ -25,7 +24,6 @@ import { getVoterTransactions } from "../utils";
 
 export default function TransactionTable() {
   const { customVotingAddress } = useContext(ContractAddressesContext);
-  const { userInfo, setUserInfo } = useContext(UserInfoContext);
 
   const [transactionList, setTransactionList] = useState([]);
   const [loading, setLoading] = useState(true);

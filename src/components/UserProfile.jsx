@@ -1,6 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
 import ContractAddressesContext from "../context/ContractAddressesContext";
-import UserInfoContext from "../context/UserInfoContext";
 import { ErrorBoundary } from 'react-error-boundary';
 import ErrorFallback from "./ErrorFallback";
 import {
@@ -21,14 +20,12 @@ import {
   PopoverArrow,
   PopoverCloseButton,
 } from '@chakra-ui/react';
-import { rankOrdinalSuffix, numDecimalPlaces, getProfile, vote } from "../utils";
+import { rankOrdinalSuffix, getProfile, vote } from "../utils";
 
 export default function UserProfile() {
   const { customVotingAddress } = useContext(ContractAddressesContext);
-  const { userInfo, setUserInfo } = useContext(UserInfoContext);
-
   // Get and Display Profile
-  const [profile, setProfile] = useState({ username: userInfo.username, address: userInfo.address, rank: 0, });
+  const [profile, setProfile] = useState();
   const [profileLoading, setProfileLoading] = useState(true);
   function resetProfile() {
     setProfileLoading(true);
