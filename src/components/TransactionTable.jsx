@@ -21,17 +21,17 @@ import {
   Text
 } from '@chakra-ui/react';
 import { ExternalLinkIcon } from "@chakra-ui/icons";
-import { getTransactionList } from "../utils";
+import { fetchTransactionList } from "../utils";
 
 export default function TransactionTable() {
-  const { customVotingAddress } = useContext(ContractAddressesContext);
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
+  const { address } = userInfo;
 
   const [transactionList, setTransactionList] = useState([]);
   const [loading, setLoading] = useState(true);
   function resetTransactionList() {
     setLoading(true);
-    getTransactionList(customVotingAddress)
+    fetchTransactionList(address)
       .then(response =>
         setTransactionList(response)
       )

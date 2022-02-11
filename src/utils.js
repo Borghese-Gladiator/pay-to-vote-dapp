@@ -75,8 +75,8 @@ export async function fetchGetProfile(address) {
   return await fetchGetWrapper("/api/profile", { address });
 }
 
-export async function getTransactionList(address) {
-  const { transactionList } = await fetchGetWrapper("/api/profile", { address });
+export async function fetchTransactionList(address) {
+  const { transactionList } = await fetchGetProfile(address);
   return transactionList;
 }
 

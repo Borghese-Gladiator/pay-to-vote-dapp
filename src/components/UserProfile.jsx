@@ -21,7 +21,7 @@ import {
   PopoverArrow,
   PopoverCloseButton,
 } from '@chakra-ui/react';
-import { getProfile, fetchVote, rankOrdinalSuffix } from "../utils";
+import { fetchGetProfile, fetchVote, rankOrdinalSuffix } from "../utils";
 
 export default function UserProfile() {
   const { customVotingAddress } = useContext(ContractAddressesContext);
@@ -33,7 +33,7 @@ export default function UserProfile() {
   const [profileLoading, setProfileLoading] = useState(true);
   function resetProfile() {
     setProfileLoading(true);
-    getProfile(customVotingAddress, userInfo.address)
+    fetchGetProfile(address)
       .then(response =>
         setProfile(response) // { username, address, rank, contribution }
       )
