@@ -37,7 +37,7 @@ export default function CreateUsername({ setSetupComplete }) {
     
     const { chainId } = await provider.getNetwork()
     console.log(chainId);
-    if (chainId !== "3" && chainId !== "1337") {
+    if (chainId !== 3 && chainId !== 1337) {
       setStatus("error");
       setError("In MetaMask, please change to Ropsten network");
     } else {
@@ -50,7 +50,7 @@ export default function CreateUsername({ setSetupComplete }) {
         setSetupComplete(true);
       } catch(e) {
         setStatus("error");
-        setError(e);
+        setError(e.message);
       }
     }
   }
@@ -65,7 +65,7 @@ export default function CreateUsername({ setSetupComplete }) {
       <Flex direction="column" p={3} m={1}>
         {status === "idle" || status === "pending" && <Text mt={5}>Enter Username below</Text>}
         {status === "success" && <Alert status='success' mt={5}><AlertIcon />Successfully created user!</Alert>}
-        {status === "error" && <Alert status='error' mt={5}><AlertIcon />{error.message}</Alert>}
+        {status === "error" && <Alert status='error' mt={5}><AlertIcon />{error}</Alert>}
         <Flex alignItems="center">
           <Input
             value={username}
