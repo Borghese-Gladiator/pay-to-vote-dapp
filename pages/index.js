@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import UserInfoContext from "../src/context/UserInfoContext";
 import ContractAddressesContext from "../src/context/ContractAddressesContext";
+
 import RootLayout from "../src/components/_layouts/RootLayout";
 import UserSetup from "../src/components/UserSetup";
 import VotingCountdown from "../src/components/VotingCountdown";

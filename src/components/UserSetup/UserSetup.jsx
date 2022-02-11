@@ -1,8 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import UserInfoContext from "../../context/UserInfoContext";
 
-import { fetchGetProfile, timeout } from "../../utils";
-
 import CreateUsername from "./CreateUsername";
 import NoWalletDetected from "./NoWalletDetected";
 import Lottie from "react-lottie";
@@ -12,6 +10,8 @@ import {
   SlideFade,
   Container,
 } from '@chakra-ui/react';
+
+import { fetchGetProfile, timeout } from "../../utils";
 
 import * as loadingData from "./4397-loading-blocks.json";
 import * as doneData from "./92460-checkmark-animation.json";

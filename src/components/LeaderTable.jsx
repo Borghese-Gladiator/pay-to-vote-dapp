@@ -1,7 +1,9 @@
 import { useState, useEffect, useContext } from 'react';
 import ContractAddressesContext from "../context/ContractAddressesContext";
+
 import { ErrorBoundary } from 'react-error-boundary';
 import ErrorFallback from "./ErrorFallback";
+
 import {
   Table,
   Tbody,
@@ -19,6 +21,7 @@ import {
   PopoverArrow,
   PopoverCloseButton,
 } from '@chakra-ui/react';
+
 import { getLeaderList, rankOrdinalSuffix } from "../utils";
 
 export default function LeaderTable() {

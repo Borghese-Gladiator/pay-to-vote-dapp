@@ -1,8 +1,10 @@
 import { useState, useEffect, useContext } from 'react';
 import ContractAddressesContext from "../context/ContractAddressesContext";
 import UserInfoContext from "../context/UserInfoContext";
+
 import { ErrorBoundary } from 'react-error-boundary';
 import ErrorFallback from "./ErrorFallback";
+
 import {
   Flex,
   Text,
@@ -21,6 +23,7 @@ import {
   PopoverArrow,
   PopoverCloseButton,
 } from '@chakra-ui/react';
+
 import { fetchGetProfile, fetchVote, rankOrdinalSuffix } from "../utils";
 
 export default function UserProfile() {

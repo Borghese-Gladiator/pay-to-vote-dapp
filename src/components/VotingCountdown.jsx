@@ -1,7 +1,9 @@
 import { useState, useEffect, useContext } from 'react';
 import ContractAddressesContext from "../context/ContractAddressesContext";
+
 import { ErrorBoundary } from 'react-error-boundary';
 import ErrorFallback from "./ErrorFallback";
+
 import CountdownTimer from "./CountdownTimer";
 import {
   Table,
@@ -12,6 +14,7 @@ import {
   Text,
   Container
 } from '@chakra-ui/react';
+
 import { getTotalPool, getVotingEndTime } from "../utils";
 
 export default function VotingCountdown() {

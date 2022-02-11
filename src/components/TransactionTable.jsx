@@ -2,10 +2,11 @@
  * Table for User's Past Transactions
  */
 import { useState, useEffect, useContext } from 'react';
-import ContractAddressesContext from "../context/ContractAddressesContext";
 import UserInfoContext from "../context/UserInfoContext";
+
 import { ErrorBoundary } from 'react-error-boundary';
 import ErrorFallback from "./ErrorFallback";
+
 import {
   Spinner,
   Heading,
@@ -21,6 +22,7 @@ import {
   Text
 } from '@chakra-ui/react';
 import { ExternalLinkIcon } from "@chakra-ui/icons";
+
 import { fetchTransactionList } from "../utils";
 
 export default function TransactionTable() {
