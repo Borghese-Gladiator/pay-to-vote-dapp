@@ -1,8 +1,9 @@
 /**
- * All information contained in functions because window.ethereum must be defined
+ * All information contained in functions because window.ethereum must be defined.
+ * Therefore, this utils controls when to make calls to backend and when to make calls to Smart Contract
  */
 import { ethers } from 'ethers';
-import { getVoterList, getEndTime, getContributionTotal } from "./contractUtils";
+import { setVote, getVoterList, getEndTime, getContributionTotal } from "./contractUtils";
 
 const dev = process.env.NODE_ENV !== 'production';
 const server = dev ? 'http://localhost:3000' : process.env.VERCEL_URL;
@@ -11,11 +12,20 @@ async function fetchGetWrapper(url, params) {
   return await fetch(`${server}/${url}?` + new URLSearchParams(params), {
     method: 'GET'
   })
-  .then(data => data.json())
-  .then(data => {
-    console.log(data); // JSON data parsed by `data.json()` call
-    return data
-  })
+    .then(response => {
+      if (!response.ok) {
+        // make the promise be rejected if we didn't get a 2xx response
+        const err = new Error("Not 2xx response");
+        err.response = response;
+        throw err;
+      }
+      return response
+    })
+    .then(data => data.json())
+    .then(data => {
+      console.log(data); // JSON data parsed by `data.json()` call
+      return data
+    })
 }
 
 async function fetchPostWrapper(url, body) {
@@ -27,19 +37,33 @@ async function fetchPostWrapper(url, body) {
     },
     body: JSON.stringify(body)
   })
-  .then(data => data.json())
-  .then(data => {
-    console.log(data); // JSON data parsed by `data.json()` call
-    return data;
-  })
+    .then(response => {
+      if (!response.ok) {
+        // make the promise be rejected if we didn't get a 2xx response
+        const err = new Error("Not 2xx response");
+        err.response = response;
+        throw err;
+      }
+      return response
+    })
+    .then(data => data.json())
+    .then(data => {
+      console.log(data); // JSON data parsed by `data.json()` call
+      return data;
+    })
 }
 
 export async function setProfile(address, username) {
   return await fetchPostWrapper("/api/profile", { address, username });
 }
 
-export async function setVote(address, username) {
-  return await fetchPostWrapper("/api/vote", { address, username });
+export async function fetchVote(contractAddress, address, username, contribution) {
+  const success = await setVote(contractAddress, address, username, contribution);
+  if (success) {
+    await fetchPostWrapper("/api/vote", { address, username });
+    return true;
+  }
+  throw new Error("Failed to set vote");
 }
 
 export async function getProfile(address) {
