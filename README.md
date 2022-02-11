@@ -125,9 +125,11 @@ Account Data flows MetaMask address to Frontend (HTML/CSS/JS(React)) to deployed
 #### Bugs
 - When you have 0 ETH, check which account you are using and what network you are on. In MetaMask, name your accounts names like Local_Test_Account and Ropsten_Test_Account to clearly see which network you should be on when using them.
 - ```Error: call revert exception (method="greet()", errorArgs=null, errorName=null, errorSignature=null, reason=null, code=CALL_EXCEPTION, version=abi/5.5.0)``` AND server logs ```WARNING: Calling an account which is not a contract```
+  - run hardhat clean to clean out network - ```npx hardhat clean```
   - REDEPLOY contracts to local network (usually running on wrong network I believe)
   - Double check values in .env.local
   - Switch to Test Account in MetaMask (one of the accounts listed when hardhat is starting up locally)
+  - Restart DEV server [https://github.com/nomiclabs/hardhat/issues/1566](https://github.com/nomiclabs/hardhat/issues/1566)
 - ```{"code":-32602,"message":"Trying to send a raw transaction with an invalid chainId. The expected chainId is 31337"``` - fix by updating hardhat.config.js (missing ```hardhat: { chainId: 337 }```) [https://hardhat.org/metamask-issue.html](https://hardhat.org/metamask-issue.html)
 - ```MetaMask - RPC Error: [ethjs-query] while formatting outputs from RPC '{"value":{"code":-32603,"data":{"code":-32000,"message":"Nonce too high. Expected nonce to be 2 but got 9. Note that transactions can't be queued when automining."}}}'``` - Reset Account (occurred when using same account but switching which app was running)
 - ```Warning: Can't perform a React state update on an unmounted component.``` - Occurred after I used dynamic imports. Fix with useAsync hook.
