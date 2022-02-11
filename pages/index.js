@@ -22,10 +22,10 @@ export default function Home({ greeterAddress, simpleAuctionAddress, customVotin
     setSetupComplete(false);
   }
   useEffect(() => {
-    if (!setupComplete) {
+    if (setupComplete) {
       window.ethereum.on('accountsChanged', handleAccountsChanged);
     }
-  })
+  }, [])
 
   return (
     <UserInfoContext.Provider value={{ userInfo, setUserInfo }}>
