@@ -41,7 +41,7 @@ export default function LeaderTable() {
   // Call once on initial load
   useEffect(() => {
     resetLeaderList()
-  })
+  }, [])
 
   return (
     <ErrorBoundary

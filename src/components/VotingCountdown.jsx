@@ -33,7 +33,7 @@ export default function VotingCountdown() {
   // Call resetEndTime only on initial load
   useEffect(() => {
     resetEndTime()
-  })
+  }, [])
 
   const [prizePool, setPrizePool] = useState("");
   const [prizePoolLoading, setPrizePoolLoading] = useState(true);
@@ -49,7 +49,7 @@ export default function VotingCountdown() {
   // Call resetPrizePool only on initial load
   useEffect(() => {
     resetPrizePool()
-  })
+  }, [])
 
   return (
     <ErrorBoundary
