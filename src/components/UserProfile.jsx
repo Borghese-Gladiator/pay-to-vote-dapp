@@ -6,6 +6,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import ErrorFallback from "./ErrorFallback";
 
 import {
+  Box,
   Flex,
   Text,
   Input,
@@ -40,14 +41,17 @@ export default function UserProfile() {
     const { address } = userInfo;
     fetchGetProfile(address)
       .then(response => {
-        console.log(response)
-        setProfile(response)
+        setUserInfo(response)
       })
       .catch(e => {
         console.log(`Getting profile failed: ${e.message}`);
       })
       .finally(() => setProfileLoading(false))
   }
+  useEffect(() => {
+    // Update profile when user info is updated
+    setProfile(userInfo);
+  }, [userInfo])
 
   // Set contribution through voting
   const [contribution, setContribution] = useState('');
@@ -86,7 +90,7 @@ export default function UserProfile() {
           :
           <Popover trigger="hover">
             <PopoverTrigger>
-              <Heading as='h4' size='md'>{`${profile.username}`}</Heading>
+              <Box borderWidth={1} p={2} _hover={{ bg: "teal.600" }}><Heading as='h4' size='md'>{`${profile.username}`}</Heading></Box>
             </PopoverTrigger>
             <PopoverContent>
               <PopoverArrow />
