@@ -9,6 +9,7 @@ const dev = process.env.NODE_ENV !== 'production';
 const server = dev ? 'http://localhost:3000' : process.env.VERCEL_URL;
 
 async function fetchGetWrapper(url, params) {
+  console.log(`${server}/${url}`);
   return await fetch(`${server}/${url}?` + new URLSearchParams(params), {
     method: 'GET'
   })
@@ -29,6 +30,7 @@ async function fetchGetWrapper(url, params) {
 }
 
 async function fetchPostWrapper(url, body) {
+  console.log(`${server}/${url}`);
   return await fetch(`${server}/${url}`, {
     method: 'POST',
     headers: {
@@ -55,14 +57,14 @@ async function fetchPostWrapper(url, body) {
 
 export async function fetchPostProfile(address, username) {
   address = address.toLowerCase();
-  return await fetchPostWrapper("/api/profile", { address, username });
+  return await fetchPostWrapper("api/profile", { address, username });
 }
 
 export async function fetchVote(contractAddress, address, username, contribution) {
   address = address.toLowerCase();
   const success = await setVote(contractAddress, address, username, contribution);
   if (success) {
-    await fetchPostWrapper("/api/vote", { address, username });
+    await fetchPostWrapper("api/vote", { address, username });
     return true;
   }
   throw new Error("Failed to set vote");
@@ -70,7 +72,7 @@ export async function fetchVote(contractAddress, address, username, contribution
 
 export async function fetchGetProfile(address) {
   address = address.toLowerCase();
-  return await fetchGetWrapper("/api/profile", { address });
+  return await fetchGetWrapper("api/profile", { address });
 }
 
 export async function fetchTransactionList(address) {
