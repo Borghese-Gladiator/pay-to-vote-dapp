@@ -20,7 +20,7 @@ import {
   PopoverArrow,
   PopoverCloseButton,
 } from '@chakra-ui/react';
-import { getTopVoters, rankOrdinalSuffix } from "../utils";
+import { getLeaderList, rankOrdinalSuffix } from "../utils";
 
 export default function LeaderTable() {
   const { customVotingAddress } = useContext(ContractAddressesContext);
@@ -30,7 +30,7 @@ export default function LeaderTable() {
   const [loading, setLoading] = useState(true);
   function resetLeaderList() {
     setLoading(true);
-    getTopVoters(customVotingAddress)
+    getLeaderList(customVotingAddress)
       .then(response => {
         console.log(response)
         setLeaderList(response)
