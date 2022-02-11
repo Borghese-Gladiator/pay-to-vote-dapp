@@ -11,6 +11,7 @@ import {
   Container,
 } from '@chakra-ui/react';
 
+import { ethers } from "ethers";
 import { fetchGetProfile, timeout } from "../../utils";
 
 import * as loadingData from "./4397-loading-blocks.json";
@@ -63,7 +64,14 @@ export default function UserSetup({ setSetupComplete }) {
       
       setStatusText("Getting MetaMask account");
       await timeout();
-      const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+      let metamaskErr;
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const accounts = await provider.send("eth_requestAccounts", []).catch(err => metamaskErr = err);
+      if (metamaskErr) {
+        setStatus("error");
+        setStatusText("Please login to MetaMask!")
+        return;
+      }
       const address = accounts[0]; // MetaMask currently only ever provide a single account, but the array gives us some room to grow.
       
       setStatusText("Getting user profile from database");
