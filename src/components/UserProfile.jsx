@@ -21,14 +21,15 @@ import {
   PopoverArrow,
   PopoverCloseButton,
 } from '@chakra-ui/react';
-import { rankOrdinalSuffix, numDecimalPlaces, getProfile, vote } from "../utils";
+import { getProfile, fetchVote, rankOrdinalSuffix } from "../utils";
 
 export default function UserProfile() {
   const { customVotingAddress } = useContext(ContractAddressesContext);
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
+  const { username, address } = userInfo;
 
   // Get and Display Profile
-  const [profile, setProfile] = useState({ username: userInfo.username, address: userInfo.address, rank: 0, });
+  const [profile, setProfile] = useState(userInfo);
   const [profileLoading, setProfileLoading] = useState(true);
   function resetProfile() {
     setProfileLoading(true);
@@ -46,10 +47,6 @@ export default function UserProfile() {
       })
       .finally(() => setProfileLoading(false))
   }
-  // Call once on initial load
-  useEffect(() => {
-    resetProfile()
-  }, [])
 
   // Set contribution through voting
   const [contribution, setContribution] = useState('');
@@ -59,7 +56,7 @@ export default function UserProfile() {
     setContributionLoading(true);
     // check contribution is a whole number
     if (contribution % 1 != 0) {
-      vote(customVotingAddress, userInfo.address, userInfo.username, contribution)
+      fetchVote(customVotingAddress, address, username, contribution)
         .then(response => {
           resetProfile(); // reset profile to refresh contribution amount
         })
