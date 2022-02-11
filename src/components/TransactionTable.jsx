@@ -27,23 +27,19 @@ import { fetchTransactionList } from "../utils";
 
 export default function TransactionTable() {
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
-  const { address } = userInfo;
+  const { address, transactionList } = userInfo;
 
-  const [transactionList, setTransactionList] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [txnList, setTxnList] = useState(transactionList);
+  const [loading, setLoading] = useState(false);
   function resetTransactionList() {
     setLoading(true);
     fetchTransactionList(address)
       .then(response =>
-        setTransactionList(response)
+        setTxnList(response)
       )
       .catch(e => console.log(`Getting data failed: ${e.message}`))
       .finally(() => setLoading(false))
   }
-  // Call once on initial load
-  useEffect(() => {
-    resetTransactionList()
-  }, []);
 
   return (
     <ErrorBoundary
@@ -63,7 +59,7 @@ export default function TransactionTable() {
           />
         </Flex>
         :
-        transactionList.length === 0
+        txnList.length === 0
           ? <Center>No Transactions Found</Center>
           : <Table size='sm'>
             <Thead>
@@ -75,7 +71,7 @@ export default function TransactionTable() {
               </Tr>
             </Thead>
             <Tbody>
-              {transactionList
+              {txnList
                 .sort((txnA, txnB) => txnB.date - txnA.date)
                 .map(({ date, contribution, txnHash }, idx) => {
                   const order = transactions.length - idx;

@@ -29,24 +29,19 @@ import { fetchGetProfile, fetchVote, rankOrdinalSuffix } from "../utils";
 export default function UserProfile() {
   const { customVotingAddress } = useContext(ContractAddressesContext);
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
-  const { username, address } = userInfo;
 
   // Get and Display Profile
-  const [profile, setProfile] = useState(userInfo);
-  const [profileLoading, setProfileLoading] = useState(true);
+  const [profile, setProfile] = useState(userInfo); // { username, address, rank, contribution }
+  const [profileLoading, setProfileLoading] = useState(false);
   function resetProfile() {
     setProfileLoading(true);
+    const { address } = userInfo;
     fetchGetProfile(address)
       .then(response =>
-        setProfile(response) // { username, address, rank, contribution }
+        setProfile(response)
       )
       .catch(e => {
-        console.log(`Getting profile failed: ${e.message}`)
-        setProfile({
-          ...profile,
-          contribution: 0,
-          rank: "User has not voted"
-        })
+        console.log(`Getting profile failed: ${e.message}`);
       })
       .finally(() => setProfileLoading(false))
   }
@@ -59,6 +54,7 @@ export default function UserProfile() {
     setContributionLoading(true);
     // check contribution is a whole number
     if (contribution % 1 != 0) {
+      const { address, username } = userInfo;
       fetchVote(customVotingAddress, address, username, contribution)
         .then(response => {
           resetProfile(); // reset profile to refresh contribution amount
@@ -109,7 +105,7 @@ export default function UserProfile() {
             <Td><Text fontSize='md' noOfLines={1}>{profileLoading ? "Loading" : `${profile.contribution} ETH`}</Text></Td>
           </Tr>
           <Tr>
-            <Td><Text fontSize='md' noOfLines={1}>Enter New Amount (Wei)</Text></Td>
+            <Td><Text fontSize='md' as="span">Enter New Vote (Wei)</Text></Td>
             <Td><Input value={contribution} onChange={handleChange} /></Td>
             <Td>
               <Flex alignItems="center">
