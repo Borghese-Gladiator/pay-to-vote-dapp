@@ -31,10 +31,15 @@ export default function CreateUsername({ setSetupComplete }) {
     // MetaMask requires requesting permission to connect users accounts
     const accounts = await provider.send("eth_requestAccounts", []);
     const address = accounts[0];
-    
+
     // Check localhost or Ropsten Testnet - https://ethereum.stackexchange.com/questions/85194/how-to-check-the-current-metamask-network
-    if (window.ethereum.networkVersion !== "3" && window.ethereum.networkVersion !== "1337") {
-      alert("Please change to Ropsten network")
+    console.log(window.ethereum.networkVersion, 'window.ethereum.networkVersion');
+    
+    const { chainId } = await provider.getNetwork()
+    console.log(chainId);
+    if (chainId !== "3" && chainId !== "1337") {
+      setStatus("error");
+      setError("In MetaMask, please change to Ropsten network");
     } else {
       try {
         const success = await fetchPostProfile(address, username);
