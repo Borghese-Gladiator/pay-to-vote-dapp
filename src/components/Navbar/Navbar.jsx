@@ -2,17 +2,37 @@ import { useState, useContext } from "react";
 import ContractAddressesContext from "../../context/ContractAddressesContext";
 
 import Logo from "./Logo";
-import { Link, Box, Flex, Text, Stack, Icon, IconButton, Image, Divider } from "@chakra-ui/react";
+import {
+  Link,
+  Box,
+  Flex,
+  Text,
+  Stack,
+  Icon,
+  IconButton,
+  Divider,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Button,
+  useDisclosure
+} from "@chakra-ui/react";
+
+import { aboutText } from "../../utils";
 
 // Icons
 import { ExternalLinkIcon } from "@chakra-ui/icons";
-import { AiFillGithub, AiOutlineClose } from "react-icons/ai";
+import { AiFillGithub, AiOutlineClose, AiOutlineInfoCircle } from "react-icons/ai";
 import { GiHamburgerMenu } from "react-icons/gi";
 
 const NavBar = (props) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [open, setIsOpen] = useState(false);
 
-  const toggle = () => setIsOpen(!isOpen);
+  const toggle = () => setIsOpen(!open);
 
   return (
     <NavBarContainer {...props}>
@@ -20,25 +40,26 @@ const NavBar = (props) => {
         w="230px"
         color={["white", "white", "primary.500", "primary.500"]}
       />
-      <MenuToggle toggle={toggle} isOpen={isOpen} />
-      <MenuLinks isOpen={isOpen} />
+      <MenuToggle toggle={toggle} open={open} />
+      <MenuLinks open={open} />
     </NavBarContainer>
   );
 };
 
-const MenuToggle = ({ toggle, isOpen }) => {
+const MenuToggle = ({ toggle, open }) => {
   return (
     <Box display={{ base: "block", md: "none" }} onClick={toggle}>
-      {isOpen ? <Icon as={AiOutlineClose} w={8} h={8} /> : <Icon as={GiHamburgerMenu} w={8} h={8} />}
+      {open ? <Icon as={AiOutlineClose} w={8} h={8} /> : <Icon as={GiHamburgerMenu} w={8} h={8} />}
     </Box>
   );
 };
 
-const MenuLinks = ({ isOpen }) => {
+const MenuLinks = ({ open }) => {
   const { customVotingAddress } = useContext(ContractAddressesContext);
+  const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <Box
-      display={{ base: isOpen ? "block" : "none", md: "block" }}
+      display={{ base: open ? "block" : "none", md: "block" }}
       flexBasis={{ base: "100%", md: "auto" }}
     >
       <Stack
@@ -48,6 +69,27 @@ const MenuLinks = ({ isOpen }) => {
         direction={["column", "row", "row", "row"]}
         pt={[4, 2, 0, 0]}
       >
+        <IconButton
+          onClick={onOpen}
+          aria-label='Open about modal'
+          size='md'
+          icon={<Icon as={AiOutlineInfoCircle} w={6} h={6} />}
+        />
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>About App</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <Text fontSize='lg'>{aboutText}</Text>
+            </ModalBody>
+            <ModalFooter>
+              <Button colorScheme='blue' mr={3} onClick={onClose}>
+                Close
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
         <Link
           href={`https://etherscan.io/address/${customVotingAddress}`}
           target="_blank"
