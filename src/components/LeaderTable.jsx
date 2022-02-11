@@ -35,13 +35,12 @@ export default function LeaderTable() {
         console.log(response)
         setLeaderList(response)
       })
-      .catch(e => console.log(`Getting data failed: ${e.message}`))
       .finally(() => setLoading(false));
   }
   // Call once on initial load
   useEffect(() => {
     resetLeaderList()
-  }, [])
+  })
 
   return (
     <ErrorBoundary

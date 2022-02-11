@@ -27,13 +27,12 @@ export default function VotingCountdown() {
       .then(response => {
         setEndTime(response)
       })
-      .catch(e => console.log(`Getting end time failed: ${e.message}`))
       .finally(() => setEndTimeLoading(false))
   }
-  // Call setEndTime only on initial load
+  // Call resetEndTime only on initial load
   useEffect(() => {
     resetEndTime()
-  }, [])
+  })
 
   const [prizePool, setPrizePool] = useState("");
   const [prizePoolLoading, setPrizePoolLoading] = useState(true);
@@ -43,12 +42,12 @@ export default function VotingCountdown() {
       .then(response =>
         setPrizePool(response)
       )
-      .catch(e => console.log(`Getting prize pool failed: ${e.message}`))
       .finally(() => setPrizePoolLoading(false))
   }
+  // Call resetPrizePool only on initial load
   useEffect(() => {
     resetPrizePool()
-  }, [prizePool])
+  })
 
   return (
     <ErrorBoundary

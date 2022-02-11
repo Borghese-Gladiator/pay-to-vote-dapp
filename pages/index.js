@@ -25,7 +25,7 @@ export default function Home({ greeterAddress, simpleAuctionAddress, customVotin
     if (!setupComplete) {
       window.ethereum.on('accountsChanged', handleAccountsChanged);
     }
-  }, [])
+  })
 
   return (
     <UserInfoContext.Provider value={{ userInfo, setUserInfo }}>
