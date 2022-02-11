@@ -19,11 +19,10 @@ export default async function handler(req, res) {
         if (typeof profile === 'undefined' || profile === null ) {
           res.status(404).json({ message: `User for this address was not found: ${address}`});
         }
-        res.status(200).json(profile);  
+        return res.status(200).json(profile);  
       } catch(e) {
-        res.status(500).json(e);  
+        return res.status(500).json(e);  
       }
-      break;
     }
     case 'POST': {
       const { address, username } = req.body;
@@ -35,12 +34,11 @@ export default async function handler(req, res) {
           { $set: { username: username } },
           { upsert: true }
         );
-      res.status(200).json({ response: response, message: "Success! Username created"});
-      break
+      return res.status(200).json({ response: response, message: "Success! Username created"});
     }
     default: {
       res.setHeader('Allow', ['GET', 'POST'])
-      res.status(405).end(`Method ${method} Not Allowed`)
+      return res.status(405).end(`Method ${method} Not Allowed`)
     }
   }
 }

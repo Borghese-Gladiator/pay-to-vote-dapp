@@ -16,15 +16,14 @@ export default async function handler(req, res) {
       const profile = await db
         .collection("voter_list")
         .findOne({ address: address });
-      res.status(200).json(profile);
-      break
+      return res.status(200).json(profile);
     case 'POST':
       const { address, contribution, username } = req.body;
       const transaction = await setVote(contractAddress, address, username, contribution);
       // from transaction - need error info, need hash for txn
       console.log(transaction);
       if (!transaction) {
-        res.status(500).json({ error: "Contract failed to save vote"});
+        return res.status(500).json({ error: "Contract failed to save vote"});
       }
       const transactionObject = {
         date: new Date().toISOString(),
@@ -38,10 +37,9 @@ export default async function handler(req, res) {
           { $set: { highestContribution: contribution, rank: await getUserRank(contractAddress, address) } },
           { $push: { transactionList: transactionObject }}
         )
-      res.status(200).json({ response: response, message: "Success! New vote saved"});
-      break
+      return res.status(200).json({ response: response, message: "Success! New vote saved"});
     default:
       res.setHeader('Allow', ['GET', 'POST'])
-      res.status(405).end(`Method ${method} Not Allowed`)
+      return res.status(405).end(`Method ${method} Not Allowed`)
   }
 }
