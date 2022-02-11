@@ -8,14 +8,14 @@ const dev = process.env.NODE_ENV !== 'production';
 const server = dev ? 'http://localhost:3000' : process.env.VERCEL_URL;
 
 async function fetchGetWrapper(url, params) {
-  return await fetch(`${server}/${url}` + new URLSearchParams(params), {
+  return await fetch(`${server}/${url}?` + new URLSearchParams(params), {
     method: 'GET'
   })
   .then(data => data.json())
   .then(data => {
     console.log(data); // JSON data parsed by `data.json()` call
     return data
-  });
+  })
 }
 
 async function fetchPostWrapper(url, body) {
@@ -31,27 +31,24 @@ async function fetchPostWrapper(url, body) {
   .then(data => {
     console.log(data); // JSON data parsed by `data.json()` call
     return data;
-  });
-}
-
-export async function setNewUsername(address, username) {
-  return await fetchPostWrapper("/api/profile", { address: address, username: username })
-}
-
-export async function setVote() {
-  return await fetchPostWrapper("/api/vote", { address: address, username: username })
-}
-
-export async function getProfile() {
-  const profile = await fetchGetWrapper("/api/profile");
-  console.log(profile);
-  return profile;
-}
-
-export async function getTransactionList() {
-  return await fetchGetWrapper("/api/profile").then((profile) => {
-    return profile.transactionList
   })
+}
+
+export async function setProfile(address, username) {
+  return await fetchPostWrapper("/api/profile", { address, username });
+}
+
+export async function setVote(address, username) {
+  return await fetchPostWrapper("/api/vote", { address, username });
+}
+
+export async function getProfile(address) {
+  return await fetchGetWrapper("/api/profile", { address });
+}
+
+export async function getTransactionList(address) {
+  const { transactionList } = await fetchGetWrapper("/api/profile", { address });
+  return transactionList;
 }
 
 export async function getLeaderList(contractAddress) {
