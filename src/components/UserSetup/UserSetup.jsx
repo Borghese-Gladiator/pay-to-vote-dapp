@@ -1,14 +1,18 @@
-import { useEffect, useState } from "react";
-import Lottie from "react-lottie";
+import { useEffect, useState, useContext } from "react";
+import UserInfoContext from "../../context/UserInfoContext";
+
 import { getProfile } from "../../utils";
+
 import CreateUsername from "./CreateUsername";
 import NoWalletDetected from "./NoWalletDetected";
+import Lottie from "react-lottie";
 import {
   Flex,
   Heading,
   SlideFade,
   Container,
 } from '@chakra-ui/react';
+
 import * as loadingData from "./4397-loading-blocks.json";
 import * as doneData from "./92460-checkmark-animation.json";
 import * as errorData from "./14651-error-animation.json";
@@ -37,9 +41,13 @@ const errorOptions = {
     preserveAspectRatio: "xMidYMid slice"
   }
 }
+const animationDelay = 2000; // ms
+function timeout(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 export default function UserSetup({ setSetupComplete }) {
-  const animationDelay = 1000; // ms
+  const { userInfo, setUserInfo } = useContext(UserInfoContext);
   const [showMetamaskError, setShowMetamaskError] = useState(false);
   const [showCreateUsername, setShowCreateUsername] = useState(false);
   const [status, setStatus] = useState("pending");
@@ -48,29 +56,36 @@ export default function UserSetup({ setSetupComplete }) {
   // Run on initial load
   useEffect(async () => {
     setStatusText("Getting MetaMask!")
+    await timeout(animationDelay);
     if (typeof window.ethereum === "undefined") {
       setShowMetamaskError(true);
       setStatus("error");
       setStatusText("Please install MetaMask!")
       return;
     }
-    setStatusText("Getting MetaMask account address");
+    
+    setStatusText("Getting MetaMask account");
+    await timeout(animationDelay);
     const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
     const address = accounts[0]; // MetaMask currently only ever provide a single account, but the array gives us some room to grow.
+    
     setStatusText("Getting user profile from database");
-    const username = await getProfile(address);
-    if (typeof username === "undefined") {
+    await timeout(animationDelay);
+    let getProfileErr;
+    const profile = await getProfile(address).catch(err => getProfileErr = err);
+    if (getProfileErr) {
       setShowCreateUsername(true);
       setStatus("error");
       setStatusText("Register a username with this account!")
       return;
     }
+
     // Loading complete animation
     setStatus("success");
     setStatusText("Setup complete")
-    setTimeout(() => {
-      setSetupComplete(true);
-    }, animationDelay)
+    await timeout(animationDelay);
+    setUserInfo(profile);
+    setSetupComplete(true);
   }, [])
 
   return (
