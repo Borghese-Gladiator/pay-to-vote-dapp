@@ -9,7 +9,6 @@ const dev = process.env.NODE_ENV !== 'production';
 const server = dev ? 'http://localhost:3000' : process.env.VERCEL_URL;
 
 async function fetchGetWrapper(url, params) {
-  console.log(process.env)
   console.log(process.env.VERCEL_URL)
   console.log(url);
   console.log(params);
@@ -34,7 +33,6 @@ async function fetchGetWrapper(url, params) {
 }
 
 async function fetchPostWrapper(url, body) {
-  console.log(process.env)
   console.log(process.env.VERCEL_URL)
   console.log(body);
   console.log(params);
