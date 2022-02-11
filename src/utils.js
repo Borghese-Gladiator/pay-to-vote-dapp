@@ -7,8 +7,8 @@ import { getVoterList, getEndTime, getContributionTotal } from "./contractUtils"
 const dev = process.env.NODE_ENV !== 'production';
 const server = dev ? 'http://localhost:3000' : process.env.VERCEL_URL;
 
-function fetchGetWrapper(url, params) {
-  return fetch(`${server}/${url}` + new URLSearchParams(params), {
+async function fetchGetWrapper(url, params) {
+  return await fetch(`${server}/${url}` + new URLSearchParams(params), {
     method: 'GET'
   })
   .then(data => data.json())
@@ -18,8 +18,8 @@ function fetchGetWrapper(url, params) {
   });
 }
 
-function fetchPostWrapper(url, body) {
-  return fetch(`${server}/${url}`, {
+async function fetchPostWrapper(url, body) {
+  return await fetch(`${server}/${url}`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -34,20 +34,22 @@ function fetchPostWrapper(url, body) {
   });
 }
 
-export function setNewUsername(address, username) {
-  return fetchPostWrapper("profile", { address: address, username: username })
+export async function setNewUsername(address, username) {
+  return await fetchPostWrapper("/api/profile", { address: address, username: username })
 }
 
-export function setVote() {
-  return fetchPostWrapper("vote", { address: address, username: username })
+export async function setVote() {
+  return await fetchPostWrapper("/api/vote", { address: address, username: username })
 }
 
-export function getProfile() {
-  return fetchGetWrapper("profile")
+export async function getProfile() {
+  const profile = await fetchGetWrapper("/api/profile");
+  console.log(profile);
+  return profile;
 }
 
-export function getTransactionList() {
-  return fetchGetWrapper("profile").then((profile) => {
+export async function getTransactionList() {
+  return await fetchGetWrapper("/api/profile").then((profile) => {
     return profile.transactionList
   })
 }
