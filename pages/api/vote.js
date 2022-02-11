@@ -11,13 +11,14 @@ export default async function handler(req, res) {
   const { db } = await connectToDatabase();
 
   switch (method) {
-    case 'GET':
+    case 'GET': {
       const { address } = req.query;
       const profile = await db
         .collection("voter_list")
         .findOne({ address: address });
       return res.status(200).json(profile);
-    case 'POST':
+    }
+    case 'POST': {
       const { address, contribution, username } = req.body;
       const transaction = await setVote(contractAddress, address, username, contribution);
       // from transaction - need error info, need hash for txn
@@ -38,8 +39,10 @@ export default async function handler(req, res) {
           { $push: { transactionList: transactionObject }}
         )
       return res.status(200).json({ response: response, message: "Success! New vote saved"});
-    default:
+    }
+    default: {
       res.setHeader('Allow', ['GET', 'POST'])
       return res.status(405).end(`Method ${method} Not Allowed`)
+    }
   }
 }
