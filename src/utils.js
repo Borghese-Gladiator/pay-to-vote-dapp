@@ -8,10 +8,7 @@ import { setVote, getVoterList, getEndTime, getContributionTotal } from "./contr
 const dev = process.env.NODE_ENV !== 'production';
 const server = dev ? 'http://localhost:3000' : process.env.VERCEL_URL;
 
-
 async function fetchGetWrapper(url, params) {
-  console.log(procss.env.VERCEL_URL);
-  console.log(`${server}/${url}`);
   return await fetch(`${server}/${url}?` + new URLSearchParams(params), {
     method: 'GET'
   })
@@ -32,8 +29,6 @@ async function fetchGetWrapper(url, params) {
 }
 
 async function fetchPostWrapper(url, body) {
-  console.log(procss.env.VERCEL_URL);
-  console.log(`${server}/${url}`);
   return await fetch(`${server}/${url}`, {
     method: 'POST',
     headers: {
