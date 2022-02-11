@@ -40,6 +40,11 @@ export default function TransactionTable() {
       .catch(e => console.log(`Getting data failed: ${e.message}`))
       .finally(() => setLoading(false))
   }
+  useEffect(() => {
+    // Update table when user info is updated
+    const { transactionList } = userInfo;
+    setTxnList(transactionList);
+  }, [userInfo])
 
   return (
     <ErrorBoundary
@@ -74,13 +79,13 @@ export default function TransactionTable() {
               {txnList
                 .sort((txnA, txnB) => txnB.date - txnA.date)
                 .map(({ date, contribution, txnHash }, idx) => {
-                  const order = transactions.length - idx;
-                  const dateString = date
-                    .toLocaleString('en-us', { year: 'numeric', month: '2-digit', day: '2-digit' })
+                  const reverseIdx = txnList.length - idx;
+                  const dateString = new Date(date)
+                    .toLocaleString('en-us', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })
                     .replace(/(\d+)\/(\d+)\/(\d+)/, '$3-$1-$2');
                   return (
-                    <Tr key={`txn-row-${order}`}>
-                      <Td>{order}</Td>
+                    <Tr key={`txn-row-${reverseIdx}`}>
+                      <Td>{reverseIdx}</Td>
                       <Td>{dateString}</Td>
                       <Td>${contribution}</Td>
                       <Td>
