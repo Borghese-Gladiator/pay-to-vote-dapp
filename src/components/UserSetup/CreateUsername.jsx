@@ -1,6 +1,5 @@
 import { useState, useContext } from "react";
 import UserInfoContext from "../../context/UserInfoContext";
-import useAsync from "../../hooks/useAsync";
 
 import {
   Input,
@@ -19,11 +18,14 @@ import { fetchGetProfile, fetchPostProfile, timeout } from "../../utils";
 
 export default function CreateUsername({ setSetupComplete }) {
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
+  const [status, setStatus] = useState("idle");
+  const [error, setError] = useState();
+
   const [username, setUsername] = useState('')
   const handleChange = (event) => setUsername(event.target.value);
 
-  const { execute, status, value, error } = useAsync(updateUsername, false);
   async function updateUsername() {
+    setStatus("pending");
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     
     // MetaMask requires requesting permission to connect users accounts
@@ -37,11 +39,13 @@ export default function CreateUsername({ setSetupComplete }) {
       try {
         const success = await fetchPostProfile(address, username);
         const profile = await fetchGetProfile(address);
+        setStatus("success");
         await timeout();
         setUserInfo(profile);
         setSetupComplete(true);
       } catch(e) {
-        console.error(e.message);
+        setStatus("error");
+        setError(e);
       }
     }
   }
@@ -54,15 +58,15 @@ export default function CreateUsername({ setSetupComplete }) {
       borderColor='gray.200'
     >
       <Flex direction="column" p={3} m={1}>
-        {status === "idle" && <Text mt={5}>Enter Username below</Text>}
-        {status === "success" && <Alert status='success' mt={5}><AlertIcon />Successfully created</Alert>}
+        {status === "idle" || status === "pending" && <Text mt={5}>Enter Username below</Text>}
+        {status === "success" && <Alert status='success' mt={5}><AlertIcon />Successfully created user!</Alert>}
         {status === "error" && <Alert status='error' mt={5}><AlertIcon />{error.message}</Alert>}
         <Flex alignItems="center">
           <Input
             value={username}
             onChange={handleChange}
-            placeholder={"Winged Victory of Samothrace"} size="lg" />
-          <Button onClick={execute} disabled={status === "pending"}>Submit</Button>
+            placeholder={"Enter username here"} size="lg" />
+          <Button onClick={updateUsername} disabled={status === "pending"}>Submit</Button>
           {status === "pending"
             && <div><Spinner
               thickness='4px'
