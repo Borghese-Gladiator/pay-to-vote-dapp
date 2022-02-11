@@ -18,9 +18,7 @@ async function fetchGetWrapper(url, params) {
         const err = new Error("Not 2xx response");
         err.response = response;
         throw err;
-        console.log("BLAH")
       }
-      console.log("RETURNING");
       return response
     })
     .then(data => data.json())
