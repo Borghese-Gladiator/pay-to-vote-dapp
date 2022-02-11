@@ -24,14 +24,15 @@ export default async function handler(req, res) {
         .collection("voter_list")
         .updateOne(
           { address: address },
-          { $set: { contribution, rank } },
           {
+            $set: { contribution, rank },
             $push: {
               transactionList: {
                 date: new Date().toISOString(),
                 txnHash: hash,
                 contribution
-              }}
+              }
+            }
           }
         )
       return res.status(200).json({ response: response, message: "Success! New vote saved" });
