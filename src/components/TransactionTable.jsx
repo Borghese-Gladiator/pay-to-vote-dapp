@@ -23,7 +23,7 @@ import {
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { getVoterTransactions } from "../utils";
 
-export default function UserTxnTable() {
+export default function TransactionTable() {
   const { customVotingAddress } = useContext(ContractAddressesContext);
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
 
