@@ -50,38 +50,41 @@ export default function UserSetup({ setSetupComplete }) {
   const [statusText, setStatusText] = useState("Loading...");
   
   // Run on initial load
-  useEffect(async () => {
-    setStatusText("Getting MetaMask!")
-    await timeout();
-    if (typeof window.ethereum === "undefined") {
-      setShowMetamaskError(true);
-      setStatus("error");
-      setStatusText("Please install MetaMask!")
-      return;
+  useEffect(() => {
+    async function fetchData() {
+      setStatusText("Getting MetaMask!")
+      await timeout();
+      if (typeof window.ethereum === "undefined") {
+        setShowMetamaskError(true);
+        setStatus("error");
+        setStatusText("Please install MetaMask!")
+        return;
+      }
+      
+      setStatusText("Getting MetaMask account");
+      await timeout();
+      const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+      const address = accounts[0]; // MetaMask currently only ever provide a single account, but the array gives us some room to grow.
+      
+      setStatusText("Getting user profile from database");
+      await timeout();
+      let getProfileErr;
+      const profile = await fetchGetProfile(address).catch(err => getProfileErr = err);
+      if (getProfileErr) {
+        setShowCreateUsername(true);
+        setStatus("error");
+        setStatusText("Register a username!")
+        return;
+      }
+  
+      // Loading complete animation
+      setStatus("success");
+      setStatusText("Setup complete")
+      await timeout();
+      setUserInfo(profile);
+      setSetupComplete(true);
     }
-    
-    setStatusText("Getting MetaMask account");
-    await timeout();
-    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-    const address = accounts[0]; // MetaMask currently only ever provide a single account, but the array gives us some room to grow.
-    
-    setStatusText("Getting user profile from database");
-    await timeout();
-    let getProfileErr;
-    const profile = await fetchGetProfile(address).catch(err => getProfileErr = err);
-    if (getProfileErr) {
-      setShowCreateUsername(true);
-      setStatus("error");
-      setStatusText("Register a username!")
-      return;
-    }
-
-    // Loading complete animation
-    setStatus("success");
-    setStatusText("Setup complete")
-    await timeout();
-    setUserInfo(profile);
-    setSetupComplete(true);
+    fetchData()
   }, [])
 
   return (
