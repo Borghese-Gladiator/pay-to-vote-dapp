@@ -67,8 +67,6 @@ export default function UserProfile() {
     const { address, username } = userInfo;
     fetchVote(customVotingAddress, address, username, contribution)
       .then(response => {
-        console.log(response);
-        console.log("HERE");
         resetProfile(); // reset profile to refresh contribution amount
       })
       .catch(e => {

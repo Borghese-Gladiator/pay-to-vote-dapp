@@ -33,10 +33,7 @@ export default function CreateUsername({ setSetupComplete }) {
     const address = accounts[0];
 
     // Check localhost or Ropsten Testnet - https://ethereum.stackexchange.com/questions/85194/how-to-check-the-current-metamask-network
-    console.log(window.ethereum.networkVersion, 'window.ethereum.networkVersion');
-    
     const { chainId } = await provider.getNetwork()
-    console.log(chainId);
     if (chainId !== 3 && chainId !== 1337) {
       setStatus("error");
       setError("In MetaMask, please change to Ropsten network");

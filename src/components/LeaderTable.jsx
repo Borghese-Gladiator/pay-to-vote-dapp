@@ -32,7 +32,6 @@ export default function LeaderTable() {
     setLoading(true);
     getLeaderList(customVotingAddress)
       .then(response => {
-        console.log(response)
         setLeaderList(response)
       })
       .catch(e => console.log(`Getting prize pool failed: ${e.message}`))

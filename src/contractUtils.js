@@ -62,7 +62,6 @@ export async function setVote(contractAddress, address, username, contribution) 
   const signer = provider.getSigner();
   const contract = new ethers.Contract(contractAddress, CustomVoting.abi, signer);
   const transaction = await contract.vote(address, ethers.utils.formatBytes32String(username), ethers.BigNumber.from(contribution));
-  console.log(transaction);
   return transaction
 }
 
