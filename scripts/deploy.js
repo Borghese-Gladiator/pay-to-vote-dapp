@@ -6,7 +6,7 @@ require('dotenv').config()
 // Runtime Environment's members available in the global scope.
 const hre = require("hardhat");
 
-const ONE_DAY_IN_SECONDS = 86400;
+const ONE_DAY_IN_MINUTES = 1440; // minutes // 86400; (one unit bigger than hours)
 const dateUINT = 1345619256308 // Value of Date: Wed Aug 22 16:37:36 CST 2012
 
 async function main() {
@@ -24,7 +24,7 @@ async function main() {
   
   const greeter = await Greeter.deploy("Hello, Hardhat!");
   const simpleAuction = await SimpleAuction.deploy(dateUINT, process.env.ACCOUNT_PUBLIC_ADDRESS);
-  const customVoting = await CustomVoting.deploy(ONE_DAY_IN_SECONDS); // voting ends one day from now
+  const customVoting = await CustomVoting.deploy(ONE_DAY_IN_MINUTES); // voting ends one day from now
   
   await greeter.deployed();
   await simpleAuction.deployed();
