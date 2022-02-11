@@ -133,4 +133,4 @@ export function convertDateToStr(date) {
   const options = { day: 'numeric', hour: '2-digit', minute: '2-digit' };
   return date.toLocaleDateString("en-US", options);
 }
-export const aboutText = "DApp to pay to win a prize pool. Each voter contributes an amount and the highestVoter takes the pool home."
+export const aboutText = "DApp money auction. Every voter contributes an amount to play and the voter with the highest contribution takes the whole pool home at the end of the auction! Smart contract deployed to Ropsten Testnet"
