@@ -22,6 +22,8 @@ import {
   PopoverHeader,
   PopoverArrow,
   PopoverCloseButton,
+  Alert,
+  AlertIcon,
 } from '@chakra-ui/react';
 
 import { fetchGetProfile, fetchVote, rankOrdinalSuffix } from "../utils";
@@ -37,9 +39,10 @@ export default function UserProfile() {
     setProfileLoading(true);
     const { address } = userInfo;
     fetchGetProfile(address)
-      .then(response =>
+      .then(response => {
+        console.log(response)
         setProfile(response)
-      )
+      })
       .catch(e => {
         console.log(`Getting profile failed: ${e.message}`);
       })
@@ -50,18 +53,25 @@ export default function UserProfile() {
   const [contribution, setContribution] = useState('');
   const handleChange = (event) => setContribution(event.target.value);
   const [contributionLoading, setContributionLoading] = useState(false);
+  const [contributionErr, setContributionErr] = useState();
   async function handleSubmit() {
+    setContributionErr(null);
     setContributionLoading(true);
-    // check contribution is a whole number
     if (contribution % 1 != 0) {
-      const { address, username } = userInfo;
-      fetchVote(customVotingAddress, address, username, contribution)
-        .then(response => {
-          resetProfile(); // reset profile to refresh contribution amount
-        })
-        .catch(e => console.log(`Sending failed: ${e.message}`))
-        .finally(() => setContributionLoading(false))
+      setContributionErr("Error: contribution cannot be a decimal!")
     }
+    const { address, username } = userInfo;
+    fetchVote(customVotingAddress, address, username, contribution)
+      .then(response => {
+        console.log(response);
+        console.log("HERE");
+        resetProfile(); // reset profile to refresh contribution amount
+      })
+      .catch(e => {
+        setContributionErr(`Transaction Error: ${e.message}`)
+        console.log(`Sending failed: ${e.message}`)
+      })
+      .finally(() => setContributionLoading(false))
   }
 
   return (
@@ -126,6 +136,13 @@ export default function UserProfile() {
           </Tr>
         </Tbody>
       </Table>
+      {typeof contributionErr === 'undefined' || contributionErr === null
+        ? <></>
+        : 
+        <Alert status='error'>
+          <AlertIcon />{contributionErr}
+        </Alert>
+      }
     </ErrorBoundary>
   )
 }

@@ -3,7 +3,7 @@
  * Therefore, this utils controls when to make calls to backend and when to make calls to Smart Contract
  */
 import { ethers } from 'ethers';
-import { setVote, getVoterList, getEndTime, getContributionTotal } from "./contractUtils";
+import { setVote, getVoterList, getUserRank, getEndTime, getContributionTotal } from "./contractUtils";
 
 const dev = process.env.NODE_ENV !== 'production';
 const server = dev ? 'http://localhost:3000/' : ""; // process.env.VERCEL_URL
@@ -60,12 +60,10 @@ export async function fetchPostProfile(address, username) {
 
 export async function fetchVote(contractAddress, address, username, contribution) {
   address = address.toLowerCase();
-  const success = await setVote(contractAddress, address, username, contribution);
-  if (success) {
-    await fetchPostWrapper("api/vote", { address: address, username: username, contribution: contribution });
-    return true;
-  }
-  throw new Error("Failed to set vote");
+  const transactionObj = await setVote(contractAddress, address, username, contribution);
+  const rank = await getUserRank(contractAddress, address);
+  const response = await fetchPostWrapper("api/vote", { address, contribution, transactionObj, rank });
+  return true;
 }
 
 export async function fetchGetProfile(address) {

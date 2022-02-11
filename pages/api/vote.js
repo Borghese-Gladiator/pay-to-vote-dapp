@@ -3,7 +3,6 @@
  * sets vote
  */
 import { connectToDatabase } from "../../src/mongodb";
-import { setVote, getUserRank } from "../../src/contractUtils";
 
 const contractAddress = process.env.CUSTOM_VOTING_DEPLOYED_ADDRESS;
 export default async function handler(req, res) {
@@ -19,26 +18,23 @@ export default async function handler(req, res) {
       return res.status(200).json(profile);
     }
     case 'POST': {
-      const { address, contribution, username } = req.body;
-      const transaction = await setVote(contractAddress, address, username, contribution);
-      // from transaction - need error info, need hash for txn
-      console.log(transaction);
-      if (!transaction) {
-        return res.status(500).json({ error: "Contract failed to save vote"});
-      }
-      const transactionObject = {
-        date: new Date().toISOString(),
-        txnHash: transaction,
-        contribution
-      }
+      const { address, contribution, rank, transactionObj } = req.body;
+      const { hash } = transactionObj;
       const response = await db
-        .collection("series_list")
+        .collection("voter_list")
         .updateOne(
           { address: address },
-          { $set: { highestContribution: contribution, rank: await getUserRank(contractAddress, address) } },
-          { $push: { transactionList: transactionObject }}
+          { $set: { contribution, rank } },
+          {
+            $push: {
+              transactionList: {
+                date: new Date().toISOString(),
+                txnHash: hash,
+                contribution
+              }}
+          }
         )
-      return res.status(200).json({ response: response, message: "Success! New vote saved"});
+      return res.status(200).json({ response: response, message: "Success! New vote saved" });
     }
     default: {
       res.setHeader('Allow', ['GET', 'POST'])
