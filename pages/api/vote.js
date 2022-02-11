@@ -12,13 +12,14 @@ export default async function handler(req, res) {
 
   switch (method) {
     case 'GET':
+      const { address } = req.query;
       const profile = await db
         .collection("voter_list")
         .findOne({ address: address });
       res.status(200).json(profile);
       break
     case 'POST':
-      const { address, contribution, username } = req;
+      const { address, contribution, username } = req.body;
       const transaction = await setVote(contractAddress, address, username, contribution);
       // from transaction - need error info, need hash for txn
       console.log(transaction);
