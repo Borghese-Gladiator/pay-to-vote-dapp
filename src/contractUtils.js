@@ -28,7 +28,7 @@ export async function getEndTime(contractAddress) {
   */
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const contract = new ethers.Contract(contractAddress, CustomVoting.abi, provider);
-  const endBigNumber = await contract.votingEndTime();
+  const endBigNumber = await contract.getVotingEndTime();
   const nowBigNumber = ethers.BigNumber.from(Math.floor(Date.now() / 1000));
   const diffBigNumber = endBigNumber.sub(nowBigNumber);
   let diffInt = parseInt(diffBigNumber.toString(), 10);
