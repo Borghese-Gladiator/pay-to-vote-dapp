@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import UserInfoContext from "../../context/UserInfoContext";
 
-import { getProfile } from "../../utils";
+import { fetchGetProfile, timeout } from "../../utils";
 
 import CreateUsername from "./CreateUsername";
 import NoWalletDetected from "./NoWalletDetected";
@@ -41,10 +41,6 @@ const errorOptions = {
     preserveAspectRatio: "xMidYMid slice"
   }
 }
-const animationDelay = 2000; // ms
-function timeout(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
 
 export default function UserSetup({ setSetupComplete }) {
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
@@ -56,7 +52,7 @@ export default function UserSetup({ setSetupComplete }) {
   // Run on initial load
   useEffect(async () => {
     setStatusText("Getting MetaMask!")
-    await timeout(animationDelay);
+    await timeout();
     if (typeof window.ethereum === "undefined") {
       setShowMetamaskError(true);
       setStatus("error");
@@ -65,25 +61,25 @@ export default function UserSetup({ setSetupComplete }) {
     }
     
     setStatusText("Getting MetaMask account");
-    await timeout(animationDelay);
+    await timeout();
     const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
     const address = accounts[0]; // MetaMask currently only ever provide a single account, but the array gives us some room to grow.
     
     setStatusText("Getting user profile from database");
-    await timeout(animationDelay);
+    await timeout();
     let getProfileErr;
-    const profile = await getProfile(address).catch(err => getProfileErr = err);
+    const profile = await fetchGetProfile(address).catch(err => getProfileErr = err);
     if (getProfileErr) {
       setShowCreateUsername(true);
       setStatus("error");
-      setStatusText("Register a username with this account!")
+      setStatusText("Register a username!")
       return;
     }
 
     // Loading complete animation
     setStatus("success");
     setStatusText("Setup complete")
-    await timeout(animationDelay);
+    await timeout();
     setUserInfo(profile);
     setSetupComplete(true);
   }, [])
@@ -112,7 +108,7 @@ export default function UserSetup({ setSetupComplete }) {
         }
         {showCreateUsername &&
           <SlideFade in={true} offsetY='20px'>
-            <CreateUsername />
+            <CreateUsername setSetupComplete={setSetupComplete} />
           </SlideFade>
         }
       </Flex>

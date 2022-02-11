@@ -18,7 +18,9 @@ async function fetchGetWrapper(url, params) {
         const err = new Error("Not 2xx response");
         err.response = response;
         throw err;
+        console.log("BLAH")
       }
+      console.log("RETURNING");
       return response
     })
     .then(data => data.json())
@@ -53,11 +55,13 @@ async function fetchPostWrapper(url, body) {
     })
 }
 
-export async function setProfile(address, username) {
+export async function fetchPostProfile(address, username) {
+  address = address.toLowerCase();
   return await fetchPostWrapper("/api/profile", { address, username });
 }
 
 export async function fetchVote(contractAddress, address, username, contribution) {
+  address = address.toLowerCase();
   const success = await setVote(contractAddress, address, username, contribution);
   if (success) {
     await fetchPostWrapper("/api/vote", { address, username });
@@ -66,7 +70,8 @@ export async function fetchVote(contractAddress, address, username, contribution
   throw new Error("Failed to set vote");
 }
 
-export async function getProfile(address) {
+export async function fetchGetProfile(address) {
+  address = address.toLowerCase();
   return await fetchGetWrapper("/api/profile", { address });
 }
 
@@ -97,6 +102,12 @@ export async function getVotingEndTime(contractAddress) {
 
 export async function getTotalPool(contractAddress) {
   return await getContributionTotal(contractAddress);
+}
+
+// UTILS
+const animationDelay = 2000; // ms
+export function timeout() {
+  return new Promise(resolve => setTimeout(resolve, animationDelay));
 }
 
 // UTILS for Display
