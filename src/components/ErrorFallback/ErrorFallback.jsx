@@ -9,7 +9,7 @@ import {
 
 export default function ErrorFallback({ error, resetErrorBoundary }) {
   return (
-    <Alert status='success'>
+    <Alert status='error'>
       <AlertIcon />
       <Box flex='1'>
         <AlertTitle>Something went wrong:</AlertTitle>
