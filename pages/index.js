@@ -8,7 +8,7 @@ import UserSetup from "../src/components/UserSetup";
 import VotingCountdown from "../src/components/VotingCountdown";
 import LeaderTable from "../src/components/LeaderTable";
 import UserProfile from "../src/components/UserProfile";
-import UserTxnTable from "../src/components/UserTxnTable";
+import TransactionTable from "../src/components/TransactionTable";
 import {
   Container,
   Grid,
@@ -79,7 +79,7 @@ export default function Home({ greeterAddress, simpleAuctionAddress, customVotin
                       <UserProfile playerObj={playerObj} />
                     </GridItem>
                     <GridItem colSpan={5}>
-                      <UserTxnTable transactions={transactions} />
+                      <TransactionTable transactions={transactions} />
                     </GridItem>
                   </Grid>
                 </Container>
