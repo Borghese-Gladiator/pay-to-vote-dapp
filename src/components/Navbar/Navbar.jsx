@@ -69,6 +69,18 @@ const MenuLinks = ({ open }) => {
         direction={["column", "row", "row", "row"]}
         pt={[4, 2, 0, 0]}
       >
+        <Link
+          href={`https://etherscan.io/address/${customVotingAddress}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          isExternal
+        >
+          <Flex alignItems="center">
+            <Text fontSize='sm'>View Deployed Contract</Text>
+            <ExternalLinkIcon w={6} h={6} p={1} />
+          </Flex>
+        </Link>
+        <Divider orientation='vertical' variant="solid" h="50px" />
         <IconButton
           onClick={onOpen}
           aria-label='Open about modal'
@@ -90,18 +102,6 @@ const MenuLinks = ({ open }) => {
             </ModalFooter>
           </ModalContent>
         </Modal>
-        <Link
-          href={`https://etherscan.io/address/${customVotingAddress}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          isExternal
-        >
-          <Flex alignItems="center">
-            <Text fontSize='sm'>View Deployed Contract</Text>
-            <ExternalLinkIcon w={6} h={6} p={1} />
-          </Flex>
-        </Link>
-        <Divider orientation='vertical' variant="solid" h="50px" />
         <Link
           href='https://github.com/Borghese-Gladiator/pay-to-vote-dapp'
           target="_blank"
