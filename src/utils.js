@@ -6,14 +6,14 @@ import { ethers } from 'ethers';
 import { setVote, getVoterList, getEndTime, getContributionTotal } from "./contractUtils";
 
 const dev = process.env.NODE_ENV !== 'production';
-const server = dev ? 'http://localhost:3000' : process.env.VERCEL_URL;
+const server = dev ? 'http://localhost:3000/' : ""; // process.env.VERCEL_URL
 
 async function fetchGetWrapper(url, params) {
   console.log(process.env.VERCEL_URL)
   console.log(url);
   console.log(params);
   console.log(`${server}/${url}`);
-  return await fetch(`${server}/${url}?` + new URLSearchParams(params), {
+  return await fetch(`${server}${url}?` + new URLSearchParams(params), {
     method: 'GET'
   })
     .then(response => {
@@ -37,7 +37,7 @@ async function fetchPostWrapper(url, body) {
   console.log(body);
   console.log(params);
   console.log(`${server}/${url}`);
-  return await fetch(`${server}/${url}`, {
+  return await fetch(`${server}${url}`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
