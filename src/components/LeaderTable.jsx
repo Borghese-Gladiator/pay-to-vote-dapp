@@ -35,6 +35,7 @@ export default function LeaderTable() {
         console.log(response)
         setLeaderList(response)
       })
+      .catch(e => console.log(`Getting prize pool failed: ${e.message}`))
       .finally(() => setLoading(false));
   }
   // Call once on initial load

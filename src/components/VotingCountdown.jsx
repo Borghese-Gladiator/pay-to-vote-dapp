@@ -27,6 +27,7 @@ export default function VotingCountdown() {
       .then(response => {
         setEndTime(response)
       })
+      .catch(e => console.log(`Getting prize pool failed: ${e.message}`))
       .finally(() => setEndTimeLoading(false))
   }
   // Call resetEndTime only on initial load
@@ -42,6 +43,7 @@ export default function VotingCountdown() {
       .then(response =>
         setPrizePool(response)
       )
+      .catch(e => console.log(`Getting prize pool failed: ${e.message}`))
       .finally(() => setPrizePoolLoading(false))
   }
   // Call resetPrizePool only on initial load
