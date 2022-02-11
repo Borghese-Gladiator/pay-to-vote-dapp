@@ -74,8 +74,8 @@ export default function UserSetup({ setSetupComplete }) {
   }, [])
 
   return (
-    <Container maxW='container.md'>
-      <Flex direction="column" justify="center" alignItems="center">
+    <Container maxW='container.md' h="100%">
+      <Flex direction="column" justify="center" alignItems="center" h="100%">
         <Flex direction="row" justify="center" alignItems="center">
           {status === "pending" && <>
             <Heading as='h3' size='lg'>{statusText}</Heading>

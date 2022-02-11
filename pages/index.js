@@ -8,6 +8,7 @@ import UserProfile from "../src/components/UserProfile";
 import TransactionTable from "../src/components/TransactionTable";
 import {
   Container,
+  Flex,
   Grid,
   GridItem
 } from '@chakra-ui/react';
@@ -31,7 +32,9 @@ export default function Home({ greeterAddress, simpleAuctionAddress, customVotin
           // Go through checks for user to setup MetaMask, connect account, and write username
           // Otherwise, everything is loaded and render application
           !setupComplete
-            ? <UserSetup setSetupComplete={setSetupComplete} />
+            ? (
+              <UserSetup setSetupComplete={setSetupComplete} />
+            )
             : (
               <Container h={'100%'} maxW='container.lg'>
                 <Grid
