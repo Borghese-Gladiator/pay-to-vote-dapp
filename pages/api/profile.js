@@ -31,7 +31,7 @@ export default async function handler(req, res) {
         .collection("voter_list")
         .updateOne(
           { address: address },
-          { $set: { username: username } },
+          { $set: { username: username, contribution: 0, rank: "User has not voted", transactionList: [] } },
           { upsert: true }
         );
       return res.status(200).json({ response: response, message: "Success! Username created"});
