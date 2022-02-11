@@ -13,7 +13,7 @@ import {
   Text,
   Container
 } from '@chakra-ui/react';
-import { getContributionTotal, getVotingEndTime } from "../utils";
+import { getTotalPool, getVotingEndTime } from "../utils";
 
 export default function VotingCountdown() {
   const { customVotingAddress } = useContext(ContractAddressesContext);
@@ -39,7 +39,7 @@ export default function VotingCountdown() {
   const [prizePoolLoading, setPrizePoolLoading] = useState(true);
   function resetPrizePool() {
     setPrizePoolLoading(true);
-    getContributionTotal(customVotingAddress)
+    getTotalPool(customVotingAddress)
       .then(response =>
         setPrizePool(response)
       )

@@ -52,7 +52,7 @@ export function getTransactionList() {
   })
 }
 
-export function getLeaderList(contractAddress) {
+export async function getLeaderList(contractAddress) {
   const voterList = await getVoterList(contractAddress);
   voterList.sort((a, b) => {
     b.voter.contribution.sub(a.voter.contribution)
@@ -68,12 +68,12 @@ export function getLeaderList(contractAddress) {
   return topVoters;
 }
 
-export function getVotingEndTime(contractAddress) {
-  return await getEndTime();
+export async function getVotingEndTime(contractAddress) {
+  return await getEndTime(contractAddress);
 }
 
-export function getContributionTotal(contractAddress) {
-  return await getContributionTotal();
+export async function getTotalPool(contractAddress) {
+  return await getContributionTotal(contractAddress);
 }
 
 // UTILS for Display
