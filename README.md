@@ -137,7 +137,9 @@ Account Data flows MetaMask address to Frontend (HTML/CSS/JS(React)) to deployed
 - ```ProviderError: rejected due to project ID settings``` - Infura security setting when I set which accounts can deploy (check .env has values of the PUBLIC ACCOUNT you want to use with Ropsten Testnet)
 - Solidity does not support floating point numbers. The default value is always Wei (one quintillionth of an ether) hence the BigNumber outlook, I need to change all my numbers to reflect that.
 - Addresses not equal - ends up some addressses are capital while others are lowercase. Convert all to lowercase [https://ethereum.stackexchange.com/questions/70764/how-to-compare-an-address-with-an-address-using-web3js](https://ethereum.stackexchange.com/questions/70764/how-to-compare-an-address-with-an-address-using-web3js)
-- undefined in URL address after pushing to Vercel - process.env.VERCEL_URL is not shown by default and does not work even when enabling system env variables (need to add as custom env)
+- undefined in URL address after pushing to Vercel
+  - process.env.VERCEL_URL is not shown by default and does not work even when enabling system env variables (need to add as custom env)
+  - added process.env.NODE_ENV as well
 
 #### References
 - Basis for initializing project [https://dev.to/dabit3/the-complete-guide-to-full-stack-ethereum-development-3j13](https://dev.to/dabit3/the-complete-guide-to-full-stack-ethereum-development-3j13)
