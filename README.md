@@ -5,18 +5,22 @@ DApp to pay to win a prize pool. Each voter contributes an amount and the highes
 ## Table of Contents
 - [Features](#features)
 - [Technologies](#technologies)
-- [Local Setup Commands](#local-setup-commands)
+- [Local Setup](#local-setup)
 - [Implementation](#implementation)
+- [Hardhat README](#hardhat-readme)
+- [Next.js README](#nextjs-readme)
 
 ## Features
-- Users vote by pawning up their ETH and at the end, the user who pawned up the most ETH wins the entire pool.
-  - CountdownTimer to end of voting
-  - Leaderboard of current top contenders
-  - User profile
-  - User past transactions
+Money Auction app where users put down money and the highest bidder at the end of the auction takes all the money.
+- Users can vote by contributing funds (UserProfile)
+- Users set their own display name and can update it (UserProfile)
+- Profile shows the user's current contribution, display name, and address (UserProfile)
+- Leaderboard shows current winner and next 3 runner-ups (LeaderTable)
+- TransactionTable shows a user's past votes and each associated transaction hash
+- VotingCountdown shows time remaining for auction and current prize pool
 
 ## Technologies
-Account Data flows MetaMask address to Frontend (HTML/CSS/JS(React)) to deployed Solidity contract in Ropsten Testnet
+Account Data flows from MetaMask address to Frontend (HTML/CSS/JS(React)) to deployed Solidity contract in Ropsten Testnet to MongoDB Atlas to save transaction
 - Frontend
   - React - JavaScript library to build components
   - Next.js - React framework with routing and serverless functions
@@ -26,10 +30,12 @@ Account Data flows MetaMask address to Frontend (HTML/CSS/JS(React)) to deployed
 - Smart Contract Development and Deployment
   - Hardhat.js - Ethereum development environment
   - Ropsten Testnet - Ethereum test network that allows for blockchain development testing before deployment on Mainnet. The only Proof of Work testnet (Ethereum is PoW as well).
-- User requires extension to use conventional browsers with Web3.0 DApps
-  - MetaMask
+- Cloud Data Storage
+  - MongoDB Atlas - cloud database as a service for MongoDB (NoSQL document database)
+- Web 3.0
+  - MetaMask - Chrome extension for hot wallet to interact with DApps. Can create accounts and get a public address & private key
 
-## Local Setup Commands
+## Local Setup
 - Install dependencies - ```npm install```
 - Run smart contract tests - ```npx hardhat test```
 - Start up both smart contract local network and frontend display - ```npm run dev```
@@ -142,6 +148,7 @@ Account Data flows MetaMask address to Frontend (HTML/CSS/JS(React)) to deployed
   - added process.env.NODE_ENV as well
 
 #### References
+- base unit of Solidity is the Wei [https://ethereum.stackexchange.com/questions/253/the-ether-denominations-are-called-finney-szabo-and-wei-what-who-are-these-na](https://ethereum.stackexchange.com/questions/253/the-ether-denominations-are-called-finney-szabo-and-wei-what-who-are-these-na)
 - Basis for initializing project [https://dev.to/dabit3/the-complete-guide-to-full-stack-ethereum-development-3j13](https://dev.to/dabit3/the-complete-guide-to-full-stack-ethereum-development-3j13)
 - Smart Contract reference [https://solidity-by-example.org/structs/](https://solidity-by-example.org/structs/)
 - Setting up Smart Contract array of structs [https://medium.com/robhitchens/solidity-crud-part-1-824ffa69509a](https://medium.com/robhitchens/solidity-crud-part-1-824ffa69509a)
@@ -168,13 +175,18 @@ User simply uses frontend and changes accounts with MetaMask as needed between M
 - Frontend takes way more time than I expected even with a component library. Also, I should use component libraries I'm more familiar with.
 - Challenging to write solidity code - I moved most of my logic into JS utils but in hindsight, if I knew Solidity better, I wouldn't need to
   - For Example, I kept trying to return an array of structs but then realized that it won't work since it's dynamic data.
-- DApps require lots of information to be loaded before they can be used. Writing this setup component was not expected.
+- DApps require lots of information to be loaded before they can be used. Writing this setup component was not expected in my estimate.
 
-#### Next Steps
-- Refactor UserSetup to be reusable fancy loading animation
-- Learn Solidity for a proper insertion - improve runtime by not running findHighestVoter each time vote is called
-  - learn Mapping vs Array
-- Add toggle to display address for table (chakra ui + react-table)
+Easiest Steps to Create Next DApp
+- get faucet test Ether for Test Network for Account#1
+- create-next-app
+- add Chakra UI
+- write up GUI and utils with hard coded values
+- write up contractUtils to call contract and unit test them with Chai
+- write up contract and hardhat tests to validate
+- validate locally E2E by deploying contract locally
+- deploy app and deploy contract
+- get faucet test Ether for Test Network for Account#2
 
 ## Hardhat README
 This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts.
