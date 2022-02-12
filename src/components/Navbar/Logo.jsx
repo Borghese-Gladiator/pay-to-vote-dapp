@@ -5,7 +5,7 @@ export default function Logo(props) {
   return (
     <Box {...props}>
       <Text fontSize="xl" fontWeight="bold">
-        Voting Platform DApp
+        Money Auction DApp
       </Text>
     </Box>
   );
