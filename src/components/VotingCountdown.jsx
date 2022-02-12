@@ -68,7 +68,7 @@ export default function VotingCountdown() {
             </Tr>
             <Tr>
               <Td isNumeric><Heading as='h3' size='xl'>Prize Pool</Heading></Td>
-              <Td><Text fontSize='lg'>{prizePoolLoading ? "Loading" : `${prizePool} ETH`}</Text></Td>
+              <Td><Text fontSize='lg'>{prizePoolLoading ? "Loading" : `${prizePool} Wei`}</Text></Td>
             </Tr>
           </Tbody>
         </Table>
