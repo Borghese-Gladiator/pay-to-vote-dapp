@@ -17,15 +17,18 @@ import {
 export default function Home({ greeterAddress, simpleAuctionAddress, customVotingAddress }) {
   const [userInfo, setUserInfo] = useState({});
   const [setupComplete, setSetupComplete] = useState(false);
-  function handleAccountsChanged() {
-    // Reloads account after account change
-    setSetupComplete(false);
-  }
   useEffect(() => {
-    if (setupComplete) {
-      window.ethereum.on('accountsChanged', handleAccountsChanged);
+    if (window.ethereum) {
+      window.ethereum.on('chainChanged', () => {
+        setSetupComplete(false); // Reloads account after network change
+        window.location.reload();
+      })
+      window.ethereum.on('accountsChanged', () => {
+        setSetupComplete(false); // Reloads account after account change
+        window.location.reload();
+      })
     }
-  }, [])
+  })
 
   return (
     <UserInfoContext.Provider value={{ userInfo, setUserInfo }}>
