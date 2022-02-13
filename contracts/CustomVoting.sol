@@ -2,21 +2,21 @@
 pragma solidity ^0.8.4;
 
 contract CustomVoting {
+    // Contract State
+    uint256 public highestVote;
+    uint256 public contributionTotal;
+    mapping(address => uint) pendingReturns; // Allowed withdrawals of previous bids
+    bool ended; // Set to true at the end, disallows any change.
+    // Array of Structs - https://medium.com/robhitchens/solidity-crud-part-1-824ffa69509a
     struct Voter {
         bytes32 username;
         uint256 contribution;
         uint256 index;
     }
-    
-    // CustomVoting State - https://medium.com/robhitchens/solidity-crud-part-1-824ffa69509a
     mapping(address => Voter) private voterStructList;
     address[] private voterIndex;
-    uint256 public highestVote;
-    uint256 public contributionTotal;
-    mapping(address => uint) pendingReturns; // Allowed withdrawals of previous bids
-    bool ended; // Set to true at the end, disallows any change.
-
-    // Parameters for CustomVoting - Times are either absolute unix timestamps (seconds since 1970-01-01) or time periods in seconds
+    
+    // Contract Parameters - Times are either absolute unix timestamps (seconds since 1970-01-01) or time periods in seconds
     uint public votingEndTime;
 
     // Events for updating state
@@ -62,11 +62,12 @@ contract CustomVoting {
     // Update Contribution through Vote
     /// Bid on the auction with the value sent together with this transaction.
     /// The value will only be refunded if the auction is not won.
-    function vote(address voterAddress, bytes32 _username, uint256 _contribution)
+    function vote(address voterAddress, bytes32 _username)
         external 
         payable
         returns (bool success)
     {
+        uint256 _contribution = msg.value;
         if (!isVoter(voterAddress)) {
             insertVoter(voterAddress, _username, _contribution);
         }

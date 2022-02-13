@@ -22,11 +22,11 @@ THINGS TO TEST
 
 describe("CustomVoting", function () {
   const ONE_DAY_SECONDS = 86400;
-  const userAVote = 3;
-  const userBVote = 10;
-  const userALowVote = 1;
-  const userAHighVote = 20;
-
+  const userAVote = { input: { value: ethers.BigNumber.from(3) }, output: 3 };
+  const userBVote = { input: { value: ethers.BigNumber.from(10) }, output: 10 };
+  const userALowVote = { input: { value: ethers.BigNumber.from(1) }, output: 1 };
+  const userAHighVote = { input: { value: ethers.BigNumber.from(20) }, output: 20 };
+  
   // `beforeEach` will run before each test, re-deploying the contract every time
   beforeEach(async function () {
     initialTotal = 0;
@@ -66,51 +66,50 @@ describe("CustomVoting", function () {
     })
     it("Should let A vote once", async function () {
       expect(await contract.getContributionTotal()).to.equal(initialTotal);
-      await contract.vote(addr1.address, usernameA, userAVote);
+      await contract.vote(addr1.address, usernameA, userAVote.input);
       const highestVoter = findHighestVoter(await getVoterList());
-      expect(highestVoter.contribution).to.equal(userAVote);
-      expect(await contract.getContributionTotal()).to.equal(initialTotal + userAVote);
+      expect(highestVoter.contribution).to.equal(userAVote.output);
+      expect(await contract.getContributionTotal()).to.equal(initialTotal + userAVote.output);
     });
     it("Should prevent second vote being lower than first", async function () {
       expect(await contract.getContributionTotal()).to.equal(initialTotal);
       try {
-        await contract.vote(addr1.address, usernameA, userAVote);
-        await contract.vote(addr1.address, usernameA, userALowVote);
+        await contract.vote(addr1.address, usernameA, userAVote.input);
+        await contract.vote(addr1.address, usernameA, userALowVote.input);
       } catch (e) {
         expect(e.message).to.equal("VM Exception while processing transaction: reverted with custom error 'PreviousContributionWasHigher()'");
       }
     });
     it("Should use highest vote of A who votes twice", async function () {
       expect(await contract.getContributionTotal()).to.equal(initialTotal);
-      await contract.vote(addr1.address, usernameA, userAVote);
-      await contract.vote(addr1.address, usernameA, userAHighVote);
+      await contract.vote(addr1.address, usernameA, userAVote.input);
+      await contract.vote(addr1.address, usernameA, userAHighVote.input);
       const highestVoter = findHighestVoter(await getVoterList());
-      expect(highestVoter.contribution).to.equal(userAHighVote);
-      expect(await contract.getContributionTotal()).to.equal(initialTotal + userAHighVote);
+      expect(highestVoter.contribution).to.equal(userAHighVote.output);
+      expect(await contract.getContributionTotal()).to.equal(initialTotal + userAHighVote.output);
     });
     it("Should let A vote then B vote and keep highest", async function () {
       expect(await contract.getContributionTotal()).to.equal(initialTotal);
-      await contract.vote(addr1.address, usernameA, userAVote);
-      await contract.vote(addr2.address, usernameB, userBVote);
+      await contract.vote(addr1.address, usernameA, userAVote.input);
+      await contract.vote(addr2.address, usernameB, userBVote.input);
       const highestVoter = findHighestVoter(await getVoterList());
-      expect(highestVoter.contribution).to.equal(userBVote);
-      expect(await contract.getContributionTotal()).to.equal(initialTotal + userAVote + userBVote);
+      expect(highestVoter.contribution).to.equal(userBVote.output);
+      expect(await contract.getContributionTotal()).to.equal(initialTotal + userAVote.output + userBVote.output);
     });
     it("Should let A vote then B Vote then A vote again to win", async function () {
       expect(await contract.getContributionTotal()).to.equal(initialTotal);
-      await contract.vote(addr1.address, usernameA, userAVote);
-      await contract.vote(addr2.address, usernameB, userBVote);
-      await contract.vote(addr1.address, usernameA, userAHighVote);
+      await contract.vote(addr1.address, usernameA, userAVote.input);
+      await contract.vote(addr2.address, usernameB, userBVote.input);
+      await contract.vote(addr1.address, usernameA, userAHighVote.input);
       const highestVoter = findHighestVoter(await getVoterList());
-      expect(highestVoter.contribution).to.equal(userAHighVote);
-      expect(await contract.getContributionTotal()).to.equal(initialTotal + userBVote + userAHighVote);
+      expect(highestVoter.contribution).to.equal(userAHighVote.output);
+      expect(await contract.getContributionTotal()).to.equal(initialTotal + userBVote.output + userAHighVote.output);
     });
   })
   describe("End of Auction", function () {
     it("Should end at correct time", async function () {
     });
     it("Should pay money out to people who were outbid", async function() {
-
     });
   });
 });
