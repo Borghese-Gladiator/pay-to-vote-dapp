@@ -90,7 +90,7 @@ export default function TransactionTable() {
                       <Td>${contribution}</Td>
                       <Td>
                         <Link
-                          href={`https://etherscan.io/tx/${txnHash}`}
+                          href={`https://ropsten.etherscan.io/tx/${txnHash}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           isExternal
