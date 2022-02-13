@@ -177,6 +177,7 @@ User simply uses frontend and changes accounts with MetaMask as needed between M
 - Challenging to write solidity code - I moved most of my logic into JS utils but in hindsight, if I knew Solidity better, I wouldn't need to
   - For Example, I kept trying to return an array of structs but then realized that it won't work since it's dynamic data.
 - DApps require lots of information to be loaded before they can be used. Writing this setup component was not expected in my estimate.
+- Pushing contract means blockchain gets wiped, however, you need to wipe database too to match.
 
 Easiest Steps to Create Next DApp
 - get faucet test Ether for Test Network for Account#1
@@ -188,6 +189,7 @@ Easiest Steps to Create Next DApp
 - validate locally E2E by deploying contract locally
 - deploy app and deploy contract
 - get faucet test Ether for Test Network for Account#2
+
 
 ## Hardhat README
 This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts.
