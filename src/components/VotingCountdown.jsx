@@ -89,7 +89,13 @@ export default function VotingCountdown() {
                 <PopoverContent>
                   <PopoverArrow />
                   <PopoverCloseButton />
-                  <PopoverHeader>{typeof prizePool === 'undefined' || prizePool === null ? "Loading" : `${convertWeiToEther(convertStrToNumber(prizePool))} ETH`}</PopoverHeader>
+                  <PopoverHeader>
+                    {typeof prizePool === 'undefined' || prizePool === null 
+                    ? "Loading"
+                    : typeof prizePool === "number"
+                      ? `${convertWeiToEther(convertStrToNumber(prizePool))} ETH`
+                      : `${convertWeiToEther(prizePool)} ETH`}
+                  </PopoverHeader>
                 </PopoverContent>
               </Popover>
                 
