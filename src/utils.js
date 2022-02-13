@@ -122,13 +122,14 @@ export function convertWeiToEther(wei) {
    * @return {string}
    */
   console.log(wei);
+  console.log(typeof wei);
   if (typeof wei === "number") {
-    wei = ethers.BigNumber.from(wei);
-    console.log(wei);
     console.log("wei is number");
+    wei = ethers.BigNumber.from(wei);
     return (+ethers.utils.formatEther(wei)).toFixed(17);
   } else if (typeof wei === "string" && isNumericStr("[0-9]+")) {
     // https://stackoverflow.com/questions/10575624/java-string-see-if-a-string-contains-only-numbers-and-not-letters
+    console.log("wei is string");
     wei = wei.trim();
     wei = ethers.BigNumber.from(wei);
     return (+ethers.utils.formatEther(wei)).toFixed(17);
@@ -137,9 +138,8 @@ export function convertWeiToEther(wei) {
   }
 }
 function isNumericStr(str) {
-  if (typeof str != "string") return false // we only process strings!  
-  return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
-    !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
+  // https://stackoverflow.com/questions/175739/how-can-i-check-if-a-string-is-a-valid-number
+  return /^-?\d+$/.test(str);
 }
 export function toTitleCase(str) {
   return str.replace(
