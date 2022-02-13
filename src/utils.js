@@ -126,12 +126,12 @@ export function convertWeiToEther(wei) {
   if (typeof wei === "number") {
     console.log("wei is number");
     wei = ethers.BigNumber.from(wei);
-    return (+ethers.utils.formatEther(wei)).toFixed(17);
+    return (+ethers.utils.formatEther(wei)).toFixed(18);
   } else if (typeof wei === "string" && isNumericStr(wei)) {
     // https://stackoverflow.com/questions/10575624/java-string-see-if-a-string-contains-only-numbers-and-not-letters
     console.log("wei is string");
     wei = ethers.BigNumber.from(wei);
-    return (+ethers.utils.formatEther(wei)).toFixed(17);
+    return (+ethers.utils.formatEther(wei)).toFixed(18);
   } else {
     return `Cannot convert WEI value: ${wei}`
   }
