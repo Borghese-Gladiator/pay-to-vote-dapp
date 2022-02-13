@@ -71,6 +71,7 @@ export default function LeaderTable() {
             <Tbody>
               {
                 leaderList
+                  .sort((leaderA, leaderB) => leaderB.contribution - leaderA.contribution)
                   .map(({ username, address, contribution, rank }, idx) => {
                     address = address.toLowerCase();
                     return (
