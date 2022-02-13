@@ -97,8 +97,7 @@ export async function getVotingEndTime(contractAddress) {
 }
 
 export async function getTotalPool(contractAddress) {
-  const totalBigNumber =  await getContributionTotal(contractAddress);
-  return totalBigNumber.toNumber();
+  return await getContributionTotal(contractAddress);
 }
 
 // UTILS
@@ -108,6 +107,9 @@ export function timeout() {
 }
 
 // UTILS for Display
+export function convertStrToNumber(str) {
+  return parseInt(str, 10);
+}
 export function convertWeiToEther(wei) {
   return ethers.utils.formatEther(wei);
 }

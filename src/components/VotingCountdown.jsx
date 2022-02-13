@@ -23,7 +23,7 @@ import {
   Box,
 } from '@chakra-ui/react';
 
-import { getTotalPool, getVotingEndTime, convertWeiToEther } from "../utils";
+import { getTotalPool, getVotingEndTime, convertStrToNumber, convertWeiToEther } from "../utils";
 
 export default function VotingCountdown() {
   const { customVotingAddress } = useContext(ContractAddressesContext);
@@ -89,7 +89,7 @@ export default function VotingCountdown() {
                 <PopoverContent>
                   <PopoverArrow />
                   <PopoverCloseButton />
-                  <PopoverHeader>{typeof prizePool === 'undefined' || prizePool === null ? "Loading" : `${convertWeiToEther(prizePool)} ETH`}</PopoverHeader>
+                  <PopoverHeader>{typeof prizePool === 'undefined' || prizePool === null ? "Loading" : `${convertWeiToEther(convertStrToNumber(prizePool))} ETH`}</PopoverHeader>
                 </PopoverContent>
               </Popover>
                 
