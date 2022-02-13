@@ -132,7 +132,7 @@ export default function UserProfile() {
                   <PopoverHeader>
                     {typeof contribution === 'undefined' || contribution === null
                       ? "Loading"
-                      : `${convertWeiToEther(contribution)}`
+                      : `${convertWeiToEther(contribution)} ETH`
                     }
                   </PopoverHeader>
                 </PopoverContent>
