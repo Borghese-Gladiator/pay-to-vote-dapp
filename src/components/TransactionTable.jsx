@@ -77,7 +77,7 @@ export default function TransactionTable() {
             </Thead>
             <Tbody>
               {txnList
-                .sort((txnA, txnB) => txnB.date - txnA.date)
+                .sort((txnA, txnB) => new Date(txnB.date) - new Date(txnA.date))
                 .map(({ date, contribution, txnHash }, idx) => {
                   const reverseIdx = txnList.length - idx;
                   const dateString = new Date(date)
