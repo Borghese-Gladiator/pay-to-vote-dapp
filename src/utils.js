@@ -23,7 +23,6 @@ async function fetchGetWrapper(url, params) {
     })
     .then(data => data.json())
     .then(data => {
-      console.log(data); // JSON data parsed by `data.json()` call
       return data
     })
 }
@@ -48,7 +47,6 @@ async function fetchPostWrapper(url, body) {
     })
     .then(data => data.json())
     .then(data => {
-      console.log(data); // JSON data parsed by `data.json()` call
       return data;
     })
 }
@@ -124,7 +122,6 @@ export function convertWeiToEther(wei) {
    */
   if (typeof wei === "number" || typeof wei === "string") {
     wei = ethers.BigNumber.from(wei);
-    console.log(typeof wei);
     return (+ethers.utils.formatEther(wei)).toFixed(17);
   } else {
     return `Cannot convert Wei value: ${wei}`
