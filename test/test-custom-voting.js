@@ -1,25 +1,6 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
-/*
-THINGS TO TEST
-- test initial pool value from owner is 1 ETH
-- test user A can vote
-  - validate total
-  - validate user A total
-- test user A votes once and then twice
-  - validate total
-  - validate user A total
-- test user A votes then user B votes
-  - validate total pool
-  - validate user A total
-  - validate user B total
-- test user A votes & user B votes and user A votes again
-  - validate total pool
-  - validate user A total
-  - validate user B total
-*/
-
 describe("CustomVoting", function () {
   const ONE_DAY_SECONDS = 86400;
   const userAVote = { input: { value: ethers.BigNumber.from(3) }, output: 3 };
