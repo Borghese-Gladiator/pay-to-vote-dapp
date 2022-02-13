@@ -20,12 +20,10 @@ export default function Home({ greeterAddress, simpleAuctionAddress, customVotin
   useEffect(() => {
     if (window.ethereum) {
       window.ethereum.on('chainChanged', () => {
-        setSetupComplete(false); // Reloads account after network change
-        window.location.reload();
+        window.location.reload(); // Reloads account after network change
       })
       window.ethereum.on('accountsChanged', () => {
-        setSetupComplete(false); // Reloads account after account change
-        window.location.reload();
+        window.location.reload(); // Reloads account after account change
       })
     }
   })
