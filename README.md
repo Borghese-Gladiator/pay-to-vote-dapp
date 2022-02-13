@@ -160,6 +160,7 @@ Account Data flows from MetaMask address to Frontend (HTML/CSS/JS(React)) to dep
   - call SET functions of contract using Signer (JsonRpCSigner)
     - ```let signer = jsonRpcProvider.getSigner(accounts[1]);```
 - Countdown timer [https://medium.com/bb-tutorials-and-thoughts/how-to-create-a-countdown-timer-in-react-app-e99916046292](https://medium.com/bb-tutorials-and-thoughts/how-to-create-a-countdown-timer-in-react-app-e99916046292)
+- Watch for account and network change [https://medium.com/@thelasthash/listening-for-metamask-account-and-network-changes-in-react-js-app-8608dfa8d8bf](https://medium.com/@thelasthash/listening-for-metamask-account-and-network-changes-in-react-js-app-8608dfa8d8bf)
 
 #### Notes
 Flow of Application
