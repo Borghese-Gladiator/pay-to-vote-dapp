@@ -97,7 +97,8 @@ export async function getVotingEndTime(contractAddress) {
 }
 
 export async function getTotalPool(contractAddress) {
-  return await getContributionTotal(contractAddress);
+  const totalBigNumber =  await getContributionTotal(contractAddress);
+  return totalBigNumber.toNumber();
 }
 
 // UTILS
