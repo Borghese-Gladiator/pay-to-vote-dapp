@@ -68,6 +68,7 @@ export default function LeaderTable() {
               {
                 leaderList
                   .map(({ username, address, contribution, rank }, idx) => {
+                    address = address.toLowerCase();
                     return (
                       <Tr key={`leader-row-${idx}`}>
                         <Td isNumeric>{rankOrdinalSuffix(rank)}</Td>
