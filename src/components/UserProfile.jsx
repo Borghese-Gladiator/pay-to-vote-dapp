@@ -60,10 +60,13 @@ export default function UserProfile() {
   const [contributionErr, setContributionErr] = useState();
   async function handleSubmit() {
     setContributionErr(null);
-    setContributionLoading(true);
     if (contribution % 1 != 0) {
       setContributionErr("Error: contribution cannot be a decimal!")
     }
+    if (profile.contribution >= contribution) {
+      setContributionErr("Error: contribution cannot be less than current contribution!")
+    }
+    setContributionLoading(true);
     const { address, username } = userInfo;
     fetchVote(customVotingAddress, address, username, contribution)
       .then(response => {
