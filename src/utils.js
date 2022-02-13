@@ -77,7 +77,8 @@ export async function fetchTransactionList(address) {
 export async function getLeaderList(contractAddress) {
   const voterList = await getVoterList(contractAddress);
   voterList.sort((a, b) => {
-    b.voter.contribution.sub(a.voter.contribution)
+    // sort highest to lowest (normally b - a, but fixed for BigNumber object subtraction)
+    a.voter.contribution.sub(b.voter.contribution)
   })
   const topVoters = voterList.slice(0, 5).map(({ address, voter }, idx) => {
     return {
