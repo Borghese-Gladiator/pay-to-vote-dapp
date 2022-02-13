@@ -120,8 +120,16 @@ export function convertWeiToEther(wei) {
    * @param {BigNumber} wei
    * @return {string}
    */
-  if (typeof wei === "number" || typeof wei === "string") {
+  console.log(wei);
+  if (typeof wei === "number") {
     wei = ethers.BigNumber.from(wei);
+    console.log(wei);
+    console.log("wei is number");
+    return (+ethers.utils.formatEther(wei)).toFixed(17);
+  } else if (typeof wei === "string") {
+    wei = wei.trim();
+    wei = ethers.BigNumber.from(wei);
+    console.log("wei is string");
     return (+ethers.utils.formatEther(wei)).toFixed(17);
   } else {
     return `Cannot convert Wei value: ${wei}`
