@@ -70,7 +70,7 @@ const MenuLinks = ({ open }) => {
         pt={[4, 2, 0, 0]}
       >
         <Link
-          href={`https://etherscan.io/address/${customVotingAddress}`}
+          href={`https://ropsten.etherscan.io/address/${customVotingAddress}`}
           target="_blank"
           rel="noopener noreferrer"
           isExternal
