@@ -93,11 +93,20 @@ export async function getLeaderList(contractAddress) {
 }
 
 export async function getVotingEndTime(contractAddress) {
-  return await getEndTime(contractAddress);
+  const endBigNumber = await getEndTime(contractAddress);
+  const nowBigNumber = ethers.BigNumber.from(Math.floor(Date.now() / 1000));
+  const diffBigNumber = endBigNumber.sub(nowBigNumber);
+  let diffInt = parseInt(diffBigNumber.toString(), 10);
+  return {
+    hours: Math.floor(diffInt / 60),
+    minutes: Math.floor(diffInt / (60 * 60)),
+    seconds: Math.floor(diffInt / (60 * 60 * 60)),
+  }
 }
 
 export async function getTotalPool(contractAddress) {
-  return await getContributionTotal(contractAddress);
+  const totalBigNumber = await getContributionTotal(contractAddress);
+  return totalBigNumber.toString();
 }
 
 // UTILS
@@ -107,11 +116,19 @@ export function timeout() {
 }
 
 // UTILS for Display
-export function convertStrToNumber(str) {
-  return parseInt(str, 10);
-}
 export function convertWeiToEther(wei) {
-  return ethers.utils.formatEther(wei);
+  /**
+   * 
+   * @param {BigNumber} wei
+   * @return {string}
+   */
+  if (typeof wei === "number" || typeof wei === "string") {
+    wei = ethers.BigNumber.from(wei);
+    console.log(typeof wei);
+    return (+ethers.utils.formatEther(wei)).toFixed(17);
+  } else {
+    return `Cannot convert Wei value: ${wei}`
+  }
 }
 export function toTitleCase(str) {
   return str.replace(

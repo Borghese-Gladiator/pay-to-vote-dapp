@@ -79,22 +79,17 @@ export default function VotingCountdown() {
             <Tr>
               <Td isNumeric><Heading as='h3' size='xl'>Prize Pool</Heading></Td>
               <Td>
-                
               <Popover trigger="hover">
                 <PopoverTrigger>
                   <Box p={2} _hover={{ bg: "teal.600" }}>
-                    <Text fontSize='lg'>{prizePoolLoading ? "Loading" : `${prizePool} Wei`}</Text>
+                    <Text fontSize='lg'>{prizePoolLoading ? "Loading" : `${prizePool.toString()} Wei`}</Text>
                   </Box>
                 </PopoverTrigger>
                 <PopoverContent>
                   <PopoverArrow />
                   <PopoverCloseButton />
                   <PopoverHeader>
-                    {typeof prizePool === 'undefined' || prizePool === null 
-                    ? "Loading"
-                    : typeof prizePool === "number"
-                      ? `${convertWeiToEther(convertStrToNumber(prizePool))} ETH`
-                      : `${convertWeiToEther(prizePool)} ETH`}
+                    {prizePoolLoading ? "Loading" : `${convertWeiToEther(prizePool)} ETH`}
                   </PopoverHeader>
                 </PopoverContent>
               </Popover>

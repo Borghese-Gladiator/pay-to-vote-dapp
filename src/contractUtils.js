@@ -24,29 +24,20 @@ export async function isVoter(contractAddress, address) {
 export async function getEndTime(contractAddress) {
   /**
   * GET voting end time - convert BigNumber to object { hours, minutes, seconds}
-  * @return object
+  * @return {BigNumber}
   */
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const contract = new ethers.Contract(contractAddress, CustomVoting.abi, provider);
-  const endBigNumber = await contract.getVotingEndTime();
-  const nowBigNumber = ethers.BigNumber.from(Math.floor(Date.now() / 1000));
-  const diffBigNumber = endBigNumber.sub(nowBigNumber);
-  let diffInt = parseInt(diffBigNumber.toString(), 10);
-  return {
-    hours: Math.floor(diffInt / 60),
-    minutes: Math.floor(diffInt / (60 * 60)),
-    seconds: Math.floor(diffInt / (60 * 60 * 60)),
-  }
+  return await contract.getVotingEndTime();
 }
 export async function getContributionTotal(contractAddress) {
   /**
   * GET total contribution - convert BigNumber result to string
-  * @return string
+  * @return {BigNumber} total contribution
   */
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const contract = new ethers.Contract(contractAddress, CustomVoting.abi, provider);
-  const total = await contract.getContributionTotal();
-  return total.toString()
+  return await contract.getContributionTotal();
 }
 
 export async function setVote(contractAddress, address, username, contribution) {
@@ -73,13 +64,13 @@ export async function getUserRank(contractAddress, address) {
    * 
    * @param contractAddress
    * @param address
-   * @return rank of user
+   * @return Integer - rank of user
    */
   const voterList = await getVoterList(contractAddress);
   voterList.sort((a, b) => {
     b.voter.contribution.sub(a.voter.contribution)
   })
-  return voterList.findIndex(x => x.address.toLowerCase() === address.toLowerCase()) + 1;
+  return 1 + voterList.findIndex(x => x.address.toLowerCase() === address.toLowerCase());
 }
 
 export async function getVoterList(contractAddress) {
