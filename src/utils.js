@@ -107,6 +107,9 @@ export function timeout() {
 }
 
 // UTILS for Display
+export function convertWeiToEther(wei) {
+  return ethers.utils.formatEther(wei);
+}
 export function toTitleCase(str) {
   return str.replace(
     /\w\S*/g,

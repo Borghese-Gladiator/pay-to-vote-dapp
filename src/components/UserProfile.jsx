@@ -27,7 +27,7 @@ import {
   AlertIcon,
 } from '@chakra-ui/react';
 
-import { fetchGetProfile, fetchVote, rankOrdinalSuffix } from "../utils";
+import { fetchGetProfile, fetchVote, rankOrdinalSuffix, convertWeiToEther } from "../utils";
 
 export default function UserProfile() {
   const { customVotingAddress } = useContext(ContractAddressesContext);
@@ -54,7 +54,7 @@ export default function UserProfile() {
   }, [userInfo])
 
   // Set contribution through voting
-  const [contribution, setContribution] = useState('');
+  const [contribution, setContribution] = useState();
   const handleChange = (event) => setContribution(event.target.value);
   const [contributionLoading, setContributionLoading] = useState(false);
   const [contributionErr, setContributionErr] = useState();
@@ -117,11 +117,22 @@ export default function UserProfile() {
           </Tr>
           <Tr>
             <Td><Text fontSize='md'>Current Contribution</Text></Td>
-            <Td><Text fontSize='md' noOfLines={1}>{profileLoading ? "Loading" : `${profile.contribution} ETH`}</Text></Td>
+            <Td><Text fontSize='md' noOfLines={1}>{profileLoading ? "Loading" : `${profile.contribution} WEI`}</Text></Td>
           </Tr>
           <Tr>
-            <Td><Text fontSize='md' as="span">Enter New Vote (Wei)</Text></Td>
-            <Td><Input value={contribution} onChange={handleChange} /></Td>
+            <Td><Text fontSize='md' as="span">Enter New Vote (WEI)</Text></Td>
+            <Td>
+              <Popover trigger="hover">
+                <PopoverTrigger>
+                  <Input value={contribution} onChange={handleChange} />
+                </PopoverTrigger>
+                <PopoverContent>
+                  <PopoverArrow />
+                  <PopoverCloseButton />
+                  <PopoverHeader>{typeof contribution === 'undefined' || contribution === null ? 0 : convertWeiToEther(contribution)} ETH</PopoverHeader>
+                </PopoverContent>
+              </Popover>
+            </Td>
             <Td>
               <Flex alignItems="center">
                 <Button onClick={handleSubmit}>Submit</Button>
@@ -143,7 +154,7 @@ export default function UserProfile() {
       </Table>
       {typeof contributionErr === 'undefined' || contributionErr === null
         ? <></>
-        : 
+        :
         <Alert status='error'>
           <AlertIcon />{contributionErr}
         </Alert>
