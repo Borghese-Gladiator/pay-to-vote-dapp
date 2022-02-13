@@ -29,7 +29,7 @@ export default function VotingCountdown() {
   const { customVotingAddress } = useContext(ContractAddressesContext);
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
 
-  const [endTime, setEndTime] = useState({ hours: 0, minutes: 0, seconds: 0});
+  const [endTime, setEndTime] = useState({ hours: 0, minutes: 0, seconds: 0 });
   const [endTimeLoading, setEndTimeLoading] = useState(true);
   function resetEndTime() {
     setEndTimeLoading(true);
@@ -79,22 +79,21 @@ export default function VotingCountdown() {
             <Tr>
               <Td isNumeric><Heading as='h3' size='xl'>Prize Pool</Heading></Td>
               <Td>
-              <Popover trigger="hover">
-                <PopoverTrigger>
-                  <Box p={2} _hover={{ bg: "teal.600" }}>
-                    <Text fontSize='lg'>{prizePoolLoading ? "Loading" : `${prizePool.toString()} WEI`}</Text>
-                  </Box>
-                </PopoverTrigger>
-                <PopoverContent>
-                  <PopoverArrow />
-                  <PopoverCloseButton />
-                  <PopoverHeader>
-                    {prizePoolLoading ? "Loading" : `${convertWeiToEther(prizePool)} ETH`}
-                  </PopoverHeader>
-                </PopoverContent>
-              </Popover>
-                
-                </Td>
+                <Popover trigger="hover">
+                  <PopoverTrigger>
+                    <Box p={2} _hover={{ bg: "teal.600" }}>
+                      <Text fontSize='lg'>{prizePoolLoading ? "Loading" : `${prizePool.toString()} WEI`}</Text>
+                    </Box>
+                  </PopoverTrigger>
+                  <PopoverContent>
+                    <PopoverArrow />
+                    <PopoverCloseButton />
+                    <PopoverHeader>
+                      {prizePoolLoading ? "Loading" : `${convertWeiToEther(prizePool)} ETH`}
+                    </PopoverHeader>
+                  </PopoverContent>
+                </Popover>
+              </Td>
             </Tr>
           </Tbody>
         </Table>
