@@ -82,14 +82,14 @@ export default function VotingCountdown() {
               <Popover trigger="hover">
                 <PopoverTrigger>
                   <Box p={2} _hover={{ bg: "teal.600" }}>
-                    <Text fontSize='lg'>{prizePoolLoading ? "Loading" : `${prizePool.toString()} Wei`}</Text>
+                    <Text fontSize='lg'>{prizePoolLoading ? "Loading" : `${prizePool.toString()} WEI`}</Text>
                   </Box>
                 </PopoverTrigger>
                 <PopoverContent>
                   <PopoverArrow />
                   <PopoverCloseButton />
                   <PopoverHeader>
-                    {prizePoolLoading ? "Loading" : `${convertWeiToEther(prizePool)} ETH`}
+                    {prizePoolLoading ? "Loading" : `${convertWeiToEther(prizePool)}`}
                   </PopoverHeader>
                 </PopoverContent>
               </Popover>

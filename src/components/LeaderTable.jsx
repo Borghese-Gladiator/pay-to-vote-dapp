@@ -88,7 +88,7 @@ export default function LeaderTable() {
                             </PopoverContent>
                           </Popover>
                         </Td>
-                        <Td>{contribution} Wei</Td>
+                        <Td>{`${contribution} WEI`}</Td>
                       </Tr>
                     )
                   })}
