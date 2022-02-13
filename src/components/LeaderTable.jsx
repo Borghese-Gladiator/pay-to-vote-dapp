@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import ContractAddressesContext from "../context/ContractAddressesContext";
+import UserInfoContext from "../context/UserInfoContext";
 
 import { ErrorBoundary } from 'react-error-boundary';
 import ErrorFallback from "./ErrorFallback";
@@ -26,6 +27,8 @@ import { getLeaderList, rankOrdinalSuffix } from "../utils";
 
 export default function LeaderTable() {
   const { customVotingAddress } = useContext(ContractAddressesContext);
+  const { userInfo, setUserInfo } = useContext(UserInfoContext);
+
   const [leaderList, setLeaderList] = useState([]);
   const [loading, setLoading] = useState(true);
   function resetLeaderList() {
@@ -39,8 +42,9 @@ export default function LeaderTable() {
   }
   // Call once on initial load
   useEffect(() => {
+    // Update ledaer board when user info is updated
     resetLeaderList()
-  }, [])
+  }, [userInfo])
 
   return (
     <ErrorBoundary
@@ -75,7 +79,7 @@ export default function LeaderTable() {
                         <Td>
                           <Popover trigger="hover">
                             <PopoverTrigger>
-                              <Box borderWidth={1} p={2} _hover={{ bg: "teal.600" }}>{username}</Box>
+                              <Box p={2} _hover={{ bg: "teal.600" }}>{username}</Box>
                             </PopoverTrigger>
                             <PopoverContent>
                               <PopoverArrow />

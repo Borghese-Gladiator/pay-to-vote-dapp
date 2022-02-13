@@ -91,7 +91,7 @@ export default function UserProfile() {
           :
           <Popover trigger="hover">
             <PopoverTrigger>
-              <Box borderWidth={1} p={2} _hover={{ bg: "teal.600" }}><Heading as='h4' size='md'>{`${profile.username}`}</Heading></Box>
+              <Box p={2} _hover={{ bg: "teal.600" }}><Heading as='h4' size='md'>{`${profile.username}`}</Heading></Box>
             </PopoverTrigger>
             <PopoverContent>
               <PopoverArrow />

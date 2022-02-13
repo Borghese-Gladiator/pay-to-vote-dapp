@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import ContractAddressesContext from "../context/ContractAddressesContext";
+import UserInfoContext from "../context/UserInfoContext";
 
 import { ErrorBoundary } from 'react-error-boundary';
 import ErrorFallback from "./ErrorFallback";
@@ -12,13 +13,22 @@ import {
   Td,
   Heading,
   Text,
-  Container
+  Container,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverArrow,
+  PopoverCloseButton,
+  Box,
 } from '@chakra-ui/react';
 
-import { getTotalPool, getVotingEndTime } from "../utils";
+import { getTotalPool, getVotingEndTime, convertWeiToEther } from "../utils";
 
 export default function VotingCountdown() {
   const { customVotingAddress } = useContext(ContractAddressesContext);
+  const { userInfo, setUserInfo } = useContext(UserInfoContext);
+
   const [endTime, setEndTime] = useState({ hours: 0, minutes: 0, seconds: 0});
   const [endTimeLoading, setEndTimeLoading] = useState(true);
   function resetEndTime() {
@@ -35,7 +45,7 @@ export default function VotingCountdown() {
     resetEndTime()
   }, [])
 
-  const [prizePool, setPrizePool] = useState("");
+  const [prizePool, setPrizePool] = useState();
   const [prizePoolLoading, setPrizePoolLoading] = useState(true);
   function resetPrizePool() {
     setPrizePoolLoading(true);
@@ -68,7 +78,22 @@ export default function VotingCountdown() {
             </Tr>
             <Tr>
               <Td isNumeric><Heading as='h3' size='xl'>Prize Pool</Heading></Td>
-              <Td><Text fontSize='lg'>{prizePoolLoading ? "Loading" : `${prizePool} Wei`}</Text></Td>
+              <Td>
+                
+              <Popover trigger="hover">
+                <PopoverTrigger>
+                  <Box p={2} _hover={{ bg: "teal.600" }}>
+                    <Text fontSize='lg'>{prizePoolLoading ? "Loading" : `${prizePool} Wei`}</Text>
+                  </Box>
+                </PopoverTrigger>
+                <PopoverContent>
+                  <PopoverArrow />
+                  <PopoverCloseButton />
+                  <PopoverHeader>{typeof prizePool === 'undefined' || prizePool === null ? "Loading" : `${convertWeiToEther(prizePool)} ETH`}</PopoverHeader>
+                </PopoverContent>
+              </Popover>
+                
+                </Td>
             </Tr>
           </Tbody>
         </Table>
