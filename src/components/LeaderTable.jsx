@@ -72,11 +72,11 @@ export default function LeaderTable() {
               {
                 leaderList
                   .sort((leaderA, leaderB) => leaderB.contribution - leaderA.contribution)
-                  .map(({ username, address, contribution, rank }, idx) => {
+                  .map(({ username, address, contribution }, idx) => {
                     address = address.toLowerCase();
                     return (
                       <Tr key={`leader-row-${idx}`}>
-                        <Td isNumeric>{rankOrdinalSuffix(rank)}</Td>
+                        <Td isNumeric>{rankOrdinalSuffix(idx + 1)}</Td>
                         <Td>
                           <Popover trigger="hover">
                             <PopoverTrigger>
