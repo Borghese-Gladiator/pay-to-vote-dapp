@@ -127,10 +127,10 @@ export function convertWeiToEther(wei) {
     console.log(wei);
     console.log("wei is number");
     return (+ethers.utils.formatEther(wei)).toFixed(17);
-  } else if (typeof wei === "string") {
+  } else if (typeof wei === "string" && wei.contains("[0-9]+")) {
+    // https://stackoverflow.com/questions/10575624/java-string-see-if-a-string-contains-only-numbers-and-not-letters
     wei = wei.trim();
     wei = ethers.BigNumber.from(wei);
-    console.log("wei is string");
     return (+ethers.utils.formatEther(wei)).toFixed(17);
   } else {
     return `Cannot convert Wei value: ${wei}`
