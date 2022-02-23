@@ -78,6 +78,19 @@ export default function UserSetup({ setSetupComplete }) {
       await timeout();
       let getProfileErr;
       const profile = await fetchGetProfile(address).catch(err => getProfileErr = err);
+      console.log(getProfileErr);
+      if (typeof getProfileErr !== "undefined" && "code" in getProfileErr && getProfileErr.code === 401 ) {
+        setStatus("error");
+        setStatusText(`User declined signing username.`)
+        return;
+      }
+      if (typeof getProfileErr !== "undefined" && "msg" in getProfileErr && getProfileErr.msg === "Incorrect signature") {
+        //  && getProfileErr.msg === "Incorrect signature - are you on the correct account?"
+        console.log("get profile");
+        setStatus("error");
+        setStatusText(`Switch accounts! Incorrect signature for username: ${getProfileErr.username}`)
+        return;
+      }
       if (getProfileErr) {
         setShowCreateUsername(true);
         setStatus("error");
