@@ -208,7 +208,6 @@ contract CustomVoting {
         );
         return true;
     }
-    
     // GET functions for CustomVoting State
     function getVoter(address voterAddress)
         public
