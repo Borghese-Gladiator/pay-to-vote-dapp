@@ -25,13 +25,13 @@ export default async function handler(req, res) {
       }
     }
     case 'POST': {
-      const { address, username } = req.body;
+      const { address, username, uniqueSignature } = req.body;
       // Upsert (update if present, insert if not) MongoDB default operation
       const response = await db
         .collection("voter_list")
         .updateOne(
           { address: address },
-          { $set: { username: username, contribution: 0, rank: "User has not voted", transactionList: [] } },
+          { $set: { uniqueSignature: uniqueSignature, username: username, contribution: 0, rank: "User has not voted", transactionList: [] } },
           { upsert: true }
         );
       return res.status(200).json({ response: response, message: "Success! Username created"});
