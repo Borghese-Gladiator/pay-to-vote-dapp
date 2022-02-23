@@ -43,9 +43,6 @@ export default function UserProfile() {
       .then(response => {
         setUserInfo(response)
       })
-      .catch(e => {
-        console.log(`Getting profile failed: ${e.message}`);
-      })
       .finally(() => setProfileLoading(false))
   }
   useEffect(() => {

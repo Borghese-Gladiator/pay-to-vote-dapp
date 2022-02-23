@@ -53,7 +53,10 @@ async function fetchPostWrapper(url, body) {
 
 export async function fetchPostProfile(address, username) {
   address = address.toLowerCase();
-  return await fetchPostWrapper("api/profile", { address: address, username: username });
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  let uniqueSignature = await signer.signMessage(username);
+  return await fetchPostWrapper("api/profile", { uniqueSignature, address, username });
 }
 
 export async function fetchVote(contractAddress, address, username, contribution) {
@@ -66,7 +69,16 @@ export async function fetchVote(contractAddress, address, username, contribution
 
 export async function fetchGetProfile(address) {
   address = address.toLowerCase();
-  return await fetchGetWrapper("api/profile", { address: address });
+  
+  const profile = await fetchGetWrapper("api/profile", { address });
+
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  let uniqueSignature = await signer.signMessage(profile.username);
+  if (profile.uniqueSignature !== uniqueSignature) {
+    throw new Error("Incorrect signature - are you on the correct account?")
+  }
+  return profile;
 }
 
 export async function fetchTransactionList(address) {
