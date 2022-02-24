@@ -62,9 +62,14 @@ export async function fetchPostProfile(address, username) {
 
 export async function fetchVote(contractAddress, address, username, contribution) {
   address = address.toLowerCase();
+  
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  let uniqueSignature = await signer.signMessage(username);
+
   const transactionObj = await setVote(contractAddress, address, username, contribution);
   const rank = await getUserRank(contractAddress, address);
-  const response = await fetchPostWrapper("api/vote", { address, contribution, transactionObj, rank });
+  const response = await fetchPostWrapper("api/vote", { address, contribution, transactionObj, rank, uniqueSignature });
   return true;
 }
 

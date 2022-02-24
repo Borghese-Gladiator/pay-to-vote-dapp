@@ -10,15 +10,14 @@ export default async function handler(req, res) {
   const { db } = await connectToDatabase();
 
   switch (method) {
-    case 'GET': {
-      const { address } = req.query;
+    case 'POST': {
+      const { uniqueSignature, address, contribution, rank, transactionObj } = req.body;
       const profile = await db
         .collection("voter_list")
         .findOne({ address: address });
-      return res.status(200).json(profile);
-    }
-    case 'POST': {
-      const { address, contribution, rank, transactionObj } = req.body;
+      if (uniqueSignature !== profile.uniqueSignature) {
+        return res.status(400).json({ message: `Unique signature does not match expected for address: ${address}!`})
+      }
       const { hash } = transactionObj;
       const response = await db
         .collection("voter_list")
