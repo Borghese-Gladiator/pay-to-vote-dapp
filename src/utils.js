@@ -126,7 +126,11 @@ export async function getTotalPool(contractAddress) {
 }
 
 export async function getRank(contractAddress, address) {
-  return await getUserRank(contractAddress, address);
+  const rank = await getUserRank(contractAddress, address);
+  if (rank === null || typeof rank === "undefined") {
+    return "User has not voted"
+  }
+  return rank;
 }
 
 // UTILS
