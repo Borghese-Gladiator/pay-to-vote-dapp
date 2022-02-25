@@ -66,11 +66,14 @@ export async function getUserRank(contractAddress, address) {
    * @param address
    * @return Integer - rank of user
    */
+  console.time('doSomething')
   const voterList = await getVoterList(contractAddress);
   voterList.sort((a, b) => {
     b.voter.contribution.sub(a.voter.contribution)
   })
-  return 1 + voterList.findIndex(x => x.address.toLowerCase() === address.toLowerCase());
+  const result = 1 + voterList.findIndex(x => x.address.toLowerCase() === address.toLowerCase());
+  console.timeEnd('doSomething')
+  return result;
 }
 
 export async function getVoterList(contractAddress) {

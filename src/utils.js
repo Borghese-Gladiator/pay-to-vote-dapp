@@ -68,7 +68,6 @@ export async function fetchVote(contractAddress, address, username, contribution
   let uniqueSignature = await signer.signMessage(username);
 
   const transactionObj = await setVote(contractAddress, address, username, contribution);
-  const rank = await getUserRank(contractAddress, address);
   const response = await fetchPostWrapper("api/vote", { address, contribution, transactionObj, rank, uniqueSignature });
   return true;
 }
@@ -124,6 +123,10 @@ export async function getVotingEndTime(contractAddress) {
 export async function getTotalPool(contractAddress) {
   const totalBigNumber = await getContributionTotal(contractAddress);
   return totalBigNumber.toString();
+}
+
+export async function getRank(contractAddress, address) {
+  return await getUserRank(contractAddress, address);
 }
 
 // UTILS

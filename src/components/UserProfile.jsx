@@ -27,7 +27,7 @@ import {
   AlertIcon,
 } from '@chakra-ui/react';
 
-import { fetchGetProfile, fetchVote, rankOrdinalSuffix, convertWeiToEther } from "../utils";
+import { fetchGetProfile, fetchVote, rankOrdinalSuffix, convertWeiToEther, getRank } from "../utils";
 
 export default function UserProfile() {
   const { customVotingAddress } = useContext(ContractAddressesContext);
@@ -35,6 +35,7 @@ export default function UserProfile() {
 
   // Get and Display Profile
   const [profile, setProfile] = useState(userInfo); // { username, address, rank, contribution }
+  const [rank, setRank] = useState(userInfo.rank);
   const [profileLoading, setProfileLoading] = useState(false);
   function resetProfile() {
     setProfileLoading(true);
@@ -48,7 +49,13 @@ export default function UserProfile() {
   useEffect(() => {
     // Update profile when user info is updated
     setProfile(userInfo);
-  }, [userInfo])
+  }, [userInfo]);
+  
+  // run once on initial load
+  useEffect(async () => {
+    const userRank = await getRank(customVotingAddress, userInfo.address)
+    setRank(userRank);
+  }, [])
 
   // Set contribution through voting
   const [contribution, setContribution] = useState();
@@ -74,6 +81,7 @@ export default function UserProfile() {
         console.log(`Sending failed: ${e.message}`)
       })
       .finally(() => setContributionLoading(false))
+    setRank(await getRank(customVotingAddress, userInfo.address));
   }
 
   return (
@@ -106,9 +114,9 @@ export default function UserProfile() {
               <Text fontSize='md' noOfLines={1}>
                 {profileLoading
                   ? "Loading"
-                  : typeof profile.rank === 'number'
-                    ? rankOrdinalSuffix(profile.rank)
-                    : profile.rank}
+                  : typeof rank === 'number'
+                    ? rankOrdinalSuffix(rank)
+                    : rank}
               </Text>
             </Td>
           </Tr>
